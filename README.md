@@ -10,4 +10,6 @@ You can download all of the datasets from this link (datasets were downloaded mo
 
 When you want to run a project, always work with this repo's folder. Open this folder and start executing your code. This will improve the reproducibility and reduce the possibility of finding or introducing bugs.
 
+Remember to always work on the `dev` branch and send your Pull Requests for approval, so a reviewer can check them out. You will NOT be able to directly push to the default branch.
+
 If you have any questions about the structure of good practices for working with this repo, please feel free to contact me (Rodo). My TripleTen discord handle is `rodonunez42`.
