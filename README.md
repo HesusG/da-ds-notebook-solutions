@@ -8,6 +8,8 @@ The datasets should be placed in a directory called `datasets/*`. Do not use `/d
 
 You can download all of the datasets from this link (datasets were downloaded more than a year ago, we need to update that eventually).
 
+[datasets.tar.gz](https://drive.google.com/file/d/1qT_22pU0BVtlbjGUvo1krsO8zyvVCh_9/view?usp=drive_link)
+
 When you want to run a project, always work with this repo's folder. Open this folder and start executing your code. This will improve the reproducibility and reduce the possibility of finding or introducing bugs.
 
 Remember to always work on the `dev` branch and send your Pull Requests for approval, so a reviewer can check them out.
