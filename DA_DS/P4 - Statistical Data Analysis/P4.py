@@ -18,27 +18,21 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 from scipy import stats as st
-from IPython.display import display
+pd.set_option('display.max_columns', None)
 
 # %%
-try:
-    calls = pd.read_csv('/datasets/megaline_calls.csv')
-    internet = pd.read_csv('/datasets/megaline_internet.csv')
-    messages = pd.read_csv('/datasets/megaline_messages.csv')
-    plans = pd.read_csv('/datasets/megaline_plans.csv')
-    users = pd.read_csv('/datasets/megaline_users.csv')
-except:
-    calls = pd.read_csv('/Users/Steve Lewis/practicum_datasets/megaline_calls.csv')
-    internet = pd.read_csv('/Users/Steve Lewis/practicum_datasets/megaline_internet.csv')
-    messages = pd.read_csv('/Users/Steve Lewis/practicum_datasets/megaline_messages.csv')
-    plans = pd.read_csv('/Users/Steve Lewis/practicum_datasets/megaline_plans.csv')
-    users = pd.read_csv('/Users/Steve Lewis/practicum_datasets/megaline_users.csv')
+
+calls = pd.read_csv('datasets/megaline_calls.csv')
+internet = pd.read_csv('datasets/megaline_internet.csv')
+messages = pd.read_csv('datasets/megaline_messages.csv')
+plans = pd.read_csv('datasets/megaline_plans.csv')
+users = pd.read_csv('datasets/megaline_users.csv')
 
 # %% [markdown]
 # ### The 'calls' dataset
 
 # %%
-display(calls)
+(calls)
 
 # %%
 calls.info()
@@ -56,7 +50,7 @@ calls.duplicated().sum()
 # ### The 'internet' dataset
 
 # %%
-display(internet)
+(internet)
 
 # %%
 internet.info()
@@ -82,7 +76,7 @@ internet.duplicated().sum()
 # ### The 'messages' dataset
 
 # %%
-display(messages)
+(messages)
 
 # %%
 messages.info()
@@ -97,7 +91,7 @@ messages.duplicated().sum()
 # ### The 'plans' dataset
 
 # %%
-display(plans)
+(plans)
 
 # %%
 plans.info()
@@ -109,7 +103,7 @@ plans.info()
 # ### The 'users' dataset
 
 # %%
-display(users)
+(users)
 
 # %%
 users['city'].value_counts()
@@ -209,7 +203,7 @@ users['churn_date'] = pd.to_datetime(users['churn_date'], format='%Y-%m-%d')
 calls['month'] = pd.DatetimeIndex(calls['call_date']).month
 
 # %%
-display(calls)
+(calls)
 
 # %% [markdown]
 # Now we create the new column with rounded up call durations:

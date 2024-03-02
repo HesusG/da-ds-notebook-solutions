@@ -8,9 +8,9 @@
 # - the time required for training
 
 # %%
-%matplotlib inline
 import matplotlib.pyplot as plt
 import pandas as pd
+pd.set_option('display.max_columns', None)
 import numpy as np
 
 # %% [markdown]
@@ -20,7 +20,7 @@ import numpy as np
 # ### Downloading
 
 # %%
-data = pd.read_csv('autos.csv')
+data = pd.read_csv('datasets/autos.csv')
 print(data.shape)
 data.head()
 
@@ -167,7 +167,6 @@ target_test = data_ohe_test['Price']
 # **Linear regression**
 
 # %%
-%%time
 
 from sklearn.linear_model import LinearRegression
 
@@ -175,7 +174,6 @@ model = LinearRegression()
 model.fit(features_train, target_train)
 
 # %%
-%%time
 
 pred_train = model.predict(features_train)
 pred_valid = model.predict(features_valid)
@@ -214,7 +212,6 @@ for depth in [1, 2, 4, 6, 8, None]:
     print("Valid RMSE:", rmse(target_valid, pred_valid).round(5))
 
 # %%
-%%time
 
 from sklearn.ensemble import RandomForestRegressor
 
@@ -222,7 +219,6 @@ model = RandomForestRegressor(n_estimators=100, max_depth=None)
 model.fit(features_train, target_train)
 
 # %%
-%%time
 
 pred_train = model.predict(features_train)
 pred_valid = model.predict(features_valid)
@@ -237,7 +233,6 @@ print("Test RMSE: ", rmse(target_test, pred_test).round(5))
 # **Gradient boosting LightGBM**
 
 # %%
-%%time
 
 import lightgbm as lgb
 
@@ -247,7 +242,6 @@ model.fit(features_train, target_train,
           categorical_feature=categorical_features)
 
 # %%
-%%time
 
 pred_train = model.predict(features_train)
 pred_valid = model.predict(features_valid)
@@ -259,7 +253,6 @@ print("Valid RMSE:", rmse(target_valid, pred_valid).round(5))
 print("Test RMSE: ", rmse(target_test, pred_test).round(5))
 
 # %%
-%%time
 
 import lightgbm as lgb
 
@@ -268,7 +261,6 @@ model.fit(features_train, target_train,
           eval_set=(features_valid, target_valid))
 
 # %%
-%%time
 
 pred_train = model.predict(features_train)
 pred_valid = model.predict(features_valid)
@@ -283,19 +275,17 @@ print("Test RMSE: ", rmse(target_test, pred_test).round(5))
 # **Gradient boosting CatBoost**
 
 # %%
-%%time
 
 from catboost import CatBoostRegressor
 
 model = CatBoostRegressor(iterations=1000,
                           learning_rate=0.1,
-                          cat_features=categorical_features,
+                          cat_features=categorical_features, # TODO FIXME Invalid type for cat_feature[non-default value idx=0,feature_idx=0]=4.0 : cat_features must be integer or string, real number values and NaN values should be converted to string.
                           metric_period=50)
 model.fit(features_train, target_train, 
           eval_set=(features_valid, target_valid))
 
 # %%
-%%time
 
 pred_train = model.predict(features_train)
 pred_valid = model.predict(features_valid)
@@ -307,7 +297,6 @@ print("Valid RMSE:", rmse(target_valid, pred_valid).round(5))
 print("Test RMSE: ", rmse(target_test, pred_test).round(5))
 
 # %%
-%%time
 
 from catboost import CatBoostRegressor
 
@@ -318,7 +307,6 @@ model.fit(features_train, target_train,
           eval_set=(features_valid, target_valid))
 
 # %%
-%%time
 
 pred_train = model.predict(features_train)
 pred_valid = model.predict(features_valid)

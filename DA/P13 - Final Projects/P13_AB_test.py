@@ -1,12 +1,9 @@
 # %%
 import pandas as pd
-import numpy as np
+pd.set_option('display.max_columns', None)
 from matplotlib import pyplot as plt
 
-import math
-from scipy import stats
-
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from statsmodels.stats.proportion import proportions_ztest
 
@@ -52,15 +49,15 @@ test_name = 'recommender_system_test'
 
 # %%
 # учстники теста
-test_participants = pd.read_csv('final_ab_participants.csv')
+test_participants = pd.read_csv('datasets/final_ab_participants.csv')
 # пользователи
-new_users = pd.read_csv('final_ab_new_users.csv').merge(test_participants, on = 'user_id', how = 'left')
+new_users = pd.read_csv('datasets/final_ab_new_users.csv').merge(test_participants, on = 'user_id', how = 'left')
 new_users['first_date'] = pd.to_datetime(new_users['first_date'])
 # события
-events = pd.read_csv('final_ab_events.csv').merge(test_participants, on = 'user_id', how = 'left')
+events = pd.read_csv('datasets/final_ab_events.csv').merge(test_participants, on = 'user_id', how = 'left')
 events['event_dt'] = pd.to_datetime(events['event_dt'])
 # рекламная активность
-marketing_events = pd.read_csv('ab_project_marketing_events.csv')
+marketing_events = pd.read_csv('datasets/ab_project_marketing_events.csv')
 marketing_events['start_dt'] = pd.to_datetime(marketing_events['start_dt'])
 marketing_events['finish_dt'] = pd.to_datetime(marketing_events['finish_dt'])
 
@@ -216,8 +213,7 @@ for i, dt in enumerate(test_dates):
     current_test_users = new_users.query('first_date <= @dt').groupby('group').agg({'user_id': 'nunique'}).T
     current_test_users['date'] = dt
     current_test_users['test_day'] = i
-    cumulative_test_users = cumulative_test_users.append(current_test_users, sort = False)
-    
+    cumulative_test_users = pd.concat([cumulative_test_users, current_test_users], sort = False)
     
     ##карточка продукта
     current_test_prod = events.query('event_name == "product_page"').query('event_dt <= @dt').groupby('user_id').agg({'details': 'count'})
@@ -226,7 +222,7 @@ for i, dt in enumerate(test_dates):
                                      .groupby('group').agg({'user_id': 'nunique'}).T)
     current_test_product['date'] = dt
     current_test_product['test_day'] = i
-    cumulative_test_product = cumulative_test_product.append(current_test_product, sort = False)
+    cumulative_test_product = pd.concat([cumulative_test_product, current_test_product], sort = False)
     
     ##корзина заказа
     current_test_cart = events.query('event_name == "product_cart"').query('event_dt <= @dt').groupby('user_id').agg({'details': 'count'})
@@ -235,8 +231,8 @@ for i, dt in enumerate(test_dates):
                                      .groupby('group').agg({'user_id': 'nunique'}).T)
     current_test_carters['date'] = dt
     current_test_carters['test_day'] = i
-    cumulative_test_carters = cumulative_test_carters.append(current_test_carters, sort = False)
-    
+    cumulative_test_carters = pd.concat([cumulative_test_carters, current_test_carters], sort = False)
+
     ##платящие участники теста
     current_test_purchases = events.query('event_name == "purchase"').query('event_dt <= @dt').groupby('user_id').agg({'details': 'sum'})
     current_test_payers = (new_users.merge(current_test_purchases, on = 'user_id', how = 'inner')
@@ -244,8 +240,8 @@ for i, dt in enumerate(test_dates):
                                     .groupby('group').agg({'user_id': 'nunique'}).T)
     current_test_payers['date'] = dt
     current_test_payers['test_day'] = i
-    cumulative_test_payers = cumulative_test_payers.append(current_test_payers, sort = False)
-    
+    cumulative_test_payers = pd.concat([cumulative_test_payers, current_test_payers], sort = False)
+
 #новые участники теста без накопления
 pd.pivot_table(new_users, 
                index = 'first_date', 

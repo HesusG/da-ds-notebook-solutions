@@ -2,12 +2,13 @@
 import pandas as pd
 # import numpy as np
 import matplotlib.pyplot as plt
+pd.set_option('display.max_columns', None)
 
 # %% [markdown]
 # + Step 1. Open the data file and read the general information
 
 # %%
-data = pd.read_csv('logs_exp.csv', sep='\t')
+data = pd.read_csv('datasets/logs_exp.csv', sep='\t')
 data.head()
 
 # %%

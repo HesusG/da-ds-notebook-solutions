@@ -19,10 +19,10 @@
 # ### Data research
 
 # %%
-%matplotlib inline
 import pandas as pd
+pd.set_option('display.max_columns', None)
 
-data = pd.read_csv('./Churn.csv')
+data = pd.read_csv('datasets/Churn.csv')
 
 data.head()
 

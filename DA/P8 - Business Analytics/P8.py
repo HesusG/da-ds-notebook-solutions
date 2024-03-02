@@ -29,8 +29,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np    
 import seaborn as sns
-
-%matplotlib inline
+pd.set_option('display.max_columns', None)
 
 
 # %%
@@ -41,7 +40,7 @@ orders = pd.read_csv('https://code.s3.yandex.net/datasets/orders_log.csv')
 # %%
 def first_look (df):
   print ('------------- first 5 rows ------------')
-  display(df.head())
+  (df.head())
   print('')
   print('')
   print ('------------- data types ------------')
@@ -83,8 +82,8 @@ first_look(visits)
 
 # %%
 #change types
-visits['Start Ts'] = pd.to_datetime(visits['Start Ts'], format="%Y.%m.%d %H:%M:%S")
-visits['End Ts'] = pd.to_datetime(visits['End Ts'], format="%Y.%m.%d %H:%M:%S")
+visits['Start Ts'] = pd.to_datetime(visits['Start Ts'], format="%Y-%m-%d %H:%M:%S")
+visits['End Ts'] = pd.to_datetime(visits['End Ts'], format="%Y-%m-%d %H:%M:%S")
 
 #rename columns
 visits = visits.rename(columns={"Device": "device", "End Ts": "session_end_ts", "Source Id": "source_id", "Start Ts": "session_start_ts", "Uid": "uid"})
@@ -214,8 +213,8 @@ costs['dt'].min(), costs['dt'].max()
 # ### How many people use it every day, week, and month?
 
 # %%
-visits['session_month'] = visits['session_start_ts'].astype('datetime64[M]')
-visits['session_week']  = visits['session_start_ts'].astype('datetime64[W]')
+visits['session_month'] = visits['session_start_ts'].dt.month
+visits['session_week']  = visits['session_start_ts'].dt.isocalendar().week
 visits['session_date']  = visits['session_start_ts'].dt.date
 
 visits.head()
@@ -341,13 +340,13 @@ first_visits.head()
 # %%
 #find first date and month
 first_visits['first_session_dt'] = first_visits['first_session_start_ts'].dt.date
-first_visits['first_session_month'] = first_visits['first_session_start_ts'].astype('datetime64[M]')
+first_visits['first_session_month'] = first_visits['first_session_start_ts'].dt.month
 
 #merge
 visits_full = pd.merge(first_visits, visits, on = 'uid')
 
-#calculate difference
-visits_full['age_months'] = ((visits_full['session_month'] - visits_full['first_session_month']) / np.timedelta64(1,'M')).round().astype('int')
+#calculate difference # TODO FIXME error with pandas upgrade 
+visits_full['age_months'] = ((visits_full['session_month'] - visits_full['first_session_month']) / (30*np.timedelta64(1,'D'))).round().astype('int')
 
 # %% [markdown]
 # <div class="alert alert-block alert-info">

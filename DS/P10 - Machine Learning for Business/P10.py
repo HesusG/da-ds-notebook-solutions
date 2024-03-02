@@ -8,6 +8,7 @@
 # Cargar todas las librerías
 import numpy as np
 import pandas as pd
+pd.set_option('display.max_columns', None)
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
@@ -16,15 +17,10 @@ from sklearn.metrics import mean_squared_error
 
 # %%
 # Se cargan las bases de datos de las tres regiones.
-try:
-    region_1 = pd.read_csv("geo_data_0.csv")
-    region_2 = pd.read_csv("geo_data_1.csv")
-    region_3 = pd.read_csv("geo_data_2.csv")
 
-except:
-    region_1 = pd.read_csv("https://code.s3.yandex.net/datasets/geo_data_0.csv")
-    region_2 = pd.read_csv("https://code.s3.yandex.net/datasets/geo_data_1.csv")
-    region_3 = pd.read_csv("https://code.s3.yandex.net/datasets/geo_data_2.csv")
+region_1 = pd.read_csv("https://code.s3.yandex.net/datasets/geo_data_0.csv")
+region_2 = pd.read_csv("https://code.s3.yandex.net/datasets/geo_data_1.csv")
+region_3 = pd.read_csv("https://code.s3.yandex.net/datasets/geo_data_2.csv")
 
 # %% [markdown]
 # ### Data exploration
@@ -130,7 +126,7 @@ plt.ylabel('Product')
 plt.show()
 
 # %%
-region_1.corr()
+region_1.corr() # TODO FIXME could not convert string to float: 'txEyH'
 
 # %%
 print('Scatter Region 2')
@@ -301,7 +297,7 @@ def boots_func(df, n_muestras=1000):
     benefit_muestra=[]
     for i in range(n_muestras):
         wells = df.sample(n=500,replace=True, random_state=state) 
-        benefit_muestra.append(benefit(wells))
+        benefit_muestra.append(benefit(wells)) # TODO probably FIXME change appends to concat
     benefit_muestra = pd.Series(benefit_muestra)
     return benefit_muestra 
 

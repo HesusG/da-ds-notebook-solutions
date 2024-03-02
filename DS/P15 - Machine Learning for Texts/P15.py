@@ -12,19 +12,17 @@ import math
 
 import numpy as np
 import pandas as pd
+pd.set_option('display.max_columns', None)
 
-import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 import seaborn as sns
 
 from tqdm.auto import tqdm
 
 # %%
-%matplotlib inline
-%config InlineBackend.figure_format = 'png'
+# %config InlineBackend.figure_format = 'png'
 # the next line provides graphs of better quality on HiDPI screens
-%config InlineBackend.figure_format = 'retina'
+# %config InlineBackend.figure_format = 'retina'
 
 plt.style.use('seaborn')
 
@@ -36,7 +34,7 @@ tqdm.pandas()
 # # Load Data
 
 # %%
-df_reviews = pd.read_csv('imdb_reviews.tsv', sep='\t', dtype={'votes': 'Int64'})
+df_reviews = pd.read_csv('datasets/imdb_reviews.tsv', sep='\t', dtype={'votes': 'Int64'})
 
 # %%
 df_reviews.sample(5)
@@ -413,7 +411,6 @@ evaluate_model(model_3, train_features_3, train_target, test_features_3, test_ta
 # # Model 4 - spaCy, TF-IDF and LGBMClassifier
 
 # %%
-%%time
 
 from lightgbm import LGBMClassifier
 

@@ -4,3 +4,8 @@ datasets
 *.ipynb
 *.xsls
 *.tab
+snippet*.py
+*.tsv
+*.tfevents
+*.json
+catboost_info

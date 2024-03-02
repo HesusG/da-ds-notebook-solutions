@@ -17,17 +17,17 @@
 # The data is stored in the `taxi.csv` file. The number of orders is in the '*num_orders*' column.
 
 # %%
-%matplotlib inline
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+pd.set_option('display.max_columns', None)
 
 # %% [markdown]
 # # 1. Data preparation
 
 # %%
-data = pd.read_csv('taxi.csv', parse_dates=[0], index_col=[0])
+data = pd.read_csv('datasets/taxi.csv', parse_dates=[0], index_col=[0])
 print(data.shape)
 data.head()
 
@@ -149,7 +149,6 @@ print("RMSE train:", rmse(target_train, pred_train))
 print("RMSE valid:", rmse(target_valid, pred_valid))
 
 # %%
-%%time
 
 from sklearn.ensemble import RandomForestRegressor
 
@@ -166,7 +165,6 @@ for max_depth in [2, 4, 6, 8, 10, 12, None]:
     print()
 
 # %%
-%%time
 
 from lightgbm import LGBMRegressor
 
@@ -181,7 +179,6 @@ print("RMSE train:", rmse(target_train, pred_train))
 print("RMSE valid:", rmse(target_valid, pred_valid))
 
 # %%
-%%time
 
 from catboost import CatBoostRegressor
 

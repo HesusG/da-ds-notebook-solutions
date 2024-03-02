@@ -8,6 +8,7 @@
 
 # %%
 import pandas as pd
+pd.set_option('display.max_columns', None)
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -17,7 +18,7 @@ from sklearn.model_selection import train_test_split
 # # 1. Loading data
 
 # %%
-df = pd.read_csv('users_behavior.csv')
+df = pd.read_csv('datasets/users_behavior.csv')
 df.head()
 
 # %%

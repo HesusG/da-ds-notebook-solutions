@@ -46,13 +46,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats as st
-
+pd.set_option('display.max_columns', None)
 
 
 # %%
 # Import data
-company_df = pd.read_csv('/datasets/project_sql_result_01.csv')
-trips_df = pd.read_csv('/datasets/project_sql_result_04.csv')
+company_df = pd.read_csv('datasets/project_sql_result_01.csv')
+trips_df = pd.read_csv('datasets/project_sql_result_04.csv')
 
 # %%
 # Print general/summary info of dataset
@@ -140,7 +140,7 @@ plt.show()
 
 # %%
 # Import data
-loop_ohare = pd.read_csv('/datasets/project_sql_result_07.csv')
+loop_ohare = pd.read_csv('datasets/project_sql_result_07.csv')
 loop_ohare
 
 # %%

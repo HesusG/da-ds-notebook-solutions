@@ -3,6 +3,7 @@
 
 # %%
 import pandas as pd
+pd.set_option('display.max_columns', None)
 import plotly.express as px
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -11,7 +12,7 @@ from PIL import Image
 # ## Load Data
 
 # %% [markdown]
-# The dataset is stored in the `/datasets/faces/` folder, there you can find
+# The dataset is stored in the `datasets/faces/` folder, there you can find
 # - The `final_files` folder with 7.6k photos
 # - The `labels.csv` file with labels, with two columns: `file_name` and `real_age`
 # 
@@ -20,7 +21,7 @@ from PIL import Image
 # The label file can be loaded as an usual CSV file.
 
 # %%
-labels = pd.read_csv('/datasets/faces/labels.csv')
+labels = pd.read_csv('datasets/faces/labels.csv')
 
 labels.info()
 
@@ -32,7 +33,7 @@ fig = plt.figure(figsize=(10,10))
 
 for i in range(12):
     fig.add_subplot(4, 3, i+1)
-    plt.imshow(Image.open('/datasets/faces/final_files/' + labels['file_name'][i]))
+    plt.imshow(Image.open('datasets/faces/final_files/' + labels['file_name'][i]))
     plt.xticks([])
     plt.yticks([])
     plt.tight_layout()
@@ -99,7 +100,7 @@ def load_train(path):
 
     train_gen_flow = train_datagen.flow_from_dataframe(
         labels,
-        directory='/datasets/faces/final_files/',
+        directory='datasets/faces/final_files/',
         x_col='file_name',
         y_col='real_age',
         target_size=(150, 150),
@@ -121,7 +122,7 @@ def load_test(path):
 
     test_gen_flow = test_datagen.flow_from_dataframe(
         labels,
-        directory='/datasets/faces/final_files/',
+        directory='datasets/faces/final_files/',
         x_col='file_name',
         y_col='real_age',
         target_size=(150, 150),
@@ -199,7 +200,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import GlobalAveragePooling2D, Dense, Dropout, Flatten
 from tensorflow.keras.optimizers import Adam
 
-labels = pd.read_csv('/datasets/faces/labels.csv')
+labels = pd.read_csv('datasets/faces/labels.csv')
 """
 
 import inspect

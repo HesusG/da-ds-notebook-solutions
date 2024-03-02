@@ -51,20 +51,16 @@ Your project will consist of three stages:
 Open the data and explore it.
 """
 
-#This is only to load the dataset so it can be tested. it should be substituted for a more definitive solution later
-#and also fix the paths to it
-from google.colab import files
-uploaded = files.upload()
-
 """You'll need `pandas`, so import it."""
 
 # importing pandas
 import pandas as pd
+pd.set_option('display.max_columns', None)
 
 """Read the file `music_project_en.csv` from the `/datasets/` folder and save it in the `df` variable:"""
 
 # reading the file and storing it to df
-df = pd.read_csv("/datasets/music_project_en.csv")
+df = pd.read_csv("datasets/music_project_en.csv")
 
 """Print the first 10 table rows:"""
 
