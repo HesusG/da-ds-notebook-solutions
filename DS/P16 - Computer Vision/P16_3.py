@@ -3,17 +3,16 @@
 
 # %%
 import pandas as pd
-import numpy as np
+pd.set_option('display.max_columns', None)
 import matplotlib.pyplot as plt
 import seaborn as sns
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from PIL import Image
 
 # %% [markdown]
 # ## Load Data
 
 # %% [markdown]
-# The dataset is stored in the `/datasets/faces/` folder, there you can find
+# The dataset is stored in the `datasets/faces/` folder, there you can find
 # - The `final_files` folder with 7.6k photos
 # - The `labels.csv` file with labels, with two columns: `file_name` and `real_age`
 # 
@@ -22,7 +21,7 @@ from PIL import Image
 # The label file can be loaded as an usual CSV file.
 
 # %%
-path = '/datasets/faces/'
+path = 'datasets/faces/'
 directory = path + 'final_files/'
 labels = pd.read_csv(path + "labels.csv")
 
@@ -59,7 +58,7 @@ labels.head()
 #plt.imshow(array)
 
 # %% [markdown]
-# - The 'labels' dataset consists of two columns: 'file_name' (the name of an image file) and 'real_age' (the age of the person in the image), and the actual image files are pulled from '/datasets/faces/final_files/' using ImageDataGenerator.
+# - The 'labels' dataset consists of two columns: 'file_name' (the name of an image file) and 'real_age' (the age of the person in the image), and the actual image files are pulled from 'datasets/faces/final_files/' using ImageDataGenerator.
 # - The 'labels' dataset contains a list of 7591 image file names, which is not large.
 # - The data generator found 7591 images, each of which is a four-dimensional tensor of thirty-two 224x224 pixel images with three colour channels.
 # 

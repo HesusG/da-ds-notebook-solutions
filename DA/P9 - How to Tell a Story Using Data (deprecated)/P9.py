@@ -12,9 +12,10 @@ import pandas as pd
 import seaborn as sns
 import plotly.express as px
 import matplotlib.pyplot as plt
+pd.set_option('display.max_columns', None)
 
 # %%
-rest = pd.read_csv('rest_data_us.csv')
+rest = pd.read_csv('datasets/rest_data_us.csv')
 
 # %%
 rest.info()
@@ -42,7 +43,7 @@ grouped_rest = rest.groupby('object_type').count()
 grouped_rest
 
 # %%
-ax = sns.barplot(grouped_rest.index,grouped_rest['id'])
+ax = sns.barplot(grouped_rest.index,grouped_rest['id']) # TODO FIXME
 labels = ax.get_xticklabels()
 ax.set_xticklabels(labels, rotation=90)
 

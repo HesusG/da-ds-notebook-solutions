@@ -16,9 +16,8 @@
 # To complete the project, you may want to use documentation from *pandas*, *matplotlib*, and *sklearn.*
 
 # %%
-%matplotlib inline
 import pandas as pd
-import numpy as np
+pd.set_option('display.max_columns', None)
 import matplotlib.pyplot as plt
 
 # %% [markdown]
@@ -28,8 +27,8 @@ import matplotlib.pyplot as plt
 # ### Downloading
 
 # %%
-df_train = pd.read_csv('gold_recovery_train.csv', index_col='date', parse_dates=True)
-df_test = pd.read_csv('gold_recovery_test.csv', index_col='date', parse_dates=True)
+df_train = pd.read_csv('datasets/gold_recovery_train.csv', index_col='date', parse_dates=True)
+df_test = pd.read_csv('datasets/gold_recovery_test.csv', index_col='date', parse_dates=True)
 
 df_train.shape, df_test.shape
 
@@ -37,7 +36,7 @@ df_train.shape, df_test.shape
 df_train.head()
 
 # %%
-df_full = pd.read_csv('gold_recovery_full.csv', parse_dates=True, index_col='date')
+df_full = pd.read_csv('datasets/gold_recovery_full.csv', parse_dates=True, index_col='date')
 
 # %% [markdown]
 # ### Calculation validity check
@@ -274,7 +273,6 @@ lr_score = score_model(model)
 print("LR:", lr_score)
 
 # %%
-%%time
 
 for depth in range(1, 5):
     model = RandomForestRegressor(max_depth=depth, n_estimators=50, random_state=12345)
@@ -285,7 +283,6 @@ for depth in range(1, 5):
 # ### Model testing using the test sample
 
 # %%
-%%time
 
 model = RandomForestRegressor(max_depth=4, n_estimators=50, random_state=12345)
 model.fit(features_train, target_train)

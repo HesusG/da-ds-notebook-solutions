@@ -9,6 +9,7 @@ import getopt
 from datetime import datetime, timedelta
 
 import pandas as pd
+pd.set_option('display.max_columns', None)
 
 from sqlalchemy import create_engine
 
@@ -66,7 +67,7 @@ if __name__ == "__main__":
                 WHERE trending_date BETWEEN '{}' AND '{}'
             '''.format(start_dt, end_dt)
 
-    raw = pd.io.sql.read_sql(query, con = engine, index_col = 'record_id')
+    raw = pd.io.sql.read_sql(query, con = engine, index_col = 'record_id') # TODO FIXME
     raw['trending_date'] = pd.to_datetime(raw['trending_date']).dt.date
 
     #building agregated tables

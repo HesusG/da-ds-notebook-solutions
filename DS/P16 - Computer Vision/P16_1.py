@@ -5,7 +5,7 @@
 # ## Load Data
 
 # %% [markdown]
-# The dataset is stored in the `/datasets/faces/` folder, there you can find
+# The dataset is stored in the `datasets/faces/` folder, there you can find
 # - The `final_files` folder with 7.6k photos
 # - The `labels.csv` file with labels, with two columns: `file_name` and `real_age`
 # 
@@ -15,17 +15,12 @@
 
 # %%
 import pandas as pd
+pd.set_option('display.max_columns', None)
 import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning)
-import numpy as np
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-from sklearn import metrics
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error
-from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -33,7 +28,7 @@ import seaborn as sns
 # Loading the dataframe
 
 # %%
-labels = pd.read_csv(r'/datasets/faces/labels.csv')
+labels = pd.read_csv(r'datasets/faces/labels.csv')
 
 # %%
 labels.info()
@@ -56,7 +51,7 @@ train_datagen = ImageDataGenerator(rescale=1./255)
 # %%
 train_gen_flow = train_datagen.flow_from_dataframe(
         dataframe=labels,
-        directory='/datasets/faces/final_files/',
+        directory='datasets/faces/final_files/',
         x_col='file_name',
         y_col='real_age',
         target_size=(224, 224),

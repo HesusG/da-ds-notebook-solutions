@@ -19,6 +19,7 @@ import random
 
 import numpy as np
 import pandas as pd
+pd.set_option('display.max_columns', None)
 
 import seaborn as sns
 
@@ -29,8 +30,6 @@ import sklearn.preprocessing
 
 from sklearn.model_selection import train_test_split
 
-from IPython.display import display
-
 # %% [markdown]
 # # Load Data
 
@@ -38,7 +37,7 @@ from IPython.display import display
 # Load data and conduct basic checks it's free from obvious issues.
 
 # %%
-df = pd.read_csv('../datasets/insurance_us.csv')
+df = pd.read_csv('datasets/insurance_us.csv')
 
 # %% [markdown]
 # We rename the colums to make the code look more consistent with its style.
@@ -172,7 +171,7 @@ for df_source, metric in itertools.product([df, df_scaled], ['euclidean', 'manha
     if is_scaled:        
         df_nn = pd.concat([df.loc[df_nn.index], df_nn], axis=1, keys=['original', 'scaled'])
         
-    display(df_nn)
+    (df_nn)
     print()
 
 # %% [markdown]

@@ -1,13 +1,14 @@
 # %%
 import pandas as pd
 import matplotlib.pyplot as plt
+pd.set_option('display.max_columns', None)
 
 # %%
-orders         = pd.read_csv('instacart_orders.csv', sep=';')
-products       = pd.read_csv('products.csv', sep=';')
-departments    = pd.read_csv('departments.csv', sep=';')
-aisles         = pd.read_csv('aisles.csv', sep=';')
-order_products = pd.read_csv('order_products.csv', sep=';')
+orders         = pd.read_csv('datasets/instacart_orders.csv', sep=';')
+products       = pd.read_csv('datasets/products.csv', sep=';')
+departments    = pd.read_csv('datasets/departments.csv', sep=';')
+aisles         = pd.read_csv('datasets/aisles.csv', sep=';')
+order_products = pd.read_csv('datasets/order_products.csv', sep=';')
 
 # %%
 orders.info()

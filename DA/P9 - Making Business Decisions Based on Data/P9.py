@@ -1,20 +1,21 @@
 # %%
-import datetime
+import datetime as dt
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+pd.set_option('display.max_columns', None)
 
 # %% [markdown]
 # # Part 1. Hypotheses prioritization
 
 # %%
-hypothesis = pd.read_csv('hypotheses_us.csv')
+hypothesis = pd.read_csv('datasets/hypotheses_us.csv', sep=";")
 
 print(hypothesis)
 
 # %%
-hypothesis['ICE'] = hypothesis['Impact']*hypothesis['Confidence']/hypothesis['Efforts']
-hypothesis['RICE'] = hypothesis['Reach']*hypothesis['Impact']*hypothesis['Confidence']/hypothesis['Efforts']
+hypothesis['ICE'] = hypothesis['Impact']*hypothesis['Confidence']/hypothesis['Effort']
+hypothesis['RICE'] = hypothesis['Reach']*hypothesis['Impact']*hypothesis['Confidence']/hypothesis['Effort']
 
 # %%
 print(hypothesis.sort_values(by='ICE', ascending=False))
@@ -34,14 +35,11 @@ print(hypothesis.sort_values(by='RICE', ascending=False))
 # ## Preparing data
 
 # %%
-import pandas as pd
-import datetime as dt
-import numpy as np
 
-orders = pd.read_csv('orders_us.csv', sep=',')
+orders = pd.read_csv('datasets/orders_us.csv', sep=',')
 orders['date'] = orders['date'].map(lambda x: dt.datetime.strptime(x, '%Y-%m-%d'))
 
-visitors = pd.read_csv('visitors_us.csv', sep=',')
+visitors = pd.read_csv('datasets/visitors_us.csv', sep=',')
 visitors['date'] = visitors['date'].map(lambda x: dt.datetime.strptime(x, '%Y-%m-%d'))
 
 print(orders.head(5))
@@ -62,7 +60,7 @@ visitorsAggregated = datesGroups.apply(
 lambda x: visitors[np.logical_and(visitors['date'] <= x['date'], visitors['group'] == x['group'])].agg({
 'date' : 'max',
 'group' : 'max',
-'visitors' : 'sum'}), axis=1).sort_values(by=['date','group'])
+'visits' : 'sum'}), axis=1).sort_values(by=['date','group'])
 
 cumulativeData = ordersAggregated.merge(visitorsAggregated, left_on=['date', 'group'], right_on=['date', 'group'])
 cumulativeData.columns = ['date', 'group', 'orders', 'buyers', 'revenue', 'visitors']
@@ -125,7 +123,7 @@ cumulativeDataB = cumulativeData[cumulativeData['group']=='B']
 plt.plot(cumulativeDataA['date'], cumulativeDataA['conversion'], label='A')
 plt.plot(cumulativeDataB['date'], cumulativeDataB['conversion'], label='B')
 plt.legend()
-plt.axis(["2019-08-01", '2019-08-31', 0, 0.04])
+plt.axis(["2019-08-01", '2019-08-31', 0, 0.04]) # TODO FIXME
 
 # %% [markdown]
 # Group B forged ahead at the beginning of the test and remained a leader in conversion throughout the whole test

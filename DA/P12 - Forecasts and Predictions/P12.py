@@ -1,11 +1,8 @@
 # %%
 import pandas as pd 
-import numpy as np
+pd.set_option('display.max_columns', None)
 import seaborn as sns
 import matplotlib.pyplot as plt
-from scipy.stats import spearmanr
-from IPython.core.display import display, HTML
-display(HTML("<style>.container { width:90% !important; }</style>"))
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -47,7 +44,7 @@ def feat_hist(x, group_col, key_cols):
 # # Загружаем данные
 
 # %%
-df = pd.read_csv('gym_churn.csv')
+df = pd.read_csv('datasets/gym_churn.csv')
 df.head()
 
 # %%
