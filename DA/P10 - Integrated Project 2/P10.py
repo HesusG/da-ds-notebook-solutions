@@ -74,6 +74,11 @@ data['date_time'].hist(bins=100, figsize=(14, 5))
 data.pivot_table(index='date', values='user', aggfunc='count').plot(style='o-', grid=True)
 
 # %%
+
+data.groupby("date_time")["user"].count().plot()
+plt.show()
+
+
 data.query('date_time > "2019-07-31 21:00"', inplace=True)
 data.head()
 
@@ -189,10 +194,6 @@ def check_hypothesis(successes1, successes2, trials1, trials2, alpha=0.01):
 
     # setting standard normal distribution (mean= 0, standard deviation=1)
     distr = stats.norm(0, 1) 
-
-    # calculating the statistic in standard deviations of standard normal distribution
-    z_value = difference / math.sqrt(p_combined * (1 - p_combined) * (1/trials1 + 1/trials2))
-
 
     p_value = (1 - distr.cdf(abs(z_value))) * 2
 

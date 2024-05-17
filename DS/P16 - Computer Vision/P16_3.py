@@ -28,6 +28,8 @@ labels = pd.read_csv(path + "labels.csv")
 # %%
 train_datagen = ImageDataGenerator(rescale=1./255)
 
+# https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image/ImageDataGenerator
+
 # %%
 train_gen_flow = train_datagen.flow_from_dataframe(
         dataframe= labels,
@@ -195,7 +197,7 @@ def create_model(input_shape=(224, 224, 3)):
     """
 
     backbone = ResNet50(
-        input_shape=input_shape, #(224, 224, 3),
+        input_shape=input_shape, 
         weights='imagenet',
         include_top=False
     )
