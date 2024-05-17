@@ -1,893 +1,863 @@
 # %% [markdown]
-# # Research for a Telecoms Operator ¶
-# 
-# You work as an analyst for the telecom operator Megaline. The company offers its clients two prepaid plans, Surf and Ultimate. The commercial department wants to know which of the plans brings in more revenue in order to adjust the advertising budget. 
+# ### Project description
+# The online store Ice sells video games all over the world. User and expert reviews, genres, platforms (e.g. Xbox or PlayStation), and historical data on game sales are available from open sources.
+#
+# We need to identify patterns that determine whether a game succeeds or not. This will allow us to spot potential big winners and plan advertising campaigns.
 
 # %% [markdown]
-# ## Objectives ¶
-# 
-# We are going to carry out a preliminary analysis of the Surf and Ultimate plans based on a relatively small client selection. We have the data on 500 Megaline clients: who the clients are, where they're from, which plan they use, and the number of calls they made and text messages they sent in 2018. Our job is to analyze clients' behavior and determine which prepaid plan brings in more revenue. 
-
-# %% [markdown]
-# ## Studying the Data
-# First we'll import the data and have a look at it. There are five datasets: 
+# ### Importing libraries
 
 # %%
+import plotly.express as px
 import pandas as pd
-import matplotlib.pyplot as plt 
-import math
+import sidetable as stb
+import matplotlib.pyplot as plt
 import numpy as np
-from scipy import stats as st
-pd.set_option('display.max_columns', None)
-
-# %%
-calls = pd.read_csv('datasets/megaline_calls.csv')
-internet = pd.read_csv('datasets/megaline_internet.csv')
-messages = pd.read_csv('datasets/megaline_messages.csv')
-plans = pd.read_csv('datasets/megaline_plans.csv')
-users = pd.read_csv('datasets/megaline_users.csv')
+import seaborn as sns
+from functools import reduce
+from scipy import stats
+from IPython.core.interactiveshell import InteractiveShell
+InteractiveShell.ast_node_interactivity = 'all'
+pd.options.display.float_format = '{:.2f}'.format
 
 # %% [markdown]
-# ### The 'calls' dataset
+# ### Reading and studying the data
 
 # %%
-(calls)
+data = pd.read_csv('datasets/games.csv')
 
 # %%
-calls.info()
+data
+data.info()
+data.describe()
 
 # %%
-calls['duration'].describe()
-
-# %%
-calls.duplicated().sum()
+data.duplicated().sum()
+data.stb.missing(style=True)
 
 # %% [markdown]
-# Conclusion: This dataset lists all the calls made by this sample of 500 clients in 2018.  It has 137735 rows and no null values.  The duration of calls is measured in minutes and the data seems reasonable.  However, the data type of 'call_date' needs to be changed from object to datetime.
+# #### Conclusion
 
 # %% [markdown]
-# ### The 'internet' dataset
-
-# %%
-(internet)
-
-# %%
-internet.info()
-
-# %%
-internet['mb_used'].describe()
-
-# %%
-len(internet.query('mb_used == 0'))
-
-# %%
-len(internet.query('mb_used == 0'))/len(internet)
-
-# %%
-internet.duplicated().sum()
+# <div style="border:solid green 2px; padding: 20px"> <b>Success:</b><br>
+#     It's great that you checked for duplicates in the dataset and made sure there were none.  I like that you use a variety of methods when studying general information in table. Good job!</div>
 
 # %% [markdown]
-# Conclusion: This dataset details the internet usage of this sample of 500 clients in 2018. It has 104825 rows and no null values and we notice that 13,737 of the web sessions (13.11%) used no data at all.  Ideally, to confirm if this is legitimate we would need to discuss with the relevant person in the company. However with no further information currently we will assume that the data is correct.
-# 
-# The data type of session_date also needs to be changed from object to datetime.
-
-# %% [markdown]
-# ### The 'messages' dataset
-
-# %%
-(messages)
-
-# %%
-messages.info()
-
-# %%
-messages.duplicated().sum()
-
-# %% [markdown]
-# Conclusion: This dataset lists all the messages sent by the sample of 500 clients in 2018. This dataset has 76051 rows and no null values.  The data type of message_date also needs to be changed from object to datetime.
-
-# %% [markdown]
-# ### The 'plans' dataset
-
-# %%
-(plans)
-
-# %%
-plans.info()
-
-# %% [markdown]
-# Conclusion: This table details the differences between the surf and the ultimate prepaid plans.
-
-# %% [markdown]
-# ### The 'users' dataset
-
-# %%
-(users)
-
-# %%
-users['city'].value_counts()
-
-# %%
-users.info()
-
-# %%
-users.duplicated().sum()
-
-# %% [markdown]
-# Conclusion: This dataset contains information on the sample of 500 clients in 2018.  The data type of reg_date and churn_date will need to be changed from object to datetime.
-
-# %% [markdown]
-# Note that he churn_date column is poorly populated with only 34 values (ie less than 10%).  Let's look at this data in more detail:
-
-# %%
-users['churn_date'].value_counts()
-
-# %% [markdown]
-# These are the dates that the 34 customers ended their plans.  As per the information given with the data, this means that the other 466 customers remained on their plans at least until the end of 2018.
-
-# %% [markdown]
-# Overall Conclusion: the data has very few errors.  We just need to change the date variables as described above.
-
-# %% [markdown]
-# ## Preparing the Data
-# Converting the data to the necessary types and eliminating errors in the data.
-
-# %% [markdown]
-# ### Converting the data to the necessary types
-# We will first change the type of all the date variables to datetime:
-
-# %%
-calls['call_date'] = pd.to_datetime(calls['call_date'], format='%Y-%m-%d')
-
-# %%
-calls.info()
-
-# %% [markdown]
-# The type of call_date has been successfully changed.  Now let's make the other type changes as detailed above:
-
-# %%
-calls['call_date'] = pd.to_datetime(calls['call_date'], format='%Y-%m-%d')
-internet['session_date'] = pd.to_datetime(internet['session_date'], format='%Y-%m-%d')
-messages['message_date'] = pd.to_datetime(messages['message_date'], format='%Y-%m-%d')
-users['reg_date'] = pd.to_datetime(users['reg_date'], format='%Y-%m-%d')
-users['churn_date'] = pd.to_datetime(users['churn_date'], format='%Y-%m-%d')
-
-# %% [markdown]
-# ### Eliminating Errors in the Data
-# We didn't find any errors with the dataset so there is no need to perform any operations to eliminate errors in the data.
-
-# %% [markdown]
-# ### Calculating New Columns
-# We will now find the following:
-# - The number of calls made and minutes used per month for each user
-# - The number of text messages sent per month for each user
-# - The volume of data per month for each user
-# - The monthly revenue from each user (subtract the free package limit from the total number of calls, text messages, and data; multiply the result by the calling plan value; add the monthly charge depending on the calling plan)
+# The initial dataset is comprised of 16,715 rows and 11 columns. We can see that we'll need to normalize column names. We identified missing values (up to 51%) in different columns and we found no duplicates. The data types are mostly OK except for Year_of_release and User_score columns.
 
 # %% [markdown]
 # <div class="alert alert-block alert-info">
-#     
-# <b>Senior reviewer's comment</b> <a class="tocSkip"></a>
-#     
-# Senior Reviewer's Comment It's important to look at how students do rounding:
-#     
-# Rounding will be done incorrectly by any built-in methods, except for math.ceil and np.ceil (int, round....). 
-#     
-# Serious mistake, red comment.
-#     
-# math.ceil with apply is not the optimal way.
-#     
-# It can be suggested that np.ceil would be a better fit, as can work with the whole column at once. np.ceil with apply is not the optimal way.
-#     
-# It is possible to say that np.ceil doesn't need apply, because it can work with the whole column at once. A self-written function is not the best way.
-#     
-# If the function is written correctly, you can give advice that np.ceil is a better fit. If it is incorrect - red comment.
-# np.ceil without apply is perfect, here you can only praise.
-#     
-# If the student did not bring the rounded values of the call duration to an integer type - a yellow comment.
-# 
-# You can also give the following advice: Usually, a dataframe contains data for several years, and then the month method can lead to an error: for example, June 2019 and June 2020 can become one month.
-# The astype('datetime64[M]') method should be used.
-# 
-# 
+# <b>Senior Reviewer's comment </b> <a class="tocSkip"></a>
+#
+# Often students try to find the release year - for example, looking for the year in the title of the game using lemmatization.
+#
+# No need to scold them for it, but you can give advice:
+#
+# immediately remove such a small proportion of gaps to save time;
+#
+# check the result - not always 4 digits in the game name indicate the year of release.
+#
+# Filling gaps in years with mean/median/minimum, etc. values is considered a gross mistake, we mark it with a red comment.
+#
+#
 # </div>
 
 # %% [markdown]
-# ### The number of calls made and minutes used per month for each user
+# ### Preparing the data
 
 # %% [markdown]
-# We first need to extract the month from 'call_date' and store it in a new column.  Then we need to find the total number of calls and the duration of calls for each user_id for each month. Note that Megaline rounds seconds up to minutes. For calls, each individual call is rounded up: even if the call lasted just one second, it will be counted as one minute. We therefore need to create a new colum with these rounded up call durations.
+# #### Lowering headers case and dealing with the missing values
 
 # %%
-calls['month'] = pd.DatetimeIndex(calls['call_date']).month
-
-# %%
-(calls)
+data.columns = data.columns.str.lower()
+data['year_of_release'] = data['year_of_release'].fillna(0).astype('int')
+data.loc[data['user_score'] == 'tbd', 'user_score'] = np.nan
+data['user_score'] = data['user_score'].astype('float')
+data.info()
 
 # %% [markdown]
-# Now we create the new column with rounded up call durations:
-
-# %%
-def rounding_up_calls (duration):
-    rounding = math.ceil(duration)
-    return rounding
-
-# %%
-calls['duration_rounded_up'] = calls['duration'].apply(rounding_up_calls)
-
-# %%
-calls.head()
-
-# %% [markdown]
-# Now we create a table with the durations of calls per user per month (using the rounded up call durations):
-
-# %%
-calls_pivot = calls.pivot_table(index = ['user_id', 'month'], values = 'duration_rounded_up', aggfunc = ['sum','count'])
-
-# %%
-calls_pivot.head()
-
-# %%
-calls_pivot.columns = ['minutes_used', 'calls_made']
-
-# %%
-calls_pivot = calls_pivot.reset_index()
-
-# %%
-calls_pivot.head()
-
-# %%
-calls_pivot.shape
-
-# %% [markdown]
-# ### The number of text messages sent per month for each user
-# Again, we need to extract the month from 'message_date' and store it in a new column.  Then we need to find the total number of messages for each user_id for each month.
-
-# %%
-messages['month'] = pd.DatetimeIndex(messages['message_date']).month
-
-# %%
-messages.head()
-
-# %%
-messages_pivot = messages.pivot_table(index = ['user_id', 'month'], values = 'id', aggfunc = 'count')
-
-# %%
-messages_pivot.head()
-
-# %%
-messages_pivot.columns = ['number_of_texts']
-
-# %%
-messages_pivot.head()
-
-# %%
-messages_pivot = messages_pivot.reset_index()
-
-# %%
-messages_pivot.head()
-
-# %%
-messages_pivot.shape
-
-# %% [markdown]
-# ### 2.3.3 The Volume of Data per Month for Each User
-# We will extract the month from 'session_date' and store it in a new column.  Then we will find the total volume of data used (in megabytes) by each user_id each month.
-
-# %%
-internet['month'] = pd.DatetimeIndex(internet['session_date']).month
-internet.head()
-
-# %%
-internet_pivot = internet.pivot_table(index = ['user_id', 'month'], values = 'mb_used', aggfunc = 'sum')
-internet_pivot.head()
-
-# %%
-internet_pivot.columns = ['volume_of_data_used']
-internet_pivot.head()
-
-# %%
-internet_pivot = internet_pivot.reset_index()
-internet_pivot.head()
-
-# %%
-internet_pivot.shape
-
-# %% [markdown]
-# Megaline rounds up the total megabytes used for the month per user to gigabytes. We will therefore create a new column in the table with these rounded up values in gigabytes:
-
-# %%
-def rounding_up (mb):
-    rounded = math.ceil(mb/1024)
-    return rounded
-
-# %%
-internet_pivot['data_rounded_up'] = internet_pivot['volume_of_data_used'].apply(rounding_up)
-
-# %%
-internet_pivot.head()
-
-# %% [markdown]
-# ### The Monthly Revenue from Each User
-# To calculate monthly revenue, we first need to join the above three tables together to get the total calls, messages and internet usage by user per month. 
-# 
-# Then we need to add the plan information (ie whether the user was on Surf or Ultimate) and calculate the *chargeable* calls, texts and messages.
-# 
-# First we join the calls and messages table:
-
-# %%
-calls_and_messages = calls_pivot.merge(messages_pivot, on=['user_id','month'], how='outer')
-calls_and_messages.head()
-
-# %%
-calls_and_messages.info()
-
-# %% [markdown]
-# Now we join the internet table:
-
-# %%
-usage_table = calls_and_messages.merge(internet_pivot, on=['user_id','month'], how='outer')
-usage_table.head()
-
-# %%
-usage_table.shape
-
-# %% [markdown]
-# Now we will add the plan information.
-# 
-# We will first create a subset of the users table containing the user_id, plan and city columns (as we will need the city column later in the project). Then we will join it to the usage_table.
-
-# %%
-plans = users[['user_id', 'plan', 'city']]
-plans.head()
-
-# %%
-users['plan'].value_counts()
-
-# %%
-usage_table_plans = usage_table.merge(plans, on=['user_id'], how='outer')
-usage_table_plans.head()
+# <div style="border:solid green 2px; padding: 20px"> <b>Success:</b><br>
+#     Very well that you converted the columns to lower case using <code>str.lower()</code>
+#
+# Agree with your decision not to fill the missing values with the median, for example. But in this case we can just remove missing values :)</div>
 
 # %% [markdown]
 # <div class="alert alert-block alert-info">
-#     
-# <b>Senior reviewer's comment</b> <a class="tocSkip"></a>
-#     
-# **Converts MB to GB.**
-#     
-# If it's not done - gross mistake, red comment.
-#     
-# Remembers that 1 GB = 1024 MB, not 1000.
-#    
-#     
-# MB can be converted to GB at any stage of the project, up to and including the calculation of revenue.
-#     
-# The task does NOT say to round GB to an integer. If students don't do it, that's fine.
-# 
-# **Merging tables**
-#     
-#  In this sprint, many students merge tables for the first time. It is extremely important to comment on how successful this merger was. Above is the best method in my opinion:
-#     
-# Preliminary data grouping by users and months.
-#     
-# Combining calls, SMS and Internet data by user and month with the how='outer' parameter.
-#     
-# Adding the user's fare and city data to the table using how='left' parameter
-#     
-# There may be other correct ways to merge, for example:
-#     
-# First, creating a "perfect array" of all possible combinations of users and months corresponding to the period under study, then adding the rest of the data to it.
-#     
-# After grouping, the reset_index method is not applied to the resulting arrays, the arrays themselves are combined by index.
-#     
-# The most common mistakes:
-#     
-# The student merges arrays by users only.
-#     
-# Sometimes does not conduct a preliminary grouping.
-#     
-# Usually this is a problem for teachers, reviewers rarely see this, since most often Python does not cope with such a heavy merger.
-# 
-# This is a gross mistake and red comment. Tell the student that it's possible to merge not only by one column, but to use two or more columns as a join key.
-#     
-# Add an approximate calculation of the number of rows received in the correct merger, show that the student got more rows.
-# If necessary, indicate the importance of preliminary data grouping.
-#     
-# The student is merging call, SMS and Internet data NOT with the how='outer' parameter.
-#     
-# This leads to the loss of the number of unique users. Gross mistake, red comment. It is worth counting (or suggesting to count) the number of unique users in the merged table as a confirmation of an error.
-#     
-# When pre-grouping, the student displays the month of the service in the column name, for example: df_calls.pivot_table(index=['user_id'], columns = ['month'], values='duration', aggfunc=['count', 'sum']) As a result, technically the merger is carried out without errors, but the final dataframe contains more than 40 columns and is difficult to work with.
-#     
-# In such cases I mark it as a gross mistake with a red comment. Optionally, you can leave a yellow comment, indicating that it's possible to use two columns at the same time as a join key.
-# 
-# If everything is done correctly, but no check for correctness of the merger was conducted - give advice to conduct such checks, providing a couple of possible examples.
-#     
-# I suggest not commenting or commenting in green all minor shortcomings - merging with tariff rates, merging with all columns of the table containing users data, etc.
-#     
-# Yes, this is not optimal, but otherwise at this stage many will simply not pass the project.
-#     
-# **Filling gaps in a merged table**
-#     
-# It is important that the student fills in these gaps with zeros.
-#     
-# This will affect subsequent calculations.
-#     
-# If it's not done - gross mistake, red comment.
-#     
-#     
-# </div>
-
-# %% [markdown]
-# We now need to calculate the 'chargeable' minutes, texts and data for each month.  These are the minutes, texts and data outside of the monthly allowances. 
-# 
-# We will need the following pricing data relating to the two tariffs: Surf and Ultimate.
-
-# %% [markdown]
-# <div class="alert alert-block alert-info">
-#     
-# <b>Senior reviewer's comment</b> <a class="tocSkip"></a>
-#     
-# Here student used many functions and create many columns. Weshould add yellow comment and tell about one function for all parametres.
-#     
-#     
-# Be sure to comment on whether the revenue was calculated correctly by the student.
-#     
-# *Most frequent gross mistakes (red comments):*
-#     
-# Forgets about monthly payment.
-# Confusion with converting of Mb to Gb.
-#     
-# You can convert GB to MB, but it's impossible not to convert anything, because of the data in the tariff table.
-#     
-# The "overrun" of minutes, GB and SMS is not calculated correctly.
-#     
-# For example, they get negative values for overspending and deduct "underspent" money from the subscription fee.
-#     
-# *Yellow comments:*
-#     
-# Calculate additional columns for overspending by type of service.
-# 
-# Sometimes they don't even delete them after the calculation.
-#     
-# Do not use the apply function and method.
-#     
-# When calculating, instead of references to the cells of the df_tariffs table they use numbers from it: For example, 1950 instead of df_tariffs[df_tariffs['tariff_name'] == 'ultra']['rub_monthly_fee'].
-# 
+# <b>Senior Reviewer's comment </b> <a class="tocSkip"></a>
+#
+# Successful solutions are the following:
+#
+# entering a unreal value(-1,-999999, etc);
+#
+# leaving the gaps unchanged.
+#
+# The second option can potentially lead to problems when analyzing games by region, we need to track this down.
+#
+# Deleting rows with gaps in the Rating column is considered a gross mistake, we mark it with a red comment. Explanation for the student: "This way our dataset will become much poorer, losing more than a third of the lines that contain information about sales, release date, and platform. The data in these columns will be useful for finding answers to all questions in the assignment, while the rating information is needed for only one question."
+#
+#
+# An attempt to restore the rating by "replacing all gaps with one rating value, for example, E" is considered a gross mistake, we mark it with a red comment. Instead of explaining, I ask the student: "Why do you think that such a replacement is appropriate?"
+#
+# An attempt to fill in the gaps in a more complex way - for example, splitting games into groups by genre and filling in the gaps with the most popular value of every genre - should be marked with a yellow comment.
+#
+# Explanation for the student: "You did a great job filling the gaps.But sometimes the gap itself constitutes valuable information.What countries was the ESRB system created for?Will the authors of the local market games in other countries try to get an ESRB rating?"
+#
+#
 # </div>
 
 # %%
-surf_monthly_charge = 20
-surf_monthly_minutes = 500
-surf_monthly_messages = 50
-surf_monthly_data = 15
-surf_call_charge = 0.03
-surf_message_charge = 0.03
-surf_data_charge = 10
-
-ultimate_monthly_charge = 70
-ultimate_monthly_minutes = 3000
-ultimate_monthly_messages = 1000
-ultimate_monthly_data = 30
-ultimate_call_charge = 0.01
-ultimate_message_charge = 0.01
-ultimate_data_charge = 7
-
-# %% [markdown]
-# We will define a function to calculate the chargeable minutes, texts and data outside of the monthly allowances:
-
-# %%
-def chargeable_calls (row):
-    plan = row['plan']
-    minutes_used = row['minutes_used']
-    
-    if plan == 'surf':
-        if minutes_used > 500:
-            chargeable = minutes_used - 500
-        else:
-            chargeable = 0
-    if plan == 'ultimate':
-        if minutes_used > 3000:
-            chargeable = minutes_used - 3000
-        else:
-            chargeable = 0
-    return chargeable
-
-# %%
-usage_table_plans['chargeable_calls'] = usage_table_plans.apply(chargeable_calls, axis =1)
-usage_table_plans.head()
-
-# %% [markdown]
-# The new column has beed added successfully.  We will investigate it further:
-
-# %%
-len(usage_table_plans.query('chargeable_calls != 0'))
-
-# %%
-usage_table_plans.query('chargeable_calls != 0')['chargeable_calls'].describe()
-
-# %% [markdown]
-# We see that there were 566 user-months in the period when the company earned additonal income from calls.
-# 
-# Now we will calculate and add similar columns for messages and data.
-
-# %%
-def chargeable_messages (row):
-    plan = row['plan']
-    number_of_texts = row['number_of_texts']
-    
-    if plan == 'surf':
-        if number_of_texts > 50:
-            chargeable = number_of_texts - 50
-        else:
-            chargeable = 0
-    if plan == 'ultimate':
-        if number_of_texts > 1000:
-            chargeable = number_of_texts - 1000
-        else:
-            chargeable = 0
-    return chargeable
-
-# %%
-usage_table_plans['chargeable_messages'] = usage_table_plans.apply(chargeable_messages, axis =1)
-usage_table_plans.head()
-
-# %%
-def chargeable_data (row):
-    plan = row['plan']
-    data_rounded_up = row['data_rounded_up']
-    
-    if plan == 'surf':
-        if data_rounded_up > 15:
-            chargeable = data_rounded_up - 15
-        else:
-            chargeable = 0
-    if plan == 'ultimate':
-        if data_rounded_up > 30:
-            chargeable = data_rounded_up - 30
-        else:
-            chargeable = 0
-    return chargeable
-
-# %%
-usage_table_plans['chargeable_data'] = usage_table_plans.apply(chargeable_data, axis =1)
-usage_table_plans.head()
-
-# %%
-
-
-# %%
-
-
-# %% [markdown]
-# Now we have all the data we need to calculate and add a monthly revenue column:
-
-# %%
-def monthly_rev(row):
-    plan = row['plan']
-    chargeable_calls = row['chargeable_calls']
-    chargeable_messages = row['chargeable_messages']
-    chargeable_data = row['chargeable_data']
-    
-    if plan == 'surf':
-        revenue = surf_monthly_charge +((chargeable_calls * surf_call_charge) + (chargeable_messages * surf_message_charge)+ (chargeable_data * surf_data_charge))
-    else:
-        revenue = ultimate_monthly_charge +((chargeable_calls * ultimate_call_charge) + (chargeable_messages * ultimate_message_charge)+ (chargeable_data * ultimate_data_charge))
-    return revenue
-
-# %%
-usage_table_plans['monthly_revenue'] = usage_table_plans.apply(monthly_rev, axis =1)
-usage_table_plans.head()
-
-# %% [markdown]
-# The 'usage_table_plans' dataset now gives us the information requested: 
-# - The number of calls made and minutes used per month
-# - The number of text messages sent per month
-# - The volume of data per month
-# - The monthly revenue from each user.
-
-# %% [markdown]
-# ## Analysing the Data
-# We will now investigate the customers' behavior by plotting histograms of the minutes, texts and volume of data the users of each plan require per month. 
-# We will also calculate the mean, variance and standard deviation.
-
-# %%
-variables = ['minutes_used', 'number_of_texts', 'volume_of_data_used']
-plans = ['surf', 'ultimate']
-
-# %%
-for col in variables:
-    for tariff in plans:
-        usage_table_plans[usage_table_plans['plan'] == tariff][col].plot(kind = 'hist', bins = 100)
-    plt.title(col)
-    plt.legend(plans)
-    plt.show()
-
-# %% [markdown]
-# These graphs plot the distributions of the monthly consumption by users of call minutes, messages and data. The data covers 500 users, 339 on the surf plan and 161 on the ultimate plan. 
+data['rating'].unique()
 
 # %% [markdown]
 # <div class="alert alert-block alert-info">
-#     
-# <b>Senior reviewer's comment</b> <a class="tocSkip"></a>
-#     
-# Also, when describing distributions, students try to understand what kind they belong to.
-#     
-# It is not obligatory to do this, but if they still do and make mistakes - you need to correct them.
-#     
-# If they divide all distributions into "similar to normal" and "very different from normal" - that's correct.
-# 
-# 
+# <b>Senior Reviewer's comment </b> <a class="tocSkip"></a>
+#
+# Successful solutions for handling gaps in columns with reviews of critics / users are the following:
+# entering a unreal value;
+#
+# leaving the gaps unchanged.
+#
+# The first option could potentially lead to problems when analyzing the impact of reviews on sales, you need to track this.
+# Deleting rows with gaps in the Reviews columns is considered a gross mistake, we mark it with a red comment. Explanation for the student: "This way our dataset will become much poorer, losing more than a third of the lines that contain information about sales, release date, and platform.  The data in these columns will be useful for completing the major part of the assignment.  Besides, the newest games usually don't have reviews - and their sales information is the most valuable."
+#
+#
+# An attempt to fill in the gaps by "replacing all gaps with a median / mean value for the entire dataset" is considered a gross mistake, we mark it with a red comment. Instead of explaining, I ask the student: "Why do you think that such a replacement is appropriate?"
+#
+# An attempt to fill in the gaps in a more complex way - for example, splitting games into groups by genre and filling in the gaps with the mean / median value of every genre - should be marked with a yellow comment.
+#
+# Explanation for the student: "You did a great job filling the gaps.But such a significant proportion of gaps can hardly be correctly restored from the available values."
+#
+#
+#
+#
+#
 # </div>
 
 # %% [markdown]
 # <div class="alert alert-block alert-info">
-#     
-# <b>Senior reviewer's comment</b> <a class="tocSkip"></a>
-#     
-# For next cells:    
-#     
-# When describing distributions, students try to understand what kind they belong to.
-#     
-# It is not obligatory to do this, but if they still do and make mistakes - you need to correct them.
-#     
-# If they divide all distributions into "similar to normal" and "very different from normal" - that's correct.
-# 
-# 
+# <b>Senior Reviewer's comment </b> <a class="tocSkip"></a>
+#
+# Almost no one replaces rare options with analogues - therefore you can give the following advice as developmental feedback: "Look at how often different rating values occur. Perhaps rare values can be replaced with more common ones.
+# Or, if they make up a negligible fraction of the data, they can be deleted."
+#
+#
+# Important - the student can make this substitution later in the project: before evaluating the impact of the ESRB rating on sales in a particular region.
+#
+#
+#
+#
+#
+#
 # </div>
 
 # %% [markdown]
-# ### Analysis of Call Minutes used
+# #### Calculating total sales revenue
 
 # %%
-usage_table_plans.query('plan == "surf"')['minutes_used'].max()
-
-# %%
-usage_table_plans.query('plan == "ultimate"')['minutes_used'].max()
-
-# %%
-usage_table_plans.query('plan == "surf"')['minutes_used'].mean()
-
-# %%
-usage_table_plans.query('plan == "surf"')['minutes_used'].median()
-
-# %%
-usage_table_plans.query('plan == "ultimate"')['minutes_used'].mean()
-
-# %%
-usage_table_plans.query('plan == "ultimate"')['minutes_used'].median()
-
-# %%
-np.var(usage_table_plans.query('plan == "surf"')['minutes_used'])
-
-# %%
-np.std(usage_table_plans.query('plan == "surf"')['minutes_used'])
-
-# %%
-np.var(usage_table_plans.query('plan == "ultimate"')['minutes_used'])
-
-# %%
-np.std(usage_table_plans.query('plan == "ultimate"')['minutes_used'])
+data['total_sales'] = data[['na_sales', 'eu_sales',
+                            'jp_sales', 'other_sales']].sum(axis=1)
+data.nlargest(5, ['total_sales'])
+data.info()
 
 # %% [markdown]
-# Analysis: The distribution of minutes used per month seems to approximate a 'normal' distribution for both the Surf and Ultimate plans.  They both look to be skewed to the right and this is confirmed by the means of each being higher than the medians. The mean for Surf is 436.5 minutes and for Ultimate 434.7 minutes.  The maximum monthly usage for those on the Surf plan (in this sample) was 1510 minutes, compared to 1369 for the Ultimate plan. The standard deviation for Ultimate is 237.7 which is greater than the variance for Surf (at 229.2).
-
-# %% [markdown]
-# ### Analysis of Text Messages Sent
-
-# %%
-usage_table_plans.query('plan == "surf"')['number_of_texts'].mean()
-
-# %%
-usage_table_plans.query('plan == "ultimate"')['number_of_texts'].mean()
-
-# %%
-np.var(usage_table_plans.query('plan == "surf"')['number_of_texts'])
-
-# %%
-np.var(usage_table_plans.query('plan == "ultimate"')['number_of_texts'])
-
-# %%
-np.std(usage_table_plans.query('plan == "surf"')['number_of_texts'])
-
-# %%
-np.std(usage_table_plans.query('plan == "ultimate"')['number_of_texts'])
-
-# %% [markdown]
-# Analysis: The distribution of the number of texts sent per month looks less like a 'normal' distribution and more like a downward exponential curve for both the Surf and Ultimate plans.  
-# The mean for Surf is 40.1 texts per month and for ultimate is higher at 46.2 texts per month.  
-# The standard deviations for both plans are very similar: 33.0 for Surf and 32.9 for Ultimate.
-
-# %% [markdown]
-# ### Analysis of Data Used (mb)
-
-# %%
-usage_table_plans.query('plan == "surf"')['volume_of_data_used'].mean()
-
-# %%
-usage_table_plans.query('plan == "ultimate"')['volume_of_data_used'].mean()
-
-# %%
-np.var(usage_table_plans.query('plan == "surf"')['volume_of_data_used'])
-
-# %%
-np.var(usage_table_plans.query('plan == "ultimate"')['volume_of_data_used'])
-
-# %%
-np.std(usage_table_plans.query('plan == "surf"')['volume_of_data_used'])
-
-# %%
-np.std(usage_table_plans.query('plan == "ultimate"')['volume_of_data_used'])
-
-# %% [markdown]
-# Analysis: The distribution of the volume of data used per month looks very much like a 'normal' distribution for both the Surf and Ultimate plans.
-# The mean for Ultimate is higher at 17,238mb compared to 16,717mb for Surf.
-# However, the standard deviations for both plans are very similar: 7,882mb for Surf and 7,825mb for Ultimate.
-
-# %% [markdown]
-# Conclusion: the behavious of customers on the Surf and Ultimate plans is actually quite similar.  Despite the Ultimate plan being more expensive and having greater allowances, Surf customer use slightly more call minutes per month, on average.  Ultimate customers send more text messages on average than Surf customers (46.2 compared to 40.1) and the standard deviations for both are similar.  Ultimate customers do use more data per month that Surf customers, but not significantly more: 17.2GB compared to 16.7GB. Again, the standard deviations for both are very similar.
+# <div style="border:solid green 2px; padding: 20px"> <b>Success:</b><br>
+#
+#    `total_sales` is calculated correctly. Thanks for using `sum(axis=1)`. This way your code looks more professionally.
+#
+#
+# </div>
+#
 
 # %% [markdown]
 # <div class="alert alert-block alert-info">
-#     
-# <b>Senior reviewer's comment</b> <a class="tocSkip"></a>
-#     
-# We need to formulate H0 and H1. Use right words: reject/can't reject. Not accept, not right, not true. Sometimes students write it. It is a mistake.
-# 
-# Students should use st.ttest_ind. They have big theory lesson about it.
+# <b>Senior Reviewer's comment </b> <a class="tocSkip"></a>
+#
+# Typically students don't use the games[['na_sales','eu_sales','jp_sales', 'other_sales']].sum(axis = 1) construction - you can mention it as a tip.
+#
+#
+#
+#
+#
+#
+#
 # </div>
 
 # %% [markdown]
-# ## Testing Hypotheses
-# We will now test the following hypotheses:
-# - Hypothesis 1: The average revenue from users of Ultimate and Surf calling plans differs.
-# - Hypothesis 2: The average revenue from users in NY-NJ area is different from that of the users from other regions.
+# #### Conclusion
 
 # %% [markdown]
-# ### Hypothesis 1
-# We will compare the means of the two plans and test the hypothesis that the average revenue from users of Ultimate and Surf calling plans differs (ie that one could be greater or less than the other).  This is a 2 sided test from data for two independent data sources. 
-
-# %%
-usage_table_plans.query('plan == "surf"')['monthly_revenue'].mean()
-
-# %%
-usage_table_plans.query('plan == "ultimate"')['monthly_revenue'].mean()
-
-# %%
-np.std(usage_table_plans.query('plan == "surf"')['monthly_revenue'])
-
-# %%
-np.std(usage_table_plans.query('plan == "ultimate"')['monthly_revenue'])
+# We lowered the case for headers and changed data type for Year_of_release column.
+# We dealt with the missing values in the following way:
+#
+#    *Year_of_release*: We don't have many missing values here so we changed them to zero as it doesn't affect the results of our analysis.
+#
+#    *Critic_score*: there's nothing we can do to fill it in so we leave the missing values as they are.
+#
+#    *User_score*: again there's nothing we can do to fill in missing values or values for games where rating is pending ('tbd'). We changed 'tbd' values to 'NaN' in order to change data type leave is as it is.
+#
+# We leave the other missing values as they are because those are object data types that we can not fill in. Still they might not have any visible impact on the results of our analysis.
+#
+# Finally we calculated Total_sales column as requested.
 
 # %% [markdown]
-# The average monthly revenue for Ultimate customers (72.69 USD) appears greater than for Surf customers (63.44 USD). However, the standard distributions are very different, so we will formulate a null and alternative hypothesis and use the data sets to perform a statistical test.
-# 
-# The null hypothesis will be: 'the means of the two datasets are equal'. We will use a critical statistical significance level (alpha) of 0.05.  If the p-value < alpha, we reject the hypothesis that the mean monthly revenues of the two customer groups are equal.
+# <div style="border:solid green 2px; padding: 20px"> <b>Success:</b><br>
+# Thanks for the detailed conclusions!</div>
+
+# %% [markdown]
+# <div class="alert alert-block alert-info">
+# <b>Senior Reviewer's comment </b> <a class="tocSkip"></a>
+#
+# Frequent gross mistakes, red comment:
+#
+# forgetting about the tbd value;
+#
+# deleting lines with tdb;
+#
+# handling gaps and tdb in different ways.
+#
+#
+# Make sure that the student has provided data types in the critic_score, user_score, year_of_release columns - otherwise, we mark it as a gross mistake, a red comment, or a yellow comment, depending on the number of other mistakes.
+# Obviously, if the entire project is already highlighted in red, then there is no point in converting a float into an int.
+#
+#
+#
+#
+#
+# </div>
+
+# %% [markdown]
+# ### Analyzing the data
+
+# %% [markdown]
+# #### Looking at games releases
+
+# %%
+df_count = data[
+    ['year_of_release', 'name']].groupby(['year_of_release']).count().sort_values(by='name').reset_index(
+)
+df_count = df_count[df_count['year_of_release'] != 0]
+
+# %%
+fig, ax = plt.subplots(figsize=(15, 10))
+ax.vlines(x=df_count.year_of_release, ymin=0, ymax=df_count.name,
+          alpha=0.5, linewidth=10, color='green')
+ax.set_title('Games releases per year', size=15)
+ax.set_ylabel('Number of games')
+ax.set_xlabel('Year of release')
+ax.set_xticks(df_count.year_of_release)
+ax.set_xticklabels(df_count.year_of_release, rotation=90)
+
+# %% [markdown]
+# **Comment:**
+# *The graph shows the amount of games released per year. We can see a rapid growth in late 90's with a peack in late 2008-2009 and stagnation in 2010's.*
+
+# %% [markdown]
+# #### Looking at sales distribution
+
+# %%
+df_sales = data[['platform', 'total_sales']].groupby(
+    ['platform']).sum().sort_values(by='total_sales').reset_index(
+)
+df_sales['z_score'] = (df_sales['total_sales'] -
+                       df_sales['total_sales'].mean())/df_sales['total_sales'].std()
+df_sales['color'] = ['red' if x < 0 else 'green' for x in df_sales['z_score']]
+df_sales
+
+# %%
+plt.figure(figsize=(15, 10))
+plt.hlines(
+    y=df_sales.platform, xmax=df_sales.z_score, xmin=0, color=df_sales.color, linewidth=10, alpha=0.5
+)
+plt.ylabel('Platform')
+plt.xlabel('Z score')
+plt.title('Sales revenue per platform', size=15)
+
+# %% [markdown]
+# **Comment:**
+# *Here we can see most profitable platforms (green) and less profitable (red). We calculated z_score to show how far each platform revenue is from overall mean value (z-score=0).*
+
+# %% [markdown]
+# <div style="border:solid green 2px; padding: 20px"> <b>Success:</b><br>
+#    Wow, it's really great that you use the z-score for the determining of the most dominant platforms for the whole period 👏 👏 👏   </div>
+
+# %% [markdown]
+# #### Looking at platforms lifetime
+
+# %%
+df_lifetime = pd.pivot_table(
+    data, index='year_of_release', columns='platform', values='total_sales', aggfunc='sum').fillna(0
+                                                                                                   )
+df_lifetime = df_lifetime.iloc[1:, :]
+df_lifetime
+
+# %%
+sns.set(rc={'figure.figsize': (15, 10)})
+sns.lineplot(data=df_lifetime)
+plt.ylabel('Revenue')
+plt.xlabel('Year')
+plt.title('Platforms lifetime', size=15)
+
+# %% [markdown]
+# **Comment:**
+# *This graph shows a platform lifetime from first sales to oblivion. We can see that on average popular platforms "live" for about 10 years before they fade away.*
+
+# %% [markdown]
+# <div style="border:solid green 2px; padding: 20px"> <b>Success:</b><br>
+#   I like that you use a variety of charts in your research. </div>
+
+# %% [markdown]
+# #### Choosing relevant data for analysis
+
+# %%
+good_data = data[data.year_of_release >= 2013]
+
+# %% [markdown]
+# <div class="alert alert-block alert-info">
+# <b>Senior Reviewer's comment </b> <a class="tocSkip"></a>
+#
+# The ideal period would be 2014-2016 or 2015-2016 or 2013- 2016 - that is, a period of 2-3 years, including the data for 2016.
+# A period of 4-5 years including or excluding data for 2016 is considered acceptable.
+#
+# If a student took a period of more than 5 years - this is a gross mistake and a red comment.
+#
+# Message to the student: "It is uncommon to use data for more than 2-3 years when forecasting next year's sales, even in case of traditional businesses.   And in the dynamic computer games industry, taking longer time intervals should be avoided as it will definitely lead to tracking some obsolete trends. But you shouldn't take too short a period either."
+#
+# If a student took a period of 4-5 years, we write the same text in a yellow comment.
+#
+# Deleting the data for 2016 is not considered a gross mistake - at least the student read the text of the assignment till the end and tried to put what he read into practice.
+#
+# But there should be the following note in a yellow comment: "Usually, the forecast for the next year is made in October, when the current year is not yet closed.At the same time, the data of the current year is not deleted, since it contains the most recent information, albeit not complete. Therefore, it is better to leave 2016 in the dataset for further analysis."
+#
+#
+#
+#
+# </div>
+
+# %%
+df_lifetime_new = pd.pivot_table(
+    good_data, index='year_of_release', columns='platform', values='total_sales', aggfunc='sum').fillna(0)
+sns.set(rc={'figure.figsize': (15, 10)})
+sns.lineplot(data=df_lifetime_new)
+plt.ylabel('Revenue')
+plt.xlabel('Year')
+plt.title('New platforms lifetime', size=15)
+
+# %% [markdown]
+# **Comment:**
+# *This graph shows platforms revenue over time within the chosen period, i.e. 2013-2016. We can see that revenue of all platforms is declining.*
+
+# %% [markdown]
+# <div class="alert alert-block alert-info">
+# <b>Senior Reviewer's comment </b> <a class="tocSkip"></a>
+#
+# Also student can plot different plots for platforms.
+#
+#
+#
+#
+# </div>
+
+# %%
+# Reviewer's code
+plot_data = good_data.groupby(['year_of_release', 'platform']).agg({
+    'total_sales': 'sum'}).reset_index()
+
+fig = px.line(plot_data, x="year_of_release", y="total_sales",
+              color='platform', title="New platforms lifetime")
+fig.show()
+
+# %%
+plt.figure(figsize=(15, 10))
+sns.boxplot(x='platform', y='total_sales', data=good_data)
+plt.ylim(0, 3)
+plt.ylabel('Revenue')
+plt.xlabel('Platform')
+plt.title('Revenue distribution per game', size=15)
+
+# %% [markdown]
+# **Comment:**
+# *Here we can see revenue distribution per game for each platform. The most perspective platforms as per graph are PS3, PS4, WiiU, Wii, X360 and XOne.*
+
+# %% [markdown]
+# #### Finding correlation between sales and ratings
+
+# %%
+PS4_df = good_data.groupby(
+    ['platform', 'name'])['total_sales', 'critic_score', 'user_score'].sum(
+).query('platform == "PS4" & critic_score > 0 & user_score > 0').reset_index(
+)
+
+# %%
+PS4_df['total_sales'].corr(PS4_df['critic_score'])
+
+# %%
+print("Positive correlation between Revenue and critics' rating for PS4")
+plt.figure(figsize=(15, 10))
+sns.scatterplot(x="critic_score", y="total_sales", data=PS4_df, alpha=0.7)
+plt.ylabel('Revenue')
+plt.xlabel('Rating')
+plt.title('PS4 Correlation of critic score and sales revenue', size=15)
+
+# %%
+PS4_df['total_sales'].corr(PS4_df['user_score'])
+
+# %%
+print("A weak negative correlation between Revenue and users' rating for PS4")
+plt.figure(figsize=(15, 10))
+sns.scatterplot(x="user_score", y="total_sales", data=PS4_df, alpha=0.7)
+plt.ylabel('Revenue')
+plt.xlabel('Rating')
+plt.title('PS4 Correlation of user score and sales revenue', size=15)
+
+# %% [markdown]
+# <div style="border:solid green 2px; padding: 20px"> <b>Success:</b><br>
+#     Wonderful visualization! 😊  Yep, the platform PS4 is the most popular.</div>
+
+# %%
+X360_df = good_data.groupby(
+    ['platform', 'name'])['total_sales', 'critic_score', 'user_score'].sum(
+).query('platform == "X360" & critic_score > 0 & user_score > 0').reset_index(
+)
+
+# %%
+X360_df['total_sales'].corr(X360_df['critic_score'])
+
+# %%
+print("Positive correlation between Revenue and critics' rating for X360")
+plt.figure(figsize=(15, 10))
+sns.scatterplot(x="critic_score", y="total_sales", data=X360_df, alpha=0.7)
+plt.ylabel('Revenue')
+plt.xlabel('Rating')
+plt.title('X360 Correlation of critic score and sales revenue', size=15)
+
+# %%
+X360_df['total_sales'].corr(X360_df['user_score'])
+
+# %%
+print("A weak positive correlation between Revenue and users' rating for X360")
+plt.figure(figsize=(15, 10))
+sns.scatterplot(x="user_score", y="total_sales", data=X360_df, alpha=0.7)
+plt.ylabel('Revenue')
+plt.xlabel('Rating')
+plt.title('X360 Correlation of user score and sales revenue', size=15)
+
+# %%
+
+
+def corr_func(platform):
+    data = good_data[good_data['platform'] == platform]
+    corr = good_data[good_data['platform'] == platform][[
+        'critic_score', 'user_score', 'total_sales']].corr()['total_sales']
+    data.plot(y='total_sales', x='critic_score',
+              kind='scatter', alpha=0.7, grid=True)
+    plt.title(platform)
+    data.plot(y='total_sales', x='user_score',
+              kind='scatter', alpha=0.7, grid=True)
+    plt.title(platform)
+    print(platform, corr)
+    print('-----')
+
+
+# %%
+platforms = ['PS4', 'WiiU', 'XOne', 'PS3', 'X360', 'Wii']
+for i in platforms:
+    corr_func(i)
+
+# %% [markdown]
+# #### Finding out how revenue is affected by genre
+
+# %%
+print('Almost all genres show good sales revenue')
+df_genre = good_data.groupby(['genre', 'name'])[
+    'total_sales'].sum().reset_index()
+df_genre = df_genre.query('1<total_sales<10')
+plt.figure(figsize=(15, 10))
+sns.boxplot(x='genre', y='total_sales', data=df_genre)
+plt.ylabel('Revenue')
+plt.xlabel('Genre')
+plt.title('Revenue distribution per game', size=15)
+
+# %% [markdown]
+# #### Conclusion
+
+# %% [markdown]
+# First we looked at game releases per year. We built a histogram and see that the distribution is skewed to the left. No wonder as the game industry began to grow rapidly in late 90’s.
+#
+# We grouped the data by platform and total revenue and calculated a z_score which shows for each platform how far total revenue is from the overall mean in terms of standard deviation. Then we built a graph showing the distribution of revenue for all the platforms.
+#
+# We also created a dataset showing a platform lifetime from the first sales to oblivion and built a lineplot showing this lifetime. We can see that on average a platform “lives” about 10 years before it completely fades away. Still that's a large period for decided to take the last ten years of data into consideration for our project as it will include all the relevant platforms.
+#
+# Using a lineplot for selected data we can see that the leading platforms in the last few years were PS3, PS4, XOne, X360 and 3DS. However, the graph shows that sales revenue for all platforms is declining.
+#
+# We built a boxplot based on selected data grouped by name and platform in order to determine how revenue is distributed across platforms. We found out that the platforms we chose previously are indeed the leading ones with higher total revenues and higher mean values than the rest. Except for WiiU platform that apparently has major outliers, namely Super Mario series which brought outstanding revenues to the platform in middle 2010’s.
+#
+# We chose two popular platforms - PS4 and X360 - to see how critic and user rating can affect sales. We built scatterplots for each case and we can see a robust positive correlation for critic reviews (nearly 0.4 for both platforms), i.e. higher score usually brings more revenue. However, the correlation between user score and revenue is about zero which means that sales revenue is not affected much by users’ opinion.
+#
+# Finally, we built a box plot to see how revenue is distributed among genres. We cut off the revenue outliers to have a closer look. We can see that all genres except Adventure, Puzzle and Strategy show good sales and high mean values. This might be the case because genres get mixed and a single game can be assigned multiple genres, like Action-Fighting or Simulation-Racing games.
+
+# %% [markdown]
+# <div style="border:solid green 2px; padding: 20px"> <b>Success:</b><br>
+#
+# Great job! Especially impressed:
+#
+# - typical lifespan you determine correctly
+#
+# - z-score for the determining of the most popular platforms for the whole period
+#
+# - you have the titles and axes captions for all the graphs
+#
+#
+#
+#
+# Thank you for in-depth analysis and logical conclusions! </div>
+
+# %% [markdown]
+# <div class="alert alert-block alert-info">
+# <b>Senior Reviewer's comment </b> <a class="tocSkip"></a>
+#
+# For example, seeing that the correlation coefficient between sales and user ratings is "-0.05", a student can write: "there is a weak negative correlation between sales and user ratings".
+#
+# Pay attention to this and explain how to interpret such values correctly.
+#
+# Having put a unreal value when processing gaps, students forget to exclude it from the graphs and correlation calculation.
+# An example of graphs and calculations containing an error is given in the cell below.
+#
+# As a result, they receive distorted calculations.You need to get them to filter these values.
+#
+# A student might analyze of only 1 platform - in this case, draw his attention to the next item of the task: "Relate the conclusions with game sales on other platforms."
+#
+# You could also mention that the conclusions drawn on the basis of calculations for several platforms look "weighty" and more convincing.
+#
+#
+# Often students look only at the total sales of games by genre and conclude that Action is the most profitable genre.
+# This is a gross mistake, red comment.
+#
+# Get the student to study average/median sales: "Total sales are a poor metric for finding the most profitable genre.
+# High overall sales figures can hide a lot of small games with low sales.
+#
+# Or 2-3 stars and a bunch of failures.
+# It would be better to find a genre of games that consistently generate high revenue; to do so, you should consider average or median sales."
+#
+#
+#
+#
+# </div>
+
+# %% [markdown]
+# ### Creating a user profile for each region
+
+# %%
+na_platform = good_data.groupby(
+    ['platform'])['na_sales'].sum().reset_index().sort_values(by='na_sales', ascending=False
+                                                              )
+jp_platform = good_data.groupby(
+    ['platform'])['jp_sales'].sum().reset_index().sort_values(by='jp_sales', ascending=False
+                                                              )
+eu_platform = good_data.groupby(
+    ['platform'])['eu_sales'].sum().reset_index().sort_values(by='eu_sales', ascending=False
+                                                              )
+na_platform.sum()
+na_platform.head()
+eu_platform.sum()
+eu_platform.head()
+jp_platform.sum()
+jp_platform.head()
+
+# %% [markdown]
+# <div style="border:solid orange 2px; padding: 20px"> <b>Remarks:</b><br>
+#   For a clearer analysis of the game market in different regions it is better to use charts. For example, you can add pie plots or bar plots :)</div>
+
+# %%
+na_genre = good_data.groupby(
+    ['genre'])['na_sales'].sum().reset_index().sort_values(by='na_sales', ascending=False).head()
+jp_genre = good_data.groupby(
+    ['genre'])['jp_sales'].sum().reset_index().sort_values(by='jp_sales', ascending=False).head()
+eu_genre = good_data.groupby(
+    ['genre'])['eu_sales'].sum().reset_index().sort_values(by='eu_sales', ascending=False).head()
+na_genre.head()
+eu_genre.head()
+jp_genre.head()
+
+# %%
+good_data.groupby(['rating'])[['na_sales', 'eu_sales', 'jp_sales']].agg(
+    'sum').sort_values(by='na_sales', ascending=False)
+
+
+# %% [markdown]
+# #### Conclusion
+
+# %% [markdown]
+# We created multiple dataframes to see the top players on each market in terms of platform, genre and rating.
+#
+# First of all we looked at platforms and see that revenue is not equally distributed across the regions: NA brought 438 million to game developers in the respective period which is 3 times more than Japan. We can see that PS3 is doing better in EU region than in NA region and that XBox is not in top five in Japan. This might be because the market is special and relatively small and doesn't respond to global trends. We can see that top five platforms in Japan are originally local brands: Sony and Nintendo.
+#
+# Secondly, we looked at top five genres for each region and again NA and EU look alike except for the fifth place: Misc. (NA) vs. Racing (EU). Japan top five genres have Role-playing on top, Action is second and Shoter's the last.
+#
+# Finally, the ESRB rating for NA and EU regions are the same - "M", "E", "E10+", "T". This means that for these two regions the age of players has similar distribution.
+# In Japan however the revenue distribution differs - "T" is on the 1st place, than "E" and "M".
+
+# %% [markdown]
+# <div style="border:solid green 2px; padding: 20px"> <b>Success:</b><br>
+#     Technically everything is correct here, I really like your detailed conclusions, but due to the fact that the period previously selected was not actual, the platforms here are not quite up to date. As soon as you fix the actual period, everything will be okay here. Can you please write here your guesses as to what may be related similarities and differences in the most popular platforms in different regions?</div>
+
+# %% [markdown]
+# <div class="alert alert-block alert-info">
+# <b>Senior Reviewer's comment </b> <a class="tocSkip"></a>
+#
+# Common gross mistake, red comment: Students don't replace gaps in the rating column with a unreal value and end up losing the entire data on unrated games.
+#
+# Message to the student: "Using this method of calculation, you completely excluded unrated games from the analysis.
+# But the sales of these particular games may indicate a key difference between regions.
+#
+# Students can be given the following advice:
+#
+# if the graph for each region is built by a separate line of code - plot 3 graphs side by side using subplots;
+#
+# if subplots is successfully applied - check if there is a "two level header" - both for all three graphs together, and for each of the three separately;
+#
+# when analyzing platforms and genres, everything that is not included in the TOP-5? should be combined into "others" - so that the analysis picture is more complete.
+#
+# Average user ratings for Action and Sports are different
+#
+#
+#
+#
+#
+# </div>
+
+# %% [markdown]
+# ### Hypotheses testing
+
+# %% [markdown]
+# #### Hypothesis 1: Average user ratings of the Xbox One and PC platforms are the same
+
+# %%
+hyp_data = good_data.query(
+    'user_score > 0 & platform == "XOne" or user_score > 0 & platform == "PC"')
+fig, ax = plt.subplots(figsize=(15, 10))
+sns.histplot(hyp_data, x='user_score', hue='platform')
+plt.ylabel('Frequency')
+plt.xlabel('Rating')
+plt.title('User rating distribution per platform', size=15)
+
+# %%
+# Reviewer's code
+hyp_data[(hyp_data['platform'] == 'PC') & (hyp_data['user_score'] == 0)]
+
+# %%
+fig, ax = plt.subplots(figsize=(5, 10))
+ax = sns.boxplot(x='platform', y='user_score', data=hyp_data)
+plt.ylabel('Rating')
+plt.xlabel('Platform')
+plt.title('User rating distribution per platform', size=15)
+
+# %% [markdown]
+# <div style="border:solid green 2px; padding: 20px"> <b>Success:</b><br>
+#
+#  It's great that you visualized the sample distributions!  </div>
+
+# %% [markdown]
+# <div class="alert alert-block alert-info">
+# <b>Senior Reviewer's comment </b> <a class="tocSkip"></a>
+#
+# Graphs is an option.
+#
+#
+#
+#
+#
+# </div>
+
+# %%
+hyp_data.groupby(['platform'])['user_score'].agg('mean')
+
+# %%
+XOne_df = hyp_data.query('platform == "XOne"')
+PC_df = hyp_data.query('platform == "PC"')
+
+# %% [markdown]
+# **We formulate the hypotheses as follows:**
+#
+#  - Null-hypothesis: There are no statistically significant differences between the average user ratings of Xbox One and PC platforms;
+#  - Alternative hypothesis: The differences between average user ratings of the Xbox One and PC platforms are statistically significant.
+#
+# *We choose alpha parameter equal **5%** as a standart threshold for our kind of business.*
 
 # %%
 alpha = 0.05
-sample_1 = usage_table_plans.query('plan == "surf"')['monthly_revenue']
-sample_2 = usage_table_plans.query('plan == "ultimate"')['monthly_revenue']
-results = st.ttest_ind(sample_1, sample_2, equal_var = False) 
-# we set equal_var to False as we don't consider the variances of the statistical populations from which the samples are taken to be are approximately equal.
 
-print('p-value: ', results.pvalue)
-
-if results.pvalue < alpha:
-    print("We reject the null hypothesis")
+# %%
+p_value_levene = stats.levene(
+    XOne_df['user_score'], PC_df['user_score']).pvalue
+if p_value_levene < alpha:
+    print('Reject H0: variance of sample 1 is not equal to variance of sample 2')
 else:
-    print("We can't reject the null hypothesis") 
-
-# %% [markdown]
-# The p-value is very small.  It tells us that if the means of the two datasets were indeed the same, only around a 0.000001% of the values would have the same mean. That is, there is a very small probability of them randomly being the same. This probability is low enough to conclude that **we can reject the null hypothesis that the average revenues are the same for both groups**. So yes, it is probable that the average revenue from Users of Surf and Ultimate dies indeed differ.
-
-# %% [markdown]
-# ### Hypothesis 2
-# We will examine the claim that the average revenue from users in NY-NJ area is different from that of the users from other regions. We will compare the means of the groups. This is  a 2 sided test for paired samples.
+    print("Fail to Reject H0: We don't have enough evidence to say that variances of sample 1 and sample 2 are not the same")
 
 # %%
-usage_table_plans['city'].value_counts()
-
-# %%
-NY_NJ = usage_table_plans[usage_table_plans['city'].str.contains('NY-NJ')]
-len(NY_NJ)
-
-# %% [markdown]
-# We will compare the data from users in the 'New York-Newark-Jersey City, NY-NJ-PA MSA' to the others in the dataset.
-
-# %%
-Not_NY_NJ = usage_table_plans.query('city not in @NY_NJ.city')
-len(Not_NY_NJ)
-
-# %%
-len(usage_table_plans)
+p_value = stats.ttest_ind(
+    XOne_df['user_score'], PC_df['user_score'], nan_policy='omit', equal_var=False).pvalue
+if p_value < alpha:
+    print("Reject H0: There are statistically significant differences between the average average user ratings of Xbox One and PC platforms.")
+else:
+    print("Fail to Reject H0: We don't have enough evidence to say that the difference between average user ratings of the Xbox One and PC platforms is statistically insignificant.")
+p_value
 
 # %% [markdown]
-# As 2303 = 378 + 1925, we have successfully split our dataset along the NY-NJ border.
+# #### Hypothesis 2: Average user ratings for the Action and Sports genres are the same
+
+# %%
+hyp_data2 = good_data.query(
+    'user_score > 0 & genre == "Sports" or user_score > 0 & genre == "Action"')
+fig, ax = plt.subplots(figsize=(15, 10))
+sns.histplot(hyp_data2, x='user_score', hue='genre')
+plt.ylabel('Frequency')
+plt.xlabel('Rating')
+plt.title('User rating distribution per genre', size=15)
+
+# %%
+fig, ax = plt.subplots(figsize=(5, 10))
+ax = sns.boxplot(x='genre', y='user_score', data=hyp_data2)
+plt.ylabel('Rating')
+plt.xlabel('Genre')
+plt.title('User rating distribution per platform', size=15)
+
+# %%
+hyp_data2.groupby(['genre'])['user_score'].agg('mean')
+
+# %%
+Sports_df = hyp_data2.query('genre == "Sports"')
+Action_df = hyp_data2.query('genre == "Action"')
 
 # %% [markdown]
-# We will formulate a null and alternative hypothesis and use the data sets to perform a statistical test.
-# 
-# The null hypothesis will again be: 'the means of the two datasets are equal'. We will again use a critical statistical significance level (alpha) of 0.05.  If the p-value < alpha, we reject the hypothesis that the mean monthly revenues of the two customer groups are equal.
+# **We formulate the hypotheses as follows:**
+#
+#  - Null-hypothesis: Average user ratings for the Action and Sports genres belong to the same statistical population;
+#  - Alternative hypothesis: Average user ratings for the Action and Sports genres do not belong to the same statistical population.
+#
+# *We choose alpha parameter equal **5%** as a standart threshold for our kind of business.*
 
 # %%
 alpha = 0.05
-sample_3 = NY_NJ['monthly_revenue']
-sample_4 = Not_NY_NJ['monthly_revenue']
 
-results1 = st.ttest_ind(sample_3, sample_4)
-
-print('p-value: ', results1.pvalue)
-
-if results1.pvalue < alpha:
-    print("We reject the null hypothesis")
+# %%
+p_value_levene = stats.levene(
+    Sports_df['user_score'], Action_df['user_score']).pvalue
+if p_value_levene < alpha:
+    print('Reject H0: variance of sample 1 is not equal to variance of sample 2')
 else:
-    print("We can't reject the null hypothesis") 
+    print("Fail to Reject H0: We don't have enough evidence to say that variances of sample 1 and sample 2 are not the same")
+
+# %%
+p_value = stats.ttest_ind(
+    Sports_df['user_score'], Action_df['user_score'], nan_policy='omit', equal_var=False).pvalue
+if p_value < alpha:
+    print("Reject H0: Average user ratings for the Action and Sports genres do not belong to the same statistical population.")
+else:
+    print("Fail to Reject H0: We don't have enough evidence to say that average user ratings for the Action and Sports genres belong to different statistical populations.")
+p_value
 
 # %% [markdown]
-# This time the p-value is greater than alpha, the critical statistical significance level. This states that if the means of the two datasets were indeed the same, 11.1% of the random samples would have the same mean.  Given this, **we cannot reject the null hypothesis that the average revenue from users in the NY-NJ area is the same as that of users in other regions**. So we cannot say that the averages are different in the two geographical regions.
+# #### Conclusion
 
 # %% [markdown]
-# ## Overall Conclusion
-# In this project we analysed a sample of customer data of  of telecom operator Megaline which offers its clients two prepaid plans, Surf and Ultimate.  Our job was to analyze clients' behavior and determine which prepaid plan brings in more revenue. 
-# 
-# The distribution of call minutes used per month seemed to approximate a 'normal' distribution for both the Surf and Ultimate plans.  The mean call minutes used per month for Surf is 436.5 minutes and for Ultimate 434.7 minutes.  The maximum monthly usage for those on the Surf plan in this sample was 1510 minutes, compared to 1369 for the Ultimate plan. The standard deviation for Ultimate is 237.7 which is greater than the variance for Surf (at 229.2).
-# 
-# The distribution of the number of texts sent per month looked less like a 'normal' distribution. The mean for Surf is 40.1 texts per month and for ultimate is higher at 46.2 texts per month.  The standard deviations however for both plans are very similar: 33.0 for Surf and 32.9 for Ultimate.
-# 
-# The distribution of the volume of data used per month looks very much like a 'normal' distribution for both the Surf and Ultimate plans. The mean for Ultimate is higher at 17,238mb compared to 16,717mb for Surf. However, the standard deviations for both plans are very similar: 7,882mb for Surf and 7,825mb for Ultimate.
-# 
-# We conclude that the behaviour of customers on the Surf and Ultimate plans is very similar. Despite the Ultimate plan being more expensive and having greater allowances, Surf customer use slightly more call minutes per month, on average. Ultimate customers do use more data per month that Surf customers, but not significantly more: 17.3GB compared to 16.7GB. Again, the standard deviations for both are very similar.  
-# 
-# Given this it would appear that the Ulimate plan should be more profitable and we discovered that the mean revenue from Surf is 63.44USD and from Ultimate 72.68USD. Given however that the standard deviations for each are very different (57.34USD for Surf and 12.63USD for Ultimate) we ran a statistical test to check the probability that the means were indeed different.
-# 
-# We concluded, given the low p-value that there is a very small probability of them randomly being the same. This probability was low enough to conclude that we can reject the probability that the average revenues are the same for both groups. So yes, **it is probable that the average revenue from Users of Surf and Ultimate does differ**.
-# 
-# We than ran a second statistical test to check if the average revenue from users in NY-NJ area is different from that of the users from other regions. This time the p-value was higher than the critical statistical significance level. Given this, we could not reject the null hypothesis that the average revenue from users in the NY-NJ area is the same as that of users in other regions. So **we cannot say that the averages are different in the two geographical regions**.
+# We formulated and run the tests on both hypotheses and see that in the first case we failed to reject the null-hypothesis and in the second case we rejected the null-hypothesis.
 
 # %% [markdown]
 # <div class="alert alert-block alert-info">
-#     
-# <b>Senior reviewer's comment</b> <a class="tocSkip"></a>
-#     
-# The final conclusion must necessarily reflect the purpose of the study - it is necessary to determine a profitable tariff plan for a mobile operator.
-#     
-# If the student did not do this - gross mistake, red comment.
-#     
-# At the same time, students may come to different conclusions.
-#     
-# For instance, the author's solution mentions that the Smart tariff is more profitable, because:
-#     
-# "Users of the Ultra tariff spend chaotically, there is no clear trend over the months.
-#     
-# However, on average, most customers stay within the monthly fee - less than a quarter of customers pay extra for exceeding the limits.
-#     
-# Most often, users exceeded the Internet traffic limits.
-#     
-# This is the reason for the higher percentage of revenue from Smart tariff users.
-#     
-# In addition, the maximum revenue in the sample corresponds to the subscriber of this tariff plan."
-#     
-# The following chart can be used for confirmation:
-#     
-# Although the last graph shows that the average monthly fee for the Smart tariff is growing, which is not the case for the Ultra tariff, we only have data on the annual dynamics.
-#     
-# That is, it may be due to seasonality.
-#     
-# To be sure that growth will continue, we need data for at least a few months of the previous year.
-#     
-# The monthly payments of Ultra tariff users rarely exceed the monthly fee.
-#     
-# But they don´t spend the full package of services, and at the same time, their monthly payment is statistically much higher than the monthly payment of the Smart tariff.
-#     
-# Therefore, for the time being, the Ultra tariff is more profitable for the mobile operator.
-#     
-# Conclusion: in case experts give different recommendations, then it is not the tariff indicated by the student as the most profitable that you need to focus on.
-#     
-# Instead, look at the arguments provided in favor of this conclusion.
-#     
-# Absence of justification is a gross mistake, red comment.
-# 
+# <b>Senior Reviewer's comment </b> <a class="tocSkip"></a>
+#
+# Students do not formulate hypotheses / formulate only 1 hypothesis / formulate hypotheses incorrectly.
+#
+# They try to apply the criterion for one sample st.ttest_1samp to two samples.
+#
+# They don't remove gaps (if there are any left) - get results.pvalue equal to NaN.
+#
+# Students do not remove unreal values (if they were entered) - and get errors in calculations.
+#
+# The Equal_Var parameter is not set based on the calculation of dispersions. The approach has changed, we do not require it anymore.
+#
+# They conclude that the tests "confirm" one of the hypotheses - it is impossible to confirm the hypothesis in statistics.
+# They don't output results.pvalue, so if it's calculated incorrectly (e.g. equals to NaN) it will not be visible.
+# Samples are "averaged" beforehand: for example, 500 values are selected from each, trying to bring both samples to the same size.
+#
+# You should write that equality of sample sizes is not required for testing hypotheses, moreover, it is more common to use samples that are not equal in size.
+#
+#
+#
+#
+#
 # </div>
 
+# %% [markdown]
+# ### Overall conclusion
 
+# %% [markdown]
+# **Working on the dataset**
+#
+# Our goal was to study the data, analyze the aspects affecting sales revenue of games in order to spot potential winners. We've got a dataset that contained name of the game, year of release, platform, genre, sales revenue in different regions and different ratings. We examined the datasets and discovered some weired data and some missing data.
+#
+# **Data preprocessing**
+#
+# We lowered the case for headers and changed data type for Year_of_release column.
+# We dealt with the missing values in the following way:
+#
+#    *Year_of_release*: We don't have many missing values here so we changed them to zero as it doesn't affect the results of our analysis.
+#
+#    *Critic_score*: we looked for games with same names but missing score and filled it. We changed the rest to zero as there's nothing we can do to fill it in.
+#
+#    *User_score*: again we looked for games with same names but missing score and filled it. However here we had to first create a separate dataframe that would not contain 'tbd' values. As well as we did previously, we changed the rest of 'NaN' and 'tbd' values to zero as there's nothing we can do to fill them in.
+#
+# We leave the other missing values as they are because those are object data types that we can not fill in. Still they might not have any visible impact on the results of our analysis.
+#
+# Finally we calculated Total_sales column as requested.
+#
+# **Making calculations**
+#
+# First we looked at game releases per year. We built a histogram and see that the distribution is skewed to the left. No wonder as the game industry began to grow rapidly in late 90’s.
+#
+# We grouped the data by platform and total revenue and calculated a z_score which shows for each platform how far total revenue is from the overall mean in terms of standard deviation. Then we built a graph showing the distribution of revenue for all the platforms.
+#
+# We also created a dataset showing a platform lifetime from the first sales to oblivion and built a lineplot showing this lifetime. We can see that on average a platform “lives” about 10 years before it completely fades away and decided to take the last ten years of data into consideration for our project as it will include all the relevant platforms.
+#
+# Using a lineplot for selected data we can see that the leading platforms in the last few years were PS3, PS4, XOne, X360 and 3DS. However, the graph shows that sales revenue for all platforms is declining.
+#
+# We built a boxplot based on selected data grouped by name and platform in order to determine how revenue is distributed across platforms. We found out that the platforms we chose previously are indeed the leading ones with higher total revenues and higher mean values than the rest. Except for WiiU platform that apparently has major outliers, namely Super Mario series which brought outstanding revenues to the platform in middle 2010’s.
+#
+# We chose two popular platforms - PS4 and X360 - to see how critic and user rating can affect sales. We built scatterplots for each case and we can see a robust positive correlation for critic reviews (nearly 0.4 for both platforms), i.e. higher score usually brings more revenue. However, the correlation between user score and revenue is about zero which means that sales revenue is not affected much by users’ opinion.
+#
+# Finally, we built a box plot to see how revenue is distributed among genres. We cut off the revenue outliers to have a closer look. We can see that all genres except Adventure, Puzzle and Strategy show good sales and high mean values. This might be the case because genres get mixed and a single game can be assigned multiple genres, like Action-Fighting or Simulation-Racing games.
+#
+# **Creating a user profile for each region**
+#
+# First of all we looked at platforms and see that revenue is not equally distributed across the regions: NA brought 438 million to game developers in the respective period which is 3 times more than Japan. We can see that PS3 is doing better in EU region than in NA region and that XBox is not in top five in Japan. This might be because the market is special and relatively small and doesn't respond to global trends. We can see that top five platforms in Japan are originally local brands: Sony and Nintendo.
+#
+# Secondly, we looked at top five genres for each region and again NA and EU look alike except for the fifth place: Misc. (NA) vs. Racing (EU). Japan top five genres have Role-playing on top, Action is second and Shoter's the last.
+#
+# Finally, the ESRB rating for NA and EU regions are the same - "M", "E", "E10+", "T". This means that for these two regions the age of players has similar distribution.
+# In Japan however the revenue distribution differs - "T" is on the 1st place, than "E" and "M".
+#
+# **Testing hypotheses**
+#
+# We formulated and tested the following hypotheses:
+# 1. Average user ratings of the Xbox One and PC platforms are the same.
+# 2. Average user ratings for the Action and Sports genres are the same.
+#
+# We chose alpha parameter equal to 5% as it is a standard for this type of busines and everything falling below this threshold can be considered accidential.
+#
+# As a result we failed to reject the first null-hypothesis meaning ***we don't have enough evidense to state whether the average user ratings of the Xbox One and PC platforms are not the same.***
+#
+# And the second null-hypothesis was rejected which means that in the second case ***the average user ratings for the Action and Sports genres are not the same.***
+#
+# **Our conclusion**
+#
+# We can draw the following conclusions:
+# 1. The lifetime of a platform is about 10 years;
+# 2. The most profitable platforms in the chosen period are those made by Microsoft, Sony and Nintendo;
+# 3. Sales revenue usually depends on critics' score and does not depend on users' opinion;
+# 4. The trending genres are Action, Shooter, Sports and Role-playing;
+# 5. In order to succeed the ESRB rating must be either "E" or "M".
+
+# %% [markdown]
+# <div style="border:solid green 2px; padding: 20px"> <b>Success:</b><br>
+#    I like that you wrote such in-depth conclusions on the whole study, proved them with numbers and made logical assumptions. Thank you for your work! It's really great! 👏👏👏</d

@@ -30,7 +30,7 @@ pd.set_option('display.max_columns', None)
 data = pd.read_csv('datasets/taxi.csv', parse_dates=[0], index_col=[0])
 print(data.shape)
 data.head()
-
+data_raw = data
 # %%
 data.plot()
 
@@ -63,7 +63,7 @@ plt.subplot(313)
 decomposed.resid.plot(ax=plt.gca())
 plt.title('Residuals')
 plt.tight_layout()
-
+plt.show() 
 # %%
 plt.figure(figsize=(6, 8))
 plt.subplot(311)
@@ -76,6 +76,7 @@ plt.subplot(313)
 decomposed.resid.plot(ax=plt.gca())
 plt.title('Residuals')
 plt.tight_layout()
+plt.show() 
 
 # %% [markdown]
 # **Findings:** There is an obvious six-month trend of increasing number of orders. Also one-day seasonality can be observed: at around 6 a.m. the number of orders is minimal due to small number of flights in the morning. The maximum is observed around midnight (a lot of arriving flights, other modes of transportation are unavailable).
@@ -249,4 +250,4 @@ print("RMSE test:", rmse(target_test, pred_test))
 # %%
 
 
-
+plt.show()
