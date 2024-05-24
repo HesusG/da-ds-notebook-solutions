@@ -8,27 +8,27 @@ from datetime import timedelta
 from statsmodels.stats.proportion import proportions_ztest
 
 # %% [markdown]
-# # Постановка задачи
+# # Setting tasks
 
 # %% [markdown]
-# Вы - новый аналитик международного интернет-магазина. Ваш предшественник на этой позиции запустил А/B-тест и уволился. Осталось только техническое задание и результаты теста. Техническое задание:
-# 
-# - Наименование теста: `recommender_system_test`;
-# - Группы: А (котрольная), B (новая платежная воронка);
-# - Дата запуска: 2020-12-07
-# - Дата остановки набора новых пользователей: 2020-12-21;
-# - Дата остановки: 2021-01-04
-# - Аудитория: 15% новых пользователей из региона EU;
-# - Назначение теста: тестирование изменений, связанных с внедрением улучшенной рекомендательной системы;
-# - Ожидаемый эфект: за 14 дней с момента регистрации в системе пользователи покажут лучшую конверсию в просмотр карточек товаров (событие `product_page`), просмотр  корзины товаров (событие `product_card`) и покупку (`purchase`). На каждом из шагов воронки `product_page → product_card → purchase` улучшение составит не менее 10%;
-# - Ожидаемое количество участников теста: 6000.
-# 
-# Загрузите данные теста, проверьте корректность его проведения и проанализируйте полученные результаты.
+# New analyst for an international online store. Your predecessor in this position launched an A/B test and quit. All that remains is the technical specification and test results. Technical task:
+
+# - Test name: `recommender_system_test`;
+# - Groups: A (control room), B (new payment funnel);
+# - Launch date: 2020-12-07
+# - Stop date for recruiting new users: 2020-12-21;
+# - Stop date: 2021-01-04
+# - Audience: 15% of new users from the EU region;
+# - Purpose of the test: testing changes associated with the implementation of an improved recommendation system;
+# - Expected effect: within 14 days from the moment of registration in the system, users will show better conversion in viewing product cards (`product_page` event), viewing the product basket (`product_card` event) and purchasing (`purchase`). At each step of the funnel `product_page → product_card → purchase` the improvement will be at least 10%;
+# - Expected number of test participants: 6000.
+
+# Download the test data, check the correctness of its execution and analyze the results.
 
 # %% [markdown]
-# # Анализ результатов теста
-# 
-# Установим параметры теста:
+# # Analysis of test results
+
+# Let's set the test parameters:
 
 # %%
 test_start = pd.to_datetime('2020-12-07')
@@ -42,10 +42,10 @@ required_participants = 6000
 test_name = 'recommender_system_test'
 
 # %% [markdown]
-# ## 1 Загрузка и подготовка данных
+# ## 1 Loading and preparing data
 
 # %% [markdown]
-# Загружаем данные, преобразуем даты и веремя:
+# Loading data, converting dates and times:
 
 # %%
 # учстники теста
@@ -62,37 +62,37 @@ marketing_events['start_dt'] = pd.to_datetime(marketing_events['start_dt'])
 marketing_events['finish_dt'] = pd.to_datetime(marketing_events['finish_dt'])
 
 # %% [markdown]
-# Так, как мы сами не планировали тест и не следили за его проведением, нам прежде всего нужно проверить адекватность его проведения. Проверим: 
-# - Совпадал ли тест по времени с какими-нибудь маркетинговыми событиями?
-# - Не пересекалась ли аудитория теста с конкурирующими тестами;
-# - Была ли аудитория теста сформирована правильно;
-# - Было ли распределение по тестовым группам равномерно.
+# Since we ourselves did not plan the test and did not monitor its implementation, we first need to check the adequacy of its implementation. Let's check:
+# - Did the test coincide in time with any marketing events?
+# - Did the test audience overlap with competing tests;
+# - Was the test audience formed correctly;
+# - Was there an even distribution among test groups?
 
 # %% [markdown]
-# ## 2 Проверка корректности проведения теста
+# ## 2 Checking the correctness of the test
 # 
-# Проверим совпадение с маркетинговыми активностями:
+# Let's check the coincidence with marketing activities:
 
 # %%
 marketing_events['is_eu'] = marketing_events['regions'].apply(lambda x: 'EU' in x.split(', '))
 eu_marketing_events = marketing_events.query('is_eu == True')
-print('Временные границы теста: ', test_start, test_end)
+print('Test time limits: ', test_start, test_end)
 eu_marketing_events.query('(start_dt >= @test_start and start_dt <= @test_end) or \
                            (finish_dt >= @test_start and finish_dt <= @test_end)')
 
 # %% [markdown]
-# Тест сильно пересекается с новогодней промкой в EU. Это не слишком хорошо - нужно избегать таких ситуация.
-# 
-# Посмотрим как дела с конкурирующими тестами:
+# The test strongly overlaps with the New Year's promotion in the EU. This is not very good - you need to avoid such situations.
+
+# Let's see how things are going with competing tests:
 
 # %% [markdown]
-# Посмотрим, как у нас обстоят дела с участниками теста:
+# Let's see how we are doing with the test participants:
 
 # %%
 test_participants.groupby(['ab_test', 'group']).agg({'user_id': 'nunique'})
 
 # %% [markdown]
-# Кроме нашего теста, оказывается был еще параллельный тест interface_eu_test. Судя по названию, он проводился в EU-регионе и мог повлиять на результат нашего теста. Посмотрим, было ли пересечение аудитории и если да, то насколько большое:
+# In addition to our test, it turns out there was also a parallel test interface_eu_test. Judging by the name, it was carried out in the EU region and could affect the result of our test. Let's see if there was an audience overlap and, if so, how big:
 
 # %%
 new_test_users = test_participants.query('ab_test == @test_name')['user_id'].unique()
@@ -104,9 +104,9 @@ print('Пересечение аудитории тестов: {} ({:.2%})'.form
 
 
 # %% [markdown]
-# Довольно много, конкурирующие тесты были явно некорректно запущены.
-# 
-# Уберем из данных все, что касается конкурирующего теста:
+# Quite a lot, competing tests were clearly launched incorrectly.
+
+# Let's remove from the data everything related to the competing test:
 
 # %%
 test_participants = test_participants.query('ab_test == @test_name')
@@ -114,9 +114,9 @@ new_users = new_users.query('ab_test != "interface_eu_test"')
 events = events.query('ab_test != "interface_eu_test"')
 
 # %% [markdown]
-# Проверим корректность аудитории теста.
-# 
-# Посмотрим, попадали ли в тест в основном пользователи из EU:
+# Let's check the correctness of the test audience.
+
+# Let's see if the test included mainly users from the EU:
 
 # %%
 report = new_users.query('ab_test == @test_name').groupby('region').agg({'user_id': 'nunique'}).rename(columns = {'user_id': 'Участники'})
@@ -124,9 +124,9 @@ report['% участников'] = (report['Участники'] / report['Уч�
 report.sort_values(by = 'Участники', ascending = False)
 
 # %% [markdown]
-# Есть небольшое отклонение - 5% теста это пользователи из других регионов. Это допустимо.
-# 
-# Теперь проверим, попадала ли в тест нужная пропорция пользователей из EU:
+# There is a slight deviation - 5% of the test are users from other regions. This is acceptable.
+
+# Now let’s check whether the test included the required proportion of users from the EU:
 
 # %%
 eu_test_users = new_users.query('region == "EU" and ab_test == @test_name').shape[0]
@@ -134,14 +134,14 @@ eu_users = new_users.query('region == "EU" and first_date >= @test_start and fir
 eu_test_users / eu_users
 
 # %% [markdown]
-# Получается, что в тест вместо 15% попадают 18% пользователей из EU. Проверим насколько эта разница статистически значима.
-# 
-# Для этого, нам понадобится установить и откорректировать уровень значимости. В этом проекте мы собираемся провести 5 статистических тестов:
-# - Проверка % EU-аудитории в тесте;
-# - Проверка корректности распределения учстников по группам теста;
-# - Три теста для каждого из шагов воронки монетизации.
-# 
-# Проводим коррекцию методом Бонферрони и проводим z-тест:
+# It turns out that instead of 15%, 18% of users from the EU are included in the test. Let's check how statistically significant this difference is.
+
+# To do this, we will need to set and adjust the significance level. In this project we are going to run 5 statistical tests:
+# - Checking % of EU audience in the test;
+# - Checking the correct distribution of participants into test groups;
+# - Three tests for each step of the monetization funnel.
+
+# We carry out the Bonferroni correction and perform a z-test:
 
 # %%
 alpha = 0.05
@@ -154,9 +154,9 @@ else:
     print('Нулевая гипотеза отвергается: для пользователя из региона EU вероятность попасть в тест отличается от 15%.')
 
 # %% [markdown]
-# На 3% больше пользователей отправили в тест чем планировали. Неприятно, но не сильно страшно. Врядли 3% могли существенно повлиять на монетизацию всей EU-аудитории.
-# 
-# Проверим, равномерно ли были распределены пользователи в группах:
+# 3% more users were sent to the test than planned. Unpleasant, but not very scary. It is unlikely that 3% could significantly affect the monetization of the entire EU audience.
+
+# Let's check whether users are evenly distributed in groups:
 
 # %%
 a_users = new_users.query('group == "A" and ab_test == @test_name').shape[0]
