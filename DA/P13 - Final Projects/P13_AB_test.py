@@ -49,15 +49,15 @@ test_name = 'recommender_system_test'
 
 # %%
 # учстники теста
-test_participants = pd.read_csv('datasets/final_ab_participants.csv')
+test_participants = pd.read_csv('datasets/final_ab_participants_upd_us.csv')
 # пользователи
-new_users = pd.read_csv('datasets/final_ab_new_users.csv').merge(test_participants, on = 'user_id', how = 'left')
+new_users = pd.read_csv('datasets/final_ab_new_users_upd_us.csv').merge(test_participants, on = 'user_id', how = 'left')
 new_users['first_date'] = pd.to_datetime(new_users['first_date'])
 # события
-events = pd.read_csv('datasets/final_ab_events.csv').merge(test_participants, on = 'user_id', how = 'left')
+events = pd.read_csv('datasets/final_ab_events_upd_us.csv').merge(test_participants, on = 'user_id', how = 'left')
 events['event_dt'] = pd.to_datetime(events['event_dt'])
 # рекламная активность
-marketing_events = pd.read_csv('datasets/ab_project_marketing_events.csv')
+marketing_events = pd.read_csv('datasets/ab_project_marketing_events_us.csv')
 marketing_events['start_dt'] = pd.to_datetime(marketing_events['start_dt'])
 marketing_events['finish_dt'] = pd.to_datetime(marketing_events['finish_dt'])
 
