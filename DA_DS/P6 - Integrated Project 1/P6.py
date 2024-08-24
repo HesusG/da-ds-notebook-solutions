@@ -383,7 +383,7 @@ plt.title('Revenue distribution per game', size=15)
 
 # %%
 PS4_df = good_data.groupby(
-    ['platform', 'name'])['total_sales', 'critic_score', 'user_score'].sum(
+    ['platform', 'name'])[['total_sales', 'critic_score', 'user_score']].sum(
 ).query('platform == "PS4" & critic_score > 0 & user_score > 0').reset_index(
 )
 
