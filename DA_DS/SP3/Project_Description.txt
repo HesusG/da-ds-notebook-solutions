@@ -1,0 +1,50 @@
+
+Sprint 3: Let me Hear the Music
+===============================
+
+Project Description
+-------------------
+
+In this project, you will explore and test hypotheses about the music preferences of two cities, Springfield and Shelbyville. By analyzing real online music streaming data, you'll investigate user behavior in these two cities to confirm or reject specific hypotheses.
+
+The project is divided into three key stages, each with clear objectives:
+
+- Stage 1: Provide an overview of the dataset and document initial observations.
+- Stage 2: Preprocess the data by performing necessary cleaning tasks.
+- Stage 3: Test the hypotheses by implementing the required coding steps and document the results in detail.
+
+By the end of this sprint, you'll gain valuable insights into user behavior and develop your ability to make data-driven decisions based on real-world data.
+
+Hypotheses
+----------
+You will test the following hypotheses to understand the differences in music preferences between Springfield and Shelbyville:
+
+1- User activity differs depending on the day of the week and from city to city.
+2- On Monday mornings, Springfield and Shelbyville residents listen to different genres. This is also true for Friday evenings.
+3- Springfield and Shelbyville listeners have different preferences. In Springfield, they prefer pop, while Shelbyville has more rap fans.
+
+Hypothesis Testing Overview
+---------------------------
+
+1- A hypothesis can be fully accepted, partially accepted, partially rejected, or fully rejected depending on the results of the tests.
+2- Fully accepted: The test results support the hypothesis without doubt.
+3- Partially accepted: The results somewhat support the hypothesis but are not conclusive.
+4- Partially rejected: The data contradicts the hypothesis, but not conclusively.
+5- Fully rejected: The test results clearly contradict the hypothesis.
+
+Your task is to determine the status of each hypothesis based on the data analysis.
+
+Data Dictionary
+---------------
+The data for this project is stored in the file /datasets/music_project_en.csv.
+
+Dataset Columns:
+----------------
+
+1- userID: Unique identifier for each user.
+2- Track: Title of the music track.
+3- artist: Name of the track's artist.
+4- genre: Music genre.
+5- City: City where the user is located (Springfield or Shelbyville).
+6-time: Time of day the track was played (in HH:MM:SS format).
+7- Day: Day of the week when the track was played.
