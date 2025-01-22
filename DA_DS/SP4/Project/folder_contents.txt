@@ -1,0 +1,9 @@
+Folder Contents
+===============
+
+In this folder, you will find the following resources:
+------------------------------------------------------
+
+1. Notebooks: These notebooks correspond to the lessons and exercises the student will work on during this sprint.
+2. CSV Files: A folder containing the datasets used for analysis throughout the project.
+3. Solution Notebook: A dedicated notebook with a complete solution for the project tasks, serving as a reference for the students
