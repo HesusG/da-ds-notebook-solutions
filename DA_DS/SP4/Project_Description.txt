@@ -1,0 +1,123 @@
+Sprint 4: Data Wrangling
+===============================
+
+Project Description
+-------------------
+This project involves working with a modified dataset from Instacart, a grocery delivery platform similar to Uber Eats or DoorDash. The dataset is based on one released in 2017 for a Kaggle competition and has been adjusted to include missing and duplicate values while preserving the original data distributions.
+
+The main objective is to clean the data and create a report that provides insights into the shopping habits of Instacart customers. The tasks include:
+
+1. Answering specific questions through data analysis.
+2. Documenting findings in markdown cells within a Jupyter Notebook.
+3. Creating clear and effective visualizations with titles, labeled axes, and legends when necessary, ensuring to display the plots using plt.show().
+4. The project emphasizes presenting findings through informative graphs and clear reporting.
+
+
+
+
+Data Dictionary
+---------------
+The dataset consists of five tables, each containing information necessary for data preprocessing and exploratory data analysis (EDA):
+
+1. instacart_orders.csv: Contains information about customer orders.
+
+a) 'order_id': Unique order identifier.
+b) 'user_id': Unique customer identifier.
+c) 'order_number': Number of orders placed by the customer.
+d) 'order_dow': Day of the week the order was placed (0 = Sunday).
+e) 'order_hour_of_day': Hour of the day the order was placed.
+f) 'days_since_prior_order': Days since the customer’s last order.
+
+2. products.csv: Lists details about products available for purchase.
+
+a) 'product_id': Unique product identifier.
+b) 'product_name': Name of the product.
+c) 'aisle_id': Unique identifier for the grocery aisle category.
+d) 'department_id': Unique identifier for the grocery department category.
+
+3. order_products.csv: Details the items within each order.
+
+a) 'order_id': Unique order identifier.
+b) 'product_id': Unique product identifier.
+c) 'add_to_cart_order': Order in which items were added to the cart.
+d) 'reordered': 0 if the product is new for the customer, 1 if reordered.
+
+4. aisles.csv: Describes grocery aisle categories.
+
+a)'aisle_id': Unique identifier for the aisle.
+B) 'aisle': Name of the aisle.
+
+5. departments.csv: Details grocery department categories.
+
+a) 'department_id': Unique identifier for the department.
+b) 'department': Name of the department.
+
+
+
+
+Instructions
+============
+
+Instructions for Completing the Project
+
+Step 1: Initial Exploration
+
+- Open the data files:
+    /datasets/instacart_orders.csv
+    /datasets/products.csv
+    /datasets/aisles.csv
+    /datasets/departments.csv
+    /datasets/order_products.csv
+
+- Review the general contents of each table.
+    Use pd.read_csv() with the appropriate arguments to handle nonstandard formatting in the files.
+    Note that order_products.csv has many rows, and using info(show_counts=True) will display the non-null counts.
+    
+Step 2: Data Preprocessing
+
+- Verify and correct data types (e.g., ensure ID columns are integers).
+- Handle missing values:
+    Identify and fill missing values.
+    Explain the type of missing values found, the method used to fill them, and the rationale behind the chosen method.
+- Handle duplicate values:
+    Identify and remove duplicates.
+    Justify the method used and discuss potential reasons for their presence in the dataset.
+
+Step 3: Data Analysis
+
+[A] Mandatory Analysis (Complete All)
+      - Validate data ranges:
+        - Verify 'order_hour_of_day' values range from 0–23.
+        - Verify 'order_dow' values range from 0–6.
+      - Visualizations:
+        - Plot the number of orders placed by the hour of the day.
+        - Plot the number of orders placed on each day of the week.
+        - Plot the distribution of days until customers place their next order and comment on the minimum and maximum values.
+
+[B] Deeper Insights (Complete All)
+      - Compare 'order_hour_of_day' distributions for Wednesdays and Saturdays:
+        - Plot histograms for both days on the same graph.
+        - Describe any noticeable differences.
+      - Analyze customer order frequency:
+        - Plot the distribution of the number of orders placed by customers.
+      - Identify popular products:
+        - Display the top 20 most frequently ordered products with their IDs and names.
+
+[C] Advanced Analysis (Complete At Least Two)
+      - Typical order size:
+        - Calculate and visualize the distribution of the number of items per order.
+      - Frequent reorders:
+        - List the top 20 most frequently reordered items (IDs and names).
+      - Reorder proportions by product:
+        - Create a table with product ID, name, and the proportion of reorders.
+      - Reorder proportions by customer:
+        - Calculate the proportion of reordered products for each customer.
+      - First items in the cart:
+        - Identify the top 20 items most frequently added first to the cart (IDs, names, and the count of first placements).
+
+
+Notes:
+------
+- Ensure all visualizations include appropriate titles, axis labels, and legends where necessary.
+- Provide explanations and comments in markdown cells for each step and result.
+- Use plt.show() to display plots effectively.
