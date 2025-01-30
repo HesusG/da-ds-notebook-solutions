@@ -1,0 +1,49 @@
+Sprint 2: Python Continued
+==========================
+
+Project Description
+-------------------
+
+This sprint builds on the foundational knowledge from Sprint 1 and aims to deepen Python skills by introducing more complex data structures, functions, and data manipulation techniques. The focus is on extracting meaningful insights from structured data, applying advanced list operations, and enhancing problem-solving skills.
+
+The goal is to enable students to handle more realistic data scenarios, such as working with nested lists, performing operations on structured datasets, and writing reusable code.
+
+Project Structure & Topics Covered
+----------------------------------
+
+The project consists of several exercises that progressively introduce advanced Python concepts while maintaining a structured and hands-on approach.
+
+1- Working with Nested Data Structures
+
+    - Understanding tables as nested lists, where each entry contains structured user data.
+    - Accessing, modifying, and manipulating data within lists of lists.
+    - Extracting specific information from complex structures.
+
+2- Advanced List Operations
+
+    - Performing operations on multi-dimensional lists.
+    - Iterating through nested structures efficiently.
+    - Applying list comprehensions to transform and filter data.
+
+3- String & Data Manipulation
+
+    - Extracting meaningful information from text-based data.
+    - Splitting and joining strings for data parsing.
+    - Handling and formatting multi-field records.
+
+4- Functions & Modular Programming
+
+    - Defining and using custom functions to organize and simplify code.
+    - Implementing parameterized functions to make reusable logic.
+    - Using return values and function composition for better data processing.
+
+5- Data Aggregation & Analysis
+
+    - Summing, counting, and extracting insights from structured lists.
+    - Implementing basic statistical operations like averages and totals.
+    - Using loops and conditionals to compute metrics dynamically.
+
+6- Introduction to more advanced loops structures
+
+    - Introduction to While loops with conditions
+    - Nested loops for extractions
