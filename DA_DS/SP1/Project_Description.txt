@@ -1,0 +1,80 @@
+Sprint 1: Basic Python
+======================
+
+Project Description
+-------------------
+
+This is the student’s first project in Python, designed to provide a structured and gradual introduction to the fundamental concepts of the language. Through a series of practical exercises, key programming elements such as variables, data structures, error handling, lists, and strings will be covered.
+
+The main goal is for the student to understand how Python works and to apply its essential concepts to small programming challenges.
+
+Project Structure
+-----------------
+The project consists of 10 exercises, each focused on a key Python concept. As the student progresses through the exercises, previously learned techniques will be combined, helping to build a deeper understanding of the language and its capabilities.
+
+Topics Covered
+--------------
+1- Variables and Data Types
+
+  - Introduction to variables and their use in Python.
+  - Basic data types: int, float, str, bool.
+  - Type conversion (str(), int(), float()).
+  - Arithmetic and Logical Operations
+
+2- Basic mathematical operations (+, -, *, /, //, %, **).
+  
+  - Using logical operators (and, or, not).
+  - Evaluating boolean expressions.
+  - String Manipulation
+
+3- Text manipulation with methods like .upper(), .lower(), .replace(), .strip().
+  
+  - String concatenation and formatting (f-strings, .format()).
+  - Indexing and slicing (string[start:end:step]).
+
+4- Lists and Data Structures
+
+  - Creating and modifying lists (append(), remove(), pop()).
+  - Accessing list elements using positive and negative indexing.
+  - List slicing (list[start:end:step]).
+
+5- Conditional Statements
+
+  - Implementing decision-making structures with if, elif, and else.
+  - Using conditions to control program flow.
+  - Nesting conditions for complex decision-making scenarios.
+
+6- Loops and Iteration
+
+  - Using for loops to iterate over sequences.
+  - Implementing while loops for condition-based repetition.
+  - Combining loops and conditional statements.
+
+7- Error Handling
+
+  - Implementing try-except blocks to handle runtime errors.
+  - Understanding common Python errors (IndexError, TypeError, ValueError).
+  - Writing robust code that anticipates potential failures.
+
+8- Combining Concepts
+
+  - Applying multiple concepts together to solve more complex problems.
+  - Writing small programs that integrate variables, loops, and conditions.
+  - Debugging and refining code to improve efficiency and readability.
+
+
+Project Workflow
+----------------
+- Stage 1: Understanding the Project
+    - Read all instructions and tasks carefully.
+    - Identify where to write code and what is expected in each exercise.
+
+- Stage 2: Writing & Implementing Code
+    - Complete each exercise by writing Python code in the designated sections.
+    - Test and debug the code to ensure it works correctly.
+    - Use comments to explain the logic behind your code.
+
+- Stage 3: Review & Refinement
+    - Go through each section of your code to check for errors.
+    - Optimize and clean up your code for better readability.
+    - Ensure all exercises are completed before submitting for review.
