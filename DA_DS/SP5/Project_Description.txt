@@ -1,1 +1,71 @@
+Sprint 5: Statistical Data Analysis
+=========================================================
 
+Objective
+---------
+This sprint focuses on statistical analysis of data, emphasizing data preparation, customer behavior analysis, and hypothesis testing. As an analyst for the telecom company Megaline, your goal is to determine which prepaid plan—Surf or Ultimate—generates more revenue.
+
+By analyzing customer usage patterns, performing statistical calculations, and testing hypotheses, you will gain hands-on experience with real-world data-driven decision-making.
+
+Project Scope & Topics Covered
+------------------------------
+The project is structured into multiple steps, each covering key statistical and analytical techniques required for data-driven business decisions.
+
+1. Data Preparation & Cleaning
+  - Load and inspect five datasets (users, calls, messages, internet, plans).
+  - Convert data types as needed (e.g., date formats, numeric values).
+  - Identify and handle missing values or inconsistencies in the data.
+  - Aggregate usage data per month and customer (calls, texts, data).
+  - Compute monthly revenue per user, considering both base charges and additional costs.
+
+2. Exploratory Data Analysis (EDA)
+  - Describe customer behavior for each plan:
+  - Average number of calls, texts, and data usage per month.
+  - Identify usage distribution patterns (who exceeds the plan limits, who stays within them).
+  - Calculate mean, variance, and standard deviation for call duration, messages sent, and data usage.
+  - Visualize distributions using histograms and describe key insights.
+
+3. Hypothesis Testing
+  - Conduct statistical tests to evaluate key business questions:
+  - Do Ultimate and Surf users generate significantly different revenue?
+  - Does the average revenue from customers in the NY-NJ area differ from other regions?
+  - Formulate null and alternative hypotheses for each test.
+  - Choose the appropriate statistical test (e.g., t-test) and significance level (alpha).
+  - Interpret the test results and explain their business implications.
+
+4. Conclusions & Business Recommendations
+  - Summarize findings from data exploration and hypothesis testing.
+  - Recommend data-driven marketing and pricing strategies based on revenue insights.
+  - Suggest areas for further analysis or data collection improvements.
+
+Project Workflow
+----------------
+Step 1: Open & Inspect the Data
+  - Load CSV files into a Jupyter Notebook.
+  - Review dataset structures and clean the data.
+
+Step 2: Data Processing
+  - Convert data types and handle missing values.
+  - Aggregate monthly usage data and calculate revenue.
+
+Step 3: Exploratory Analysis
+  - Compute descriptive statistics for usage metrics.
+  - Create visualizations to compare Surf vs. Ultimate customers.
+Step 4: Hypothesis Testing
+  - Perform statistical tests and analyze the results.
+  - Validate whether differences in revenue are statistically significant.
+
+Step 5: Conclusion & Recommendations
+  - Summarize insights for the Megaline commercial department.
+  - Provide recommendations for optimizing advertising and pricing strategies.
+
+Expected Outcomes
+-----------------
+By completing this sprint, you will:
+  ✅ Master data preprocessing and handling structured datasets.
+  ✅ Understand how to analyze customer behavior using statistics.
+  ✅ Learn how to calculate variance, standard deviation, and distributions.
+  ✅ Apply hypothesis testing to make data-driven business decisions.
+  ✅ Gain experience in visualizing and interpreting statistical results.
+
+This project provides hands-on exposure to real-world telecom analytics, preparing you for advanced statistical modeling and business intelligence applications. 🚀
