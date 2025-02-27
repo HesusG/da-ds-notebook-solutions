@@ -1,0 +1,66 @@
+Sprint 6 Integrated Project 1
+=============================
+
+Project Overview
+----------------
+You’ll work for the online store Ice, which sells video games worldwide. The goal is to analyze historical data (from 2016 onward) covering sales, user/critic reviews, genres, platforms, and ESRB ratings. The objective is to identify patterns that indicate game success, thereby guiding advertising and strategy decisions for the upcoming period (e.g., forecasting for 2017).
+
+Step 1: Data Exploration
+------------------------
+
+- Objective: Open and inspect the dataset (datasets/games.csv) to understand its overall structure.
+- Key Tasks: Identify issues like inconsistent column names, incorrect data types, and missing values.
+- Outcome: Establish a clear picture of the dataset’s strengths and potential challenges.
+
+Step 2: Data Preparation and Cleaning
+-------------------------------------
+
+- Standardization: Convert all column names to lowercase and change data types to the appropriate formats.
+- Missing Values: Determine a strategy for handling missing values and the “TBD” marker—explain your choices and possible reasons for these gaps.
+- New Variable: Calculate total sales (summing NA, EU, JP, and Other sales) and add this as a new column.
+
+Step 3: Data Analysis
+---------------------
+
+- Temporal Analysis: Examine the number of games released over the years and assess the significance of data from each period.
+- Platform Analysis: Compare sales across platforms, identify the top performers, and track trends over time (including platforms that have fallen out of favor).
+- Visualization & Correlations:
+- Create box plots to analyze global sales distributions by platform.
+- Develop scatter plots to explore the relationship between user/critic reviews and sales for a selected platform, calculating the correlation coefficient.
+- Genre Analysis: Evaluate the distribution of games by genre and determine which genres are most and least profitable.
+
+Step 4: Creation of Regional Profiles
+-------------------------------------
+
+- Regional Breakdown: For North America (NA), Europe (EU), and Japan (JP), determine:
+- The top five platforms and their market shares.
+- The top five game genres.
+- The potential influence of ESRB ratings on sales in each region.
+
+Step 5: Hypothesis Testing
+--------------------------
+
+- Hypotheses:
+    - The average user ratings for Xbox One and PC are equal.
+    - The average user ratings for Action and Sports genres differ.
+- Process:
+    - Formulate null and alternative hypotheses for each case.
+    - Set an alpha threshold and select appropriate statistical tests.
+    - Explain your criteria and rationale for testing the hypotheses.
+
+Step 6: Conclusion
+------------------
+- Summary: Recap the major findings from each analysis stage.
+- Implications: Discuss how these insights can inform the online store’s advertising campaigns and overall business strategy.
+- Final Thoughts: Provide a comprehensive wrap-up that links the analysis back to the project’s initial objectives.
+
+Format and Evaluation
+---------------------
+
+- Delivery Format: Complete your project using a Jupyter Notebook, embedding code in code cells and explanations in markdown cells.
+- Evaluation Criteria:
+    - Clear identification and description of data issues.
+    - Effective data cleaning and preparation.
+    - Quality and clarity of visualizations and statistical analyses.
+    - Logical hypothesis formulation and testing.
+    - Overall organization, readability, and documentation of your code and commentary.
