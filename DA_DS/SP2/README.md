@@ -1,12 +1,12 @@
 # Sprint 2: Continue Python
 ## S2 EN: Continue Python
-English version last update: unknown (before 2025)
+📅 English version last update: unknown (before 2025)
 
 ✅ This project starts with a template for the student.
 
 --- 
 ## S2 ESP: Python básico (continuación)
-Fecha de actualización: Junio 2025
+📅 Fecha de actualización: Junio 2025
 
 ✅ El proyecto tiene plantilla o precódigo para el estudiante.
 
@@ -15,3 +15,4 @@ En la etapa final del proyecto, continuarás desempeñando tu papel de profesion
 
 --- 
 ## S2 PT: 
+📅 Data de atualização:

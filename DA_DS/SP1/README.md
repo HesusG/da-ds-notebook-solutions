@@ -1,12 +1,12 @@
 # Sprint 1: Basic Python
 ## S1 EN: Basic Python
-English version last update: unknown (before 2025)
+📅 English version last update: unknown (before 2025)
 
 ✅ This project starts with a template for the student.
 
 --- 
 ## S1 ESP: Python básico
-Fecha de actualización: Junio 2025
+📅 Fecha de actualización: Junio 2025
 
 ✅ El proyecto tiene plantilla o precódigo para el estudiante.
 
@@ -15,3 +15,4 @@ Trabajarás como profesional de datos júnior para la empresa de comercio electr
 
 --- 
 ## S1 PT: 
+📅 Data de atualização:

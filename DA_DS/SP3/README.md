@@ -1,12 +1,12 @@
 # Sprint 3: Data Wrangling
 ## S3 EN: Data Wrangling
-English version last update: unknown (before 2025)
+📅 English version last update: unknown (before 2025)
 
 ✅ This project starts with a template for the student.
 
 --- 
 ## S3 ESP: Manipulación de datos (Data Wrangling)
-Fecha de actualización: Junio 2025
+📅 Fecha de actualización: Junio 2025
 
 ✅ El proyecto tiene plantilla o precodigo para el estudiante.
 
@@ -15,3 +15,4 @@ En este proyecto, trabajarás con datos reales de transmisión de música online
 
 --- 
 ## S3 PT: 
+📅 Data de atualização:
