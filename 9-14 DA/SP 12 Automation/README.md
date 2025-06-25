@@ -1,6 +1,6 @@
 # Sprint 12: Automation
 ## EN: Automation
-📅 English version last update: 
+📅 English version last update: unknown (before 2025)
 
 ⛔ This project does not start with a template for the student.
 
