@@ -6,7 +6,7 @@
 
 --- 
 ## ESP: Recopilación y almacenamiento de datos (SQL)
-Fecha de actualización versión en español: 
+📅 Fecha de actualización versión en español: 
 
 ⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
 
