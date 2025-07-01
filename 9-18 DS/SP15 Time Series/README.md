@@ -6,7 +6,7 @@
 
 --- 
 ## ESP: Series temporales
-📅 Fecha de actualización versión en español: 
+📅 Fecha de actualización versión en español: Julio 2025
 
 ✅ El proyecto tiene plantilla o precodigo para el estudiante.
 
