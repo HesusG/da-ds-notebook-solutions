@@ -16,7 +16,7 @@ El objetivo de este proyecto es proporcionarte más posibilidades de practicar l
 
 Las tareas incluyen la creación y gestión de entornos virtuales de Python y el desarrollo de una aplicación web.
 
-En este proyecto, te proporcionamos un conjunto de datos de anuncios de venta de coches. Sin embargo, en este proyecto, el enfoque no se centrará en el conjunto de datos ni en el análisis, por lo que eres libre de elegir cualquier dataset que desees.
+En este proyecto, te proporcionamos un conjunto de datos de anuncios de venta de coches. Sin embargo, en este proyecto, el enfoque no se centrará en el conjunto de datos ni en el análisis, por lo que eres **libre de elegir cualquier dataset que desees**.
 
 ### Entregables
 Enlace al repositorio de Github con:
