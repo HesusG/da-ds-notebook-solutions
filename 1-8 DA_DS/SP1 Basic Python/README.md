@@ -6,7 +6,7 @@
 
 --- 
 ## ESP: Python básico
-📅 Fecha de actualización versión en español: Junio 2025
+📅 Fecha de actualización versión en español: 9 Julio 2025
 
 ✅ El proyecto tiene plantilla o precódigo para el estudiante.
 
