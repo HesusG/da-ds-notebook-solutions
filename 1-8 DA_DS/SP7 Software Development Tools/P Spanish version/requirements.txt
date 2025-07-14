@@ -1,0 +1,5 @@
+# IMPORTANT: avoid errors on Render by not specifying exact library versions.
+# IMPORTANTE: evita errores en Render al no especificar versiones exactas de las librerías.
+pandas
+plotly
+streamlit
