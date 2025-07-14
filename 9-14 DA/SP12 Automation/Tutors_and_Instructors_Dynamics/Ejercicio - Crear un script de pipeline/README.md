@@ -71,7 +71,9 @@ ya que tengamos lo anterior, podemos pasar a ejecutar el código:
 ## Pre-mensaje: Preparación inicial
 tienes una carpeta creada para este proyecto? 
 en caso de que no, hay que crearla
-- puedes crearla en tus documentos, donde guardes lo referente al curso, creamos una carpeta para este ejercicio
+
+puedes crearla en tus documentos, donde guardes lo referente al curso, creamos una carpeta para este ejercicio
 
 ya que la tengas lista, la abrimos desde vs code
+
 ![alt text](OpenFolder.png)
