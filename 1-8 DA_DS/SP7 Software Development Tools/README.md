@@ -14,7 +14,7 @@ Additionally, the project submission format will be different from previous spri
 
 --- 
 ## ESP: Herramientas de desarrollo de software
-📅 Fecha de actualización versión en español: 
+📅 Fecha de actualización versión en español: 16 Julio 2025
 
 ⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
 
