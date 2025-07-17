@@ -49,7 +49,7 @@ Neste projeto, vamos fornecer um conjunto de dados de anúncios de vendas de car
 ### Entregáveis
 Link para o repositório do Github com:
 - Arquivo `README.md` contendo:
-  -link para a página publicada no Render
+  - link para a página publicada no Render
 - Arquivo `requirements.txt` com as bibliotecas necessárias
 - Arquivo `EDA.ipynb` com a análise exploratória de dados
 - Arquivo `app.py` com o código da página web

@@ -21,5 +21,13 @@ El proyecto consta de tres componentes:
   - Poner el enlace al principio del notebook.
 
 --- 
-## PT: 
+## PT: S14 Projeto Final
 📅 Data de atualização da versão em português:
+
+⛔ O projeto não tem template ou código inicial para o estudante.
+
+### Descrição do projeto
+Seu projeto terá três componentes:
+- Um caderno contendo o seu código (.ipynb)
+- Uma apresentação (.pdf)
+- Um link para o seu dashboard no Tableau Public (dashboard.txt) (opcional)
