@@ -14,5 +14,7 @@
 En este proyecto, trabajarás con datos reales de transmisión de música online para explorar y procesar información sobre los hábitos de escucha de los usuarios y las usuarias en dos ciudades: Springfield y Shelbyville.
 
 --- 
-## PT: 
-📅 Data de atualização da versão em português:
+## PT: S2 Continuação de Python básico
+📅 Data de atualização da versão em português: 17 de julho de 2025
+
+✅ O projeto tem um template ou código inicial para o estudante.

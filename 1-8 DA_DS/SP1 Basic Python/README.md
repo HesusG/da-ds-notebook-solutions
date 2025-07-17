@@ -14,5 +14,7 @@
 Trabajarás como profesional de datos júnior para la empresa de comercio electrónico Store 1. El objetivo de la tienda es obtener información valiosa de su base de clientes y ha establecido varios requisitos que quiere que cumplas. Al obtener esta información, planean aprovecharla para crear campañas de marketing específicas basadas en la edad de sus clientes, sus compras previas y sus categorías de compra.
 
 --- 
-## PT: 
-📅 Data de atualização da versão em português:
+## PT: Python básico
+📅 Data de atualização da versão em português: 17 de julho de 2025
+
+✅ O projeto tem um template ou código inicial para o estudante.
