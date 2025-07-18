@@ -19,8 +19,3 @@ La compañía de seguros Sure Tomorrow quiere resolver varias tareas con la ayud
 - **Tarea 4:** proteger los datos personales de los clientes sin romper el modelo de la tarea anterior.
 
 Es necesario desarrollar un algoritmo de transformación de datos que dificulte la recuperación de la información personal si los datos caen en manos equivocadas. Esto se denomina enmascaramiento de datos u ofuscación de datos. Pero los datos deben protegerse de tal manera que la calidad de los modelos de machine learning no se vea afectada. No es necesario elegir el mejor modelo, basta con demostrar que el algoritmo funciona correctamente.
-
-
---- 
-## PT: 
-📅 Data de atualização da versão em português:

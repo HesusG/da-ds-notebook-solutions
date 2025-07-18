@@ -24,8 +24,3 @@ Proyecto comunmente usado: https://coding-bootcamps.notion.site/Proyecto-Final-D
 
 3. Informe de solución
 
-
-
---- 
-## PT: 
-📅 Data de atualização da versão em português:

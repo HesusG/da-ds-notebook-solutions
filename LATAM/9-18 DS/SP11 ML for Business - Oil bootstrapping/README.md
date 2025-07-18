@@ -20,7 +20,3 @@ Para completar esta tarea, tendrás que realizar los siguientes pasos:
 - Elegir la región con el beneficio total más alto para los pozos petrolíferos seleccionados.
  
 Tienes datos sobre muestras de crudo de tres regiones. Ya se conocen los parámetros de cada pozo petrolero de la región. Crea un modelo que ayude a elegir la región con el mayor margen de beneficio. Analiza los beneficios y riesgos potenciales utilizando la técnica bootstrapping.
-
---- 
-## PT: 
-📅 Data de atualização da versão em português:

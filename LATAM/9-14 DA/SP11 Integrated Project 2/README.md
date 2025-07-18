@@ -5,7 +5,7 @@
 ⛔ This project does not start with a template for the student.
 
 --- 
-## ESP:Proyecto del módulo 2
+## ESP: Proyecto del módulo 2
 📅 Fecha de actualización versión en español: 
 
 ⛔ El proyecto no tiene plantilla o precodigo para el estudiante.

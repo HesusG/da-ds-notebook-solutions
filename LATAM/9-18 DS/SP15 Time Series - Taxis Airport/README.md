@@ -16,6 +16,3 @@ La compañía Sweet Lift Taxi ha recopilado datos históricos sobre **pedidos de
 La métrica RECM en el conjunto de prueba no debe ser superior a 48.
 
 
---- 
-## PT: 
-📅 Data de atualização da versão em português:

@@ -22,6 +22,3 @@ A la cadena de supermercados Good Seed le gustaría explorar si la ciencia de lo
 Para empezar a trabajar en la tarea, tendrás un conjunto de fotografías de personas que indican su edad.
 
 
---- 
-## PT: 
-📅 Data de atualização da versão em português:

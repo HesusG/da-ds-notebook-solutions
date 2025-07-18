@@ -23,7 +23,3 @@ Tendrás que:
 3. Desarrollar un modelo y entrenarlo.
 
 Para completar el proyecto, puedes utilizar la documentación de pandas, matplotlib y sklearn.
-
---- 
-## PT: 
-📅 Data de atualização da versão em português:

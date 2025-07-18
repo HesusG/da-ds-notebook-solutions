@@ -18,7 +18,3 @@ A Rusty Bargain le interesa:
 - la velocidad de la predicción
 - el tiempo requerido para el entrenamiento
   
-
---- 
-## PT: 
-📅 Data de atualização da versão em português:
