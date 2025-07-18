@@ -10,3 +10,8 @@ Trabalhando com um banco de dados, você analisará dados de concorrentes e test
 
 - **Passo 1 - passo 3:** exercícios na plataforma - `SQL`.
 - **Passo 4:** Análise exploratória de dados -  `Python`.
+
+---
+O projeto do Sprint 7 em português é equivalente ao Sprint 8 em espanhol.
+
+(The Sprint 7 project in Portuguese is equivalent to Sprint 8 in Spanish.)

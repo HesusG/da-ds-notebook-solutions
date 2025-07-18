@@ -17,3 +17,8 @@ Link para o repositório do Github com:
 - Arquivo `requirements.txt` com as bibliotecas necessárias
 - Arquivo `EDA.ipynb` com a análise exploratória de dados
 - Arquivo `app.py` com o código da página web
+
+---
+O projeto do Sprint 5 em português é equivalente ao Sprint 7 em espanhol.
+
+(The Sprint 5 project in Portuguese is equivalent to Sprint 7 in Spanish.)
