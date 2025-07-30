@@ -12,6 +12,16 @@ Este ejercicio simula un proceso automatizado donde, al ejecutar el código con 
 El código:
 - **Verifica automáticamente** que no se dupliquen registros.
 - **Agrega la información nueva** a la base de datos.
+- Al final muestra los registros cargados por año:
+ ```
+ (2018, 108030)
+ (2019, 108223)
+ (2020, 86196)
+  ```
+- Se cargaron 108,030 filas del 2018
+- Se cargaron 108,223 filas del 2019
+- Se cargaron 86,196 filas del 2020
+
 
 > 🧩 Para visualizar la base de datos `.db` en Visual Studio, se puede instalar una extensión como **Local AstroDB Viewer** u otra similar.
 ---
