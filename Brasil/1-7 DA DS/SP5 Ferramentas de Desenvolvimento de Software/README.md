@@ -1,5 +1,5 @@
 # Sprint 5: Ferramentas de Desenvolvimento de Software
-📅 Data de atualização da versão em português: 17 de julho de 2025
+📅 Data de atualização da versão em português: 30 de julho de 2025
 
 ⛔ O projeto não tem template ou código inicial para o estudante.
 
