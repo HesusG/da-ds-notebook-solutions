@@ -6,7 +6,8 @@
 
 --- 
 ## ESP: Proyecto final
-Fecha de actualización: 
+Fecha de actualización: 1 Agosto 2025
+- La solución 2 es un proyecto hecho por un alumno.
 
 ⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
 

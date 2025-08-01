@@ -6,7 +6,8 @@
 
 --- 
 ## ESP: Aprendizaje supervisado 
-📅 Fecha de actualización versión en español: 
+📅 Fecha de actualización versión en español: 1 Agosto 2025
+- La solución es un proyecto hecho por un alumno.
 
 ⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
 

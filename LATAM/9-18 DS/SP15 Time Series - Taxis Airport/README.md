@@ -6,7 +6,8 @@
 
 --- 
 ## ESP: Series temporales
-📅 Fecha de actualización versión en español: Julio 2025
+📅 Fecha de actualización versión en español: 1 Agosto 2025
+- La solución 2 es un proyecto hecho por un alumno.
 
 ✅ El proyecto tiene plantilla o precodigo para el estudiante.
 
