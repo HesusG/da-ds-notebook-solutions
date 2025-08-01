@@ -9,4 +9,7 @@ build command:
 Start Command:
 - streamlit run app.py
 
-🔗link a página desplegada con Render: https://tripleten-render.onrender.com/
+🔗links a página desplegada con Render: 
+- Irene: https://tripleten-render.onrender.com/
+- Alfonso: https://github.com/alfonsoren/vehicles.git
+- Deisy: https://github.com/alfonsoren/vehicles.git
