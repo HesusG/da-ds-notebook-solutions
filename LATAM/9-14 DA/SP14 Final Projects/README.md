@@ -6,7 +6,8 @@
 
 --- 
 ## ESP: Proyecto final
-📅 Fecha de actualización versión en español: 
+📅 Fecha de actualización versión en español: 1 Agosto 2025
+- Las soluciones son proyectos hechos por alumnos.
 
 ⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
 
@@ -19,15 +20,3 @@ El proyecto consta de tres componentes:
   - Cargar el archivo en Google Drive y copia el enlace para compartir al principio del notebook.
 - OPCIONAL: Un link a dashboard en Tableau Public (dashboard.txt)
   - Poner el enlace al principio del notebook.
-
---- 
-## PT: S14 Projeto Final
-📅 Data de atualização da versão em português:
-
-⛔ O projeto não tem template ou código inicial para o estudante.
-
-### Descrição do projeto
-Seu projeto terá três componentes:
-- Um caderno contendo o seu código (.ipynb)
-- Uma apresentação (.pdf)
-- Um link para o seu dashboard no Tableau Public (dashboard.txt) (opcional)

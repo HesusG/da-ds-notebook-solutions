@@ -6,7 +6,8 @@
 
 --- 
 ## ESP:Pronósticos y predicciones
-📅 Fecha de actualización versión en español: 
+📅 Fecha de actualización versión en español: 1 Agosto 2025
+- Las soluciones son proyectos hechos por alumnos.
 
 ⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
 
