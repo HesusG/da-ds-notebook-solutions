@@ -9,3 +9,6 @@ snippet*.py
 *.tfevents
 *.json
 catboost_info
+soluciones_da
+soluciones_ds
+*.ipynb.backup
