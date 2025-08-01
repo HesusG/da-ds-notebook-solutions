@@ -7,7 +7,7 @@
 --- 
 ## ESP: Recopilación y almacenamiento de datos (SQL)
 📅 Fecha de actualización versión en español: 1 Agosto 2025
-- Las soluciones son proyectos hechos por alumnos. 
+- Las soluciones son proyectos hechos por alumnos.
 
 ⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
 
