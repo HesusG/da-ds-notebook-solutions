@@ -6,7 +6,7 @@
 
 --- 
 ## ESP:Introducción al machine learning
-📅 Fecha de actualización versión en español: 
+📅 Fecha de actualización versión en español: 4 Agosto 2025
 
 ⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
 
