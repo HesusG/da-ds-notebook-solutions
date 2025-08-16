@@ -9,7 +9,7 @@ Create a Dashboard
 
 --- 
 ## ESP: Automatización
-📅 Fecha de actualización versión en español: 
+📅 Fecha de actualización versión en español: 2025
 
 ⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
 
