@@ -15,3 +15,6 @@ Seu projeto terá três componentes:
 - Um caderno contendo o seu código (.ipynb)
 - Uma apresentação (.pdf)
 - Um link para o seu dashboard no Tableau Public (dashboard.txt) (opcional)
+
+---
+Commonly used project: https://coding-bootcamps.notion.site/PROYECTO-FINAL-DATA-ANALYST-3fe741c1f13849d691b4afe136b68c72
