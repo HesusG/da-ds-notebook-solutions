@@ -19,3 +19,14 @@ Has recibido un archivo de datos de ventas que contiene información valiosa, pe
 - Falta de una documentación clara.
 
 Tu misión es transformar estos datos caóticos en un informe profesional y comprensible que responda a las preguntas clave del negocio.
+
+---
+- Plantilla inicial de Proyecto:
+- Proyecto resuelto: 
+
+
+## 💡 Tips
+
+Mes con los mejores resultados:
+Filtra por mes, usa =SUM() en los montos totales para cada período.
+Posible solución: Filter by condition >> Text contains >> 10/2024
