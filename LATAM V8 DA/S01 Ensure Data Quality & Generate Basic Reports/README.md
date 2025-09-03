@@ -21,8 +21,8 @@ Has recibido un archivo de datos de ventas que contiene información valiosa, pe
 Tu misión es transformar estos datos caóticos en un informe profesional y comprensible que responda a las preguntas clave del negocio.
 
 ---
-- Plantilla inicial de Proyecto:
-- Proyecto resuelto: 
+- Plantilla inicial de Proyecto: https://docs.google.com/spreadsheets/d/1wrX0skTcqi1sh5vh6mbWqBuoII14Vrd3/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
+- Proyecto resuelto: https://docs.google.com/spreadsheets/d/1iE5UBVc8MxQnI8eJ6mdGS-g2wlh5YKhG/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
 
 
 ## 💡 Tips
