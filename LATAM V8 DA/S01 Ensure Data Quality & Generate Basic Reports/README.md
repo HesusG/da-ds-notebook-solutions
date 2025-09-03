@@ -3,7 +3,7 @@
 
 💻 Herramienta: Google Sheets o Excel
 
-📅 Fecha de actualización: 2025
+📅 Fecha de actualización: 3 Septiembre 2025
 
 
 ### Descripción del proyecto
