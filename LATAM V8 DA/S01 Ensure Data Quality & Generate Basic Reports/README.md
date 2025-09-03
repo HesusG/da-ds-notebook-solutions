@@ -5,6 +5,7 @@
 
 📅 Fecha de actualización: 3 Septiembre 2025
 
+✅ El proyecto tiene plantilla o precodigo para el estudiante.
 
 ### Descripción del proyecto
 ---
