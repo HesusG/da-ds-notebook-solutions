@@ -1,0 +1,128 @@
+# Sprint 1
+
+## Capitulo 2: 
+### Lección 1: Datos estructurados
+- Datos estructurados: una tabla súper organizada, tiene filas y columnas bien definidas, y cada columna tiene un tipo de información específico
+- Tipos de datos: Texto, Números, fecha, booleanos, etc
+- Tipos de datos por estructura analítica: categóricos, numéricos, discretos, continuos, series temporales, transversales
+
+
+### Lección 2: Organización de datos para el análisis
+- **Congelar filas**: menú “Ver”, elige “Congelar” y selecciona “1 fila”
+- **Ordenar datos**: menú “Datos” y elige “Ordenar rango por columna A, de A a Z”, o por la columna que necesites.
+- **Filtros**: Selecciona la fila de encabezados, ve a “Datos” y haz clic en “Crear un filtro”
+- **Validación de Datos**: Selecciona la columna, luego ve al menú Datos y haz clic en Validación de datos. Cada vez que alguien quiera escribir algo en esa celda, tendrá que elegir entre las opciones dadas.
+
+### Lección 3: Explorando Datasets con LLMs: Potencial y Limitaciones
+- ¿Cómo pueden los LLMs ayudar en análisis de datos?: Análisis exploratorio inicial, Generación de insights, Documentación, Sugerencias metodológicas
+  - Opción 1: Subir el dataset completo (menos de 10MB)
+  - Opción 2: Compartir solo la estructura (recomendado para datos sensibles)
+- Técnicas de prompting para análisis de datos: Contexto, Objetivo, Formato, Limitaciones
+- Limitaciones críticas de los LLMs: Alucinaciones, Falta de acceso a datos reales, Sesgos en interpretaciones, Incapacidad para validar
+
+## Capitulo 3: 
+### Lección 1: Identificación y corrección de errores en los datos
+- **Quitar duplicados**: menú, elige "Limpieza de datos" y después selecciona "Quitar duplicados".
+- **Valores ausentes**: menú, elige "Datos" y selecciona "Crear un filtro". En el menú del filtro, selecciona la opción  "(Vacío)"
+- **Promedio**: `=PROMEDIO(A2:A100)` o `=AVERAGE(A2:A100)`
+- **Mediana**: `=MEDIANA(A2:A100)` o `=MEDIAN(A2:A100)`
+
+### Lección 2: Modificación de columnas
+- **Dividir campos**: `SPLIT` permite dividir el contenido de una celda en múltiples columnas utilizando un "delimitador" 
+  - Sintaxis: `=SPLIT(texto_a_dividir, delimitador)`
+  - 📢 El delimitador debe ir entre comillas dobles.
+- **Recortar espacios** sobrantes:  `TRIM` (recortar) elimina todos los espacios al principio y al final del texto, y reduce los espacios múltiples entre palabras a un solo espacio. 
+  - Sintaxis: `=TRIM(texto_a_limpiar)`
+- **Unir columnas** en una sola: La función `JOIN` (unir) permite combinar el contenido de varias celdas o un rango de celdas en una sola celda, utilizando un "delimitador" 
+  - Sintaxis: `=JOIN(delimitador, valor1, [valor2, ...]) `
+  - Sintaxis para un rango: `=JOIN(delimitador, rango)`
+- **Transformar el texto:**
+  - La función `UPPER` convierte todo el texto de una celda a mayúsculas: Sintaxis: `=UPPER(texto)`
+  - La función `LOWER` convierte todo el texto de una celda a minúsculas: Sintaxis: `=LOWER(texto)`(no visto en esta lección)
+  - La función `PROPER` convierte solo la primera letra a mayúscula: Sintaxis: `=PROPER(texto)`
+
+- **Smart Fill** (Relleno Inteligente): ¿No te aparece la sugerencia? menú Datos > Relleno inteligente > Relleno inteligente para forzarla.
+- **Smart Cleanup** (Limpieza Inteligente): Puede detectar y sugerir soluciones para problemas comunes como espacios extra, errores de mayúsculas/minúsculas, o incluso algunos formatos de fecha/número inconsistentes. Menú Datos > Limpieza de datos > Sugerencias de limpieza
+
+[Lista de funciones de hoja de cálculo de Google](https://support.google.com/docs/table/25273?hl=es&ref_topic=9054531&sjid=3658440564594165918-SA)  
+[Centro de Ayuda de Google Sheets: Relleno inteligente](https://support.google.com/docs/answer/75509?hl=es&co=GENIE.Platform%3DDesktop&sjid=3658440564594165918-SA)
+
+### Lección 3: Diseño de flujos de trabajo ordenados
+Flujos de trabajo ordenados
+- **Cambiar el nombre de las pestañas:** hacer doble clic en el nombre de la pestaña o hacer clic en la flecha y seleccionar Renombrar en el menú desplegable.
+- **Añadir una hoja** de resumen (tu bitácora de datos): muestra la información clave y documenta el trabajo realizado
+  - Incluye: Descripción del proyecto, Fuente de los datos, Fecha de última actualización, Contacto, Registro de cambios, Suposiciones clave
+  - ¿Cómo la creamos? Para crear una nueva hoja: Haz clic en el signo + en la esquina inferior izquierda, renómbrala,  introduce la información sugerida
+- **Documentar las columnas:** crear una tabla que explique cada columna o característica del dataset, es decir un diccionario de datos
+- **Añadir notas** breves o **comentarios** (pistas para el futuro): 
+  - **Notas:** Pequeños textos que aparecen cuando pasas el ratón por encima de una celda. Son para información breve y contextual. Para insertar una nota, haz clic derecho en la celda donde quieres añadirla. Selecciona Agregar nota y escríbela.
+  - **Comentarios:** Permiten una discusión o un hilo de conversación sobre una celda. Son ideales para la colaboración. Para añadir un comentario, haz clic derecho en la celda. Selecciona Insertar comentario y escribe tu comentario. Puedes mencionar a otros usuarios para notificarles.
+- **Organizar el diseño**
+  - Formato y encabezados
+    - Usa fuente y tamaño consistentes para los datos, y otro para los encabezados
+    - Aplica negrita a los títulos.
+    - Mantén la misma alineación
+    - Emplea bordes sutiles y colores suaves para separar o destacar, sin abusar.
+  - **Espaciado**
+    - Ajusta el ancho de las columnas para mostrar todo el contenido.
+    - Modifica la altura de las filas si hay texto envuelto.
+    - Usa filas o columnas vacías (o con color suave) para separar secciones grandes
+    - Congelar filas/columnas: seleccionar la fila 1 > "Ver" > "Inmovilizar" > seleccionar "una fila".
+
+
+## Capitulo 4: Convertir datos en insights
+### Lección 1: Calculando estadísticas básicas
+- Las **métricas clave** son números específicos que nos ayudan a entender el desempeño
+  - Por ejemplo: Ventas totales del mes, Promedio de ventas por pedido, etc
+  - Las 5 funciones fundamentales para calcular métricas:
+    - SUM: Suma todos los valores en un rango de celdas. Sintaxis: `=SUM(rango)`
+    - COUNT: Cuenta cuántas celdas contienen **números** en un rango e ignora celdas con texto o vacías. Sintaxis: `=COUNT(rango)`
+    - AVERAGE: Calcula el promedio (media aritmética) de un rango de números. Sintaxis: `=AVERAGE(rango)`
+    - MIN y MAX: Encuentra el valor mínimo y máximo en un rango. Sintaxis: `=MIN(rango)` y `=MAX(rango)`
+
+Consejos para usar las funciones efectivamente:
+- Verifica tus rangos: Asegúrate de que estás incluyendo todas las celdas necesarias.
+- Usa referencias absolutas cuando sea necesario: Cambia A2 por $A$2:$A$10 si no quieres que el rango cambie al copiar la fórmula.
+- Nombra tus cálculos: Agrega etiquetas claras junto a tus fórmulas (ej: "Ventas Totales:", "Promedio Diario:")
+
+### Lección 2: Comunicando resultados con gráficos
+- Gráfico de líneas: para mostrar tendencias en el tiempo
+- Gráfico de barras: para comparar categorías
+
+Cómo crear gráficos
+1. **Preparar tus datos:** información organizada en columnas o filas contiguas
+2. **Seleccionar los datos:** Haz clic en la primera celda de tu rango (incluyendo encabezados) y arrastra hasta la última celda con datos. Deberías ver un rectángulo azul rodeando toda tu selección.
+3. **Insertar el gráfico:** menú "Insertar" > Selecciona "Gráfico" > Google Sheets creará automáticamente un gráfico sugerido y aparecerá el "Editor de gráficos" en el panel derecho.
+4. **Elegir el tipo correcto:** En Editor de gráficos, sección "Configuración": 
+   - Para comparar categorías: Selecciona "Gráfico de columnas"
+   - Para mostrar tendencias: Selecciona "Gráfico de líneas" (el correcto)
+5. **Personalizar para claridad:** En la pestaña "Personalizar" del Editor:
+  - Modificar Título del gráfico - El título debe responder "¿Qué estoy viendo?"
+  - Ejes (etiquetas):
+  - Formato básico: 
+    - Cambia colores si es necesario.
+    - Ajusta el tamaño de fuente para legibilidad
+    - Considera agregar una grilla para facilitar la lectura
+6. **Interpretar y resumir** lo que muestra el gráfico.
+
+### Lección 3: Cómo utilizar un LLM para crear visualizaciones de Google Sheets
+
+Necesitas una presentación visual rápidamente
+1. El poder de un prompt bien estructurado con Chat GPT
+   - información clave: el tipo de datos que tenemos,  objetivo principal y el contexto de uso (audiencia).
+2. Solicitar configuraciones específicas para Google Sheets
+   - especifica que trabajas con Google Sheets para obtener instrucciones más precisas
+3. Mejorar las visualizaciones existentes
+  - ChatGPT puede ayudarte a mejorar los gráficos que ya creaste: puedes describir tu gráfico o simplemente cargar una foto de tu gráfico.
+  
+Técnicas avanzadas de prompting
+- Solicita alternativas: No te conformes con una sola sugerencia. Pide que te dé múltiples opciones
+- Pide el "por qué": Solicita una justificación para sus recomendaciones
+- Incluye restricciones: Menciona algunas limitaciones técnicas o de formato
+
+Errores comunes a evitar
+- Prompts demasiado vagos
+- Omitir el contexto de negocio
+- No especificar la herramienta
+- Ignorar a la audiencia
+
