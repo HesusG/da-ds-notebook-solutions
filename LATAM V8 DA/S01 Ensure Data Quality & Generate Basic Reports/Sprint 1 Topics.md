@@ -1,10 +1,18 @@
-# Sprint 1
+# Sprint 1: Asegura la calidad de los datos y genera reportes
+🗓️ Fecha de creación: 4 septiembre 2025  
+🗓️ Fecha de actualización: 4 septiembre 2025
 
 ## Capitulo 2: 
 ### Lección 1: Datos estructurados
 - Datos estructurados: una tabla súper organizada, tiene filas y columnas bien definidas, y cada columna tiene un tipo de información específico
 - Tipos de datos: Texto, Números, fecha, booleanos, etc
 - Tipos de datos por estructura analítica: categóricos, numéricos, discretos, continuos, series temporales, transversales
+
+**Ejercicio 1** - Práctica guiada: Detectar problemas de estructura y formato
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/10yZMc0yH4x5Ubjmzz6qJqC-XGsrnx0yH0n2PrPUjYn0/edit?usp=sharing
+
+**Ejercicio 2** - Actividad práctica: limpiar tipos de datos
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1MgdroGbCBGVDqh7vftSbXnW8xc2rH9YHuWlA8Tq-99U/edit?usp=sharing <br><br>
 
 
 ### Lección 2: Organización de datos para el análisis
@@ -13,6 +21,14 @@
 - **Filtros**: Selecciona la fila de encabezados, ve a “Datos” y haz clic en “Crear un filtro”
 - **Validación de Datos**: Selecciona la columna, luego ve al menú Datos y haz clic en Validación de datos. Cada vez que alguien quiera escribir algo en esa celda, tendrá que elegir entre las opciones dadas.
 
+**Ejercicio 1** - Práctica guiada: ordena y mejora la hoja de ventas
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1Ovhui9G1LQxusTJlW3KgSEorXEui0_bmGH_JfCynERQ/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): 
+
+**Ejercicio 2** - Actividad práctica: Limpieza y validación de datos en suscripciones
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1pWhVHwqymE6AjSy0ysQW2Oz1PBhN4FN9kI8-0UXZdW8/edit?usp=sharing <br><br>
+
+
 ### Lección 3: Explorando Datasets con LLMs: Potencial y Limitaciones
 - ¿Cómo pueden los LLMs ayudar en análisis de datos?: Análisis exploratorio inicial, Generación de insights, Documentación, Sugerencias metodológicas
   - Opción 1: Subir el dataset completo (menos de 10MB)
@@ -20,12 +36,24 @@
 - Técnicas de prompting para análisis de datos: Contexto, Objetivo, Formato, Limitaciones
 - Limitaciones críticas de los LLMs: Alucinaciones, Falta de acceso a datos reales, Sesgos en interpretaciones, Incapacidad para validar
 
+ <br><br>
+
+
 ## Capitulo 3: 
 ### Lección 1: Identificación y corrección de errores en los datos
 - **Quitar duplicados**: menú, elige "Limpieza de datos" y después selecciona "Quitar duplicados".
 - **Valores ausentes**: menú, elige "Datos" y selecciona "Crear un filtro". En el menú del filtro, selecciona la opción  "(Vacío)"
 - **Promedio**: `=PROMEDIO(A2:A100)` o `=AVERAGE(A2:A100)`
-- **Mediana**: `=MEDIANA(A2:A100)` o `=MEDIAN(A2:A100)`
+- **Mediana**: `=MEDIANA(A2:A100)` o `=MEDIAN(A2:A100)` 
+
+**Ejercicio 1** - Práctica guiada: limpieza de datos de TecnoAll
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1B6W9eU7DcYiwa5id_PUONCBfQzErr6I2mCaLbnRceQk/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver):  https://docs.google.com/spreadsheets/d/1d2yyuk6SdusJyo7NDqO5D5UyZujcrHXTFvBGlZ0GUH8/edit?usp=sharing
+
+**Ejercicio 2** - Actividad práctica: Aplicando EDA en nuestro negocio
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1qBk0JSXm_MgzdnyMsz9aUhnvI0xV-Hsp9aymgOI-nHY/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver):
+<br><br>
 
 ### Lección 2: Modificación de columnas
 - **Dividir campos**: `SPLIT` permite dividir el contenido de una celda en múltiples columnas utilizando un "delimitador" 
@@ -45,7 +73,8 @@
 - **Smart Cleanup** (Limpieza Inteligente): Puede detectar y sugerir soluciones para problemas comunes como espacios extra, errores de mayúsculas/minúsculas, o incluso algunos formatos de fecha/número inconsistentes. Menú Datos > Limpieza de datos > Sugerencias de limpieza
 
 [Lista de funciones de hoja de cálculo de Google](https://support.google.com/docs/table/25273?hl=es&ref_topic=9054531&sjid=3658440564594165918-SA)  
-[Centro de Ayuda de Google Sheets: Relleno inteligente](https://support.google.com/docs/answer/75509?hl=es&co=GENIE.Platform%3DDesktop&sjid=3658440564594165918-SA)
+[Centro de Ayuda de Google Sheets: Relleno inteligente](https://support.google.com/docs/answer/75509?hl=es&co=GENIE.Platform%3DDesktop&sjid=3658440564594165918-SA) <br><br>
+
 
 ### Lección 3: Diseño de flujos de trabajo ordenados
 Flujos de trabajo ordenados
@@ -67,7 +96,7 @@ Flujos de trabajo ordenados
     - Ajusta el ancho de las columnas para mostrar todo el contenido.
     - Modifica la altura de las filas si hay texto envuelto.
     - Usa filas o columnas vacías (o con color suave) para separar secciones grandes
-    - Congelar filas/columnas: seleccionar la fila 1 > "Ver" > "Inmovilizar" > seleccionar "una fila".
+    - Congelar filas/columnas: seleccionar la fila 1 > "Ver" > "Inmovilizar" > seleccionar "una fila". <br><br>
 
 
 ## Capitulo 4: Convertir datos en insights
@@ -83,7 +112,7 @@ Flujos de trabajo ordenados
 Consejos para usar las funciones efectivamente:
 - Verifica tus rangos: Asegúrate de que estás incluyendo todas las celdas necesarias.
 - Usa referencias absolutas cuando sea necesario: Cambia A2 por $A$2:$A$10 si no quieres que el rango cambie al copiar la fórmula.
-- Nombra tus cálculos: Agrega etiquetas claras junto a tus fórmulas (ej: "Ventas Totales:", "Promedio Diario:")
+- Nombra tus cálculos: Agrega etiquetas claras junto a tus fórmulas (ej: "Ventas Totales:", "Promedio Diario:") <br><br>
 
 ### Lección 2: Comunicando resultados con gráficos
 - Gráfico de líneas: para mostrar tendencias en el tiempo
@@ -103,7 +132,7 @@ Cómo crear gráficos
     - Cambia colores si es necesario.
     - Ajusta el tamaño de fuente para legibilidad
     - Considera agregar una grilla para facilitar la lectura
-6. **Interpretar y resumir** lo que muestra el gráfico.
+6. **Interpretar y resumir** lo que muestra el gráfico. <br><br>
 
 ### Lección 3: Cómo utilizar un LLM para crear visualizaciones de Google Sheets
 
