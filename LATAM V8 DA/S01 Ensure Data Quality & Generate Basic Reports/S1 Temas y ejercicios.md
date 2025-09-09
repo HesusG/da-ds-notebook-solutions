@@ -1,6 +1,6 @@
 # Sprint 1: Asegura la calidad de los datos y genera reportes
 🗓️ Fecha de creación: 4 septiembre 2025  
-🗓️ Fecha de actualización: 4 septiembre 2025
+🗓️ Fecha de actualización: 9 septiembre 2025
 
 ## Capitulo 2: 
 ### Lección 1: Datos estructurados
