@@ -157,8 +157,15 @@ Cómo crear gráficos
     - Considera agregar una grilla para facilitar la lectura
 6. **Interpretar y resumir** lo que muestra el gráfico. <br><br>
 
-**Ejercicio 1** 
-- Ejercicio sin resolver (cualquier persona con el link puede ver):<br><br><br>
+Recursos adicionales  
+[Guía de gráficos de Google Sheets](https://support.google.com/docs/answer/190718)<br><br>
+
+**Ejercicio 1 y 2**  
+Práctica guiada: Gráfico de barras - Ventas por producto - Gimnasio  
+Actividad práctica: Dashboard de Desempeño por sucursal:
+
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1__2gw-vJwyCelnZL1QExzdwd-682MTW2-RT2zmGffiA/edit?usp=sharing 
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/15mJPab01s2pgn_1LK5XclJSMvqGA3x_n4PIXoli4xNo/edit?usp=sharing <br><br><br>
 
 ### Lección 3: Cómo utilizar un LLM para crear visualizaciones de Google Sheets
 
@@ -181,13 +188,7 @@ Errores comunes a evitar
 - No especificar la herramienta
 - Ignorar a la audiencia<br><br>
 
-Recursos adicionales  
-[Guía de gráficos de Google Sheets](https://support.google.com/docs/answer/190718)<br><br>
-
-**Ejercicio 1 y 2**  
-Práctica guiada: Gráfico de barras - Ventas por producto - Gimnasio  
-Actividad práctica: Dashboard de Desempeño por sucursal:
-
-- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1__2gw-vJwyCelnZL1QExzdwd-682MTW2-RT2zmGffiA/edit?usp=sharing 
-- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/15mJPab01s2pgn_1LK5XclJSMvqGA3x_n4PIXoli4xNo/edit?usp=sharing <br><br><br>
+**Ejercicio 1**  
+- Ejercicio sin resolver (cualquier persona con el link puede ver):
+- Ejercicio resuelto (cualquier persona de TT puede ver): <br><br><br>
 
