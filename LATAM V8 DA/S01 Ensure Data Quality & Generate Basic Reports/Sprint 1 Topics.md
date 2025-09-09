@@ -188,7 +188,6 @@ Errores comunes a evitar
 - No especificar la herramienta
 - Ignorar a la audiencia<br><br>
 
-**Ejercicio 1**  
-- Ejercicio sin resolver (cualquier persona con el link puede ver):
-- Ejercicio resuelto (cualquier persona de TT puede ver): <br><br><br>
+**Ejercicio 1** Práctica individual: Mejorar una visualización problemática - ventas_por_categoria
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1I1Cp31ZNdutRPUBVwMKdSGAU-ZnRW4a1esYqmRzT3lY/edit?usp=sharing <br><br><br>
 
