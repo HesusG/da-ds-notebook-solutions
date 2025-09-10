@@ -10,9 +10,11 @@
 
 **Ejercicio 1** - Práctica guiada: Detectar problemas de estructura y formato
 - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/10yZMc0yH4x5Ubjmzz6qJqC-XGsrnx0yH0n2PrPUjYn0/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1CE2Q8aC6O-Dmo8WU7W-wKQHEiDFi6TqdITEyZIYD60w/edit?usp=sharing
 
 **Ejercicio 2** - Actividad práctica: limpiar tipos de datos
-- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1MgdroGbCBGVDqh7vftSbXnW8xc2rH9YHuWlA8Tq-99U/edit?usp=sharing <br><br><br>
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1MgdroGbCBGVDqh7vftSbXnW8xc2rH9YHuWlA8Tq-99U/edit?usp=sharing 
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1BZ8tz2m-S6pEc7ltealv1u9LSiKi5eeDjvPIUwXmJNU/edit?usp=sharing <br><br><br>
 
 
 ### Lección 2: Organización de datos para el análisis
@@ -23,10 +25,11 @@
 
 **Ejercicio 1** - Práctica guiada: ordena y mejora la hoja de ventas
 - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1Ovhui9G1LQxusTJlW3KgSEorXEui0_bmGH_JfCynERQ/edit?usp=sharing
-- Ejercicio resuelto (cualquier persona de TT puede ver): 
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1yE-uUeuZb7KxG6Qc0NcenYBmeTmd_aIjYbSqHm7oFLg/edit?usp=sharing 
 
 **Ejercicio 2** - Actividad práctica: Limpieza y validación de datos en suscripciones
-- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1pWhVHwqymE6AjSy0ysQW2Oz1PBhN4FN9kI8-0UXZdW8/edit?usp=sharing <br><br><br>
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1pWhVHwqymE6AjSy0ysQW2Oz1PBhN4FN9kI8-0UXZdW8/edit?usp=sharing 
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1UILla8qYBfACE28JPGRTfVT8WfWZ1yGZgCeyqlrt8qw/edit?usp=sharing <br><br><br>
 
 
 ### Lección 3: Explorando Datasets con LLMs: Potencial y Limitaciones
@@ -36,6 +39,9 @@
 - Técnicas de prompting para análisis de datos: Contexto, Objetivo, Formato, Limitaciones
 - Limitaciones críticas de los LLMs: Alucinaciones, Falta de acceso a datos reales, Sesgos en interpretaciones, Incapacidad para validar <br><br><br>
 
+**Ejercicio** - 4. Práctica individual - Caso: Validación de análisis LLM con HR Dataset
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1BZfqGrMuUKO9Hr2aEvGyfkb-aoPSkzHf/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1RY2OGb1DZ-qW7-gcNQMLbnE0DxJjacvV/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true <br><br><br>
 
 ## Capitulo 3: 
 ### Lección 1: Identificación y corrección de errores en los datos
@@ -50,7 +56,7 @@
 
 **Ejercicio 2** - Actividad práctica: Aplicando EDA en nuestro negocio
 - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1qBk0JSXm_MgzdnyMsz9aUhnvI0xV-Hsp9aymgOI-nHY/edit?usp=sharing
-- Ejercicio resuelto (cualquier persona de TT puede ver):<br><br>
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1Seqos3Fvxg6yeNTblKWfdclZ3kO53EAbW5hMQPBAwKQ/edit?usp=sharing <br><br>
 
 
 Recursos adicionales
@@ -80,7 +86,7 @@ Recursos adicionales
 
 **Ejercicio 2** - Actividad Práctica: trabajando en nuestro inventario
 - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1ue0MRmOFtwS-nqdO0rqBAJh_8od5Yljm03TwE8le1fQ/edit?usp=sharing
-- Ejercicio resuelto (cualquier persona de TT puede ver): <br><br>
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/17c0YTUczz15sySqMGCFmf-CT214m5gYcuJp9PCRP868/edit?usp=sharing <br><br>
 
 Recursos adicionales
 - [Lista de funciones de hoja de cálculo de Google](https://support.google.com/docs/table/25273?hl=es&ref_topic=9054531&sjid=3658440564594165918-SA)  
