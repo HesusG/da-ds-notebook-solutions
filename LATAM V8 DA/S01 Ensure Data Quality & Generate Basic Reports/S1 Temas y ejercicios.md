@@ -1,9 +1,10 @@
 # Sprint 1: Asegura la calidad de los datos y genera reportes
 🗓️ Fecha de creación: 4 septiembre 2025  
-🗓️ Fecha de actualización: 9 septiembre 2025
+🗓️ Fecha de actualización: 10 septiembre 2025<br><br>
 
-## Capitulo 2: 
-### Lección 1: Datos estructurados
+---
+## Capitulo 2: Explorando datos
+### C2 - Lección 1: Datos estructurados
 - Datos estructurados: una tabla súper organizada, tiene filas y columnas bien definidas, y cada columna tiene un tipo de información específico
 - Tipos de datos: Texto, Números, fecha, booleanos, etc
 - Tipos de datos por estructura analítica: categóricos, numéricos, discretos, continuos, series temporales, transversales <br><br>
@@ -17,7 +18,7 @@
 - Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1BZ8tz2m-S6pEc7ltealv1u9LSiKi5eeDjvPIUwXmJNU/edit?usp=sharing <br><br><br>
 
 
-### Lección 2: Organización de datos para el análisis
+### C2 - Lección 2: Organización de datos para el análisis
 - **Congelar filas**: menú “Ver”, elige “Congelar” y selecciona “1 fila”
 - **Ordenar datos**: menú “Datos” y elige “Ordenar rango por columna A, de A a Z”, o por la columna que necesites.
 - **Filtros**: Selecciona la fila de encabezados, ve a “Datos” y haz clic en “Crear un filtro”
@@ -32,7 +33,7 @@
 - Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1UILla8qYBfACE28JPGRTfVT8WfWZ1yGZgCeyqlrt8qw/edit?usp=sharing <br><br><br>
 
 
-### Lección 3: Explorando Datasets con LLMs: Potencial y Limitaciones
+### C2 - Lección 3: Explorando Datasets con LLMs: Potencial y Limitaciones
 - ¿Cómo pueden los LLMs ayudar en análisis de datos?: Análisis exploratorio inicial, Generación de insights, Documentación, Sugerencias metodológicas
   - Opción 1: Subir el dataset completo (menos de 10MB)
   - Opción 2: Compartir solo la estructura (recomendado para datos sensibles)
@@ -43,8 +44,9 @@
 - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1BZfqGrMuUKO9Hr2aEvGyfkb-aoPSkzHf/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
 - Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1RY2OGb1DZ-qW7-gcNQMLbnE0DxJjacvV/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true <br><br><br>
 
-## Capitulo 3: 
-### Lección 1: Identificación y corrección de errores en los datos
+---
+## Capitulo 3: Fundamentos de la limpieza de datos
+### C3 - Lección 1: Identificación y corrección de errores en los datos
 - **Quitar duplicados**: menú, elige "Limpieza de datos" y después selecciona "Quitar duplicados".
 - **Valores ausentes**: menú, elige "Datos" y selecciona "Crear un filtro". En el menú del filtro, selecciona la opción  "(Vacío)"
 - **Promedio**: `=PROMEDIO(A2:A100)` o `=AVERAGE(A2:A100)`
@@ -63,7 +65,7 @@ Recursos adicionales
 - [Centro de Ayuda de Google Sheets: Quitar duplicados](https://support.google.com/docs/answer/6325535)
 - [Centro de Ayuda de Google Sheets: Filtrar y ordenar tus datos](https://support.google.com/docs/answer/3540681)<br><br><br>
 
-### Lección 2: Modificación de columnas
+### C3 - Lección 2: Modificación de columnas
 - **Dividir campos**: `SPLIT` permite dividir el contenido de una celda en múltiples columnas utilizando un "delimitador" 
   - Sintaxis: `=SPLIT(texto_a_dividir, delimitador)`
   - 📢 El delimitador debe ir entre comillas dobles.
@@ -94,7 +96,7 @@ Recursos adicionales
 
 
 
-### Lección 3: Diseño de flujos de trabajo ordenados
+### C3 - Lección 3: Diseño de flujos de trabajo ordenados
 Flujos de trabajo ordenados
 - **Cambiar el nombre de las pestañas:** hacer doble clic en el nombre de la pestaña o hacer clic en la flecha y seleccionar Renombrar en el menú desplegable.
 - **Añadir una hoja** de resumen (tu bitácora de datos): muestra la información clave y documenta el trabajo realizado
@@ -120,8 +122,9 @@ Flujos de trabajo ordenados
 - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1HfXzMgF09i4Tp4UpXTeyfJujOJkpuMR7YsW9W3n_sXQ/edit?usp=sharing 
 - Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1JfL_3itCwBGmPOzcvxd92-P0N2Q-W9rQfLMw95aLliU/edit?usp=sharing <br><br><br>
 
+---
 ## Capitulo 4: Convertir datos en insights
-### Lección 1: Calculando estadísticas básicas
+### C4 - Lección 1: Calculando estadísticas básicas
 - Las **métricas clave** son números específicos que nos ayudan a entender el desempeño
   - Por ejemplo: Ventas totales del mes, Promedio de ventas por pedido, etc
   - Las 5 funciones fundamentales para calcular métricas:
@@ -143,7 +146,7 @@ Consejos para usar las funciones efectivamente:
 - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/13dqXYIQuCABVoP904B2_AbogbY1a-jO6aYXPjH34w7A/edit?usp=sharing 
 - Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1kT7lq7Qba1YWTtmb-Y-ciOKgPLMFJW0Fzl4AlnEyHFM/edit?usp=sharing <br><br><br>
 
-### Lección 2: Comunicando resultados con gráficos
+### C4 - Lección 2: Comunicando resultados con gráficos
 - Gráfico de líneas: para mostrar tendencias en el tiempo
 - Gráfico de barras: para comparar categorías
 
@@ -173,7 +176,7 @@ Actividad práctica: Dashboard de Desempeño por sucursal:
 - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1__2gw-vJwyCelnZL1QExzdwd-682MTW2-RT2zmGffiA/edit?usp=sharing 
 - Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/15mJPab01s2pgn_1LK5XclJSMvqGA3x_n4PIXoli4xNo/edit?usp=sharing <br><br><br>
 
-### Lección 3: Cómo utilizar un LLM para crear visualizaciones de Google Sheets
+### C4 - Lección 3: Cómo utilizar un LLM para crear visualizaciones de Google Sheets
 
 Necesitas una presentación visual rápidamente
 1. El poder de un prompt bien estructurado con Chat GPT
