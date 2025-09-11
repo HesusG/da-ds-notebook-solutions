@@ -3,7 +3,7 @@
 
 💻 Herramienta: Google Sheets o Excel
 
-📅 Fecha de actualización: 3 Septiembre 2025
+📅 Fecha de actualización: 10 Septiembre 2025
 
 ✅ El proyecto tiene plantilla o precodigo para el estudiante.
 
