@@ -132,22 +132,67 @@ Ejercicio resuelto: https://docs.google.com/spreadsheets/d/1bZGJNBsCFrxvNe8Di1TM
 
 **Ejercicio 2** - Ejercicios Aplicados – Facturación por categoría y región
 Datos crudos (cualquier persona con el link puede ver):
-- a
+- [ventas_1000.csv](https://drive.google.com/file/d/1EMjltVRbWv5I7n0X_Tpw838iFK7jJfsm/view?usp=sharing)
 - a
 - a
 
-Ejercicio resuelto: <br><br>
+Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1PIpZZkcKfjuAOgc57aW1derL2EOCPGcltrV3jDyEVek/edit?usp=sharing
+
+No se han visto las tablas dinámicas, para responder el cuestionario, se pueden usar filtros. <br><br>
 
 Recursos adicionales
 - [Documentación oficial XLOOKUP](https://support.google.com/docs/answer/12405947)
-
 <br><br>
 
-### C2 - Lección 3:
+### C2 - Lección 3: Cómo organizar hojas de cálculo para análisis
+Crear un cuaderno limpio y profesional, con reglas claras y documentación mínima:
+- Renombrar y colorear pestañas para identificarlas rápido.
+  - Para renombrar: doble clic en nombre de la hoja
+  - Para colorear: Clic derecho en nombre de la hoja > Cambiar color
+- Escribir nombres claros en cada columna.
+- Seguir una convención estándar de nombres (pestañas, columnas, rangos).
+- Aplicar un código de colores para diferenciar tipos de datos (brutos, limpios, análisis).
+- Incluir un README.
+  -  un archivo README es una guía rápida para entender el proyecto: 
+     -  qué información contiene cada dataset
+     -  cómo fue procesada
+     -  cuál es el objetivo del análisis
+
+**Ejercicio** - Practica aplicada - Crea tu propio README - empresa Mi Che
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/18pXwhiRwo7ZsV3F9EHudanjdnX9_Cria/edit?usp=sharing&rtpof=true&sd=true
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1ZhEXh6oTxoc6VQOiHVEAbDSQydyEtQYp/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
 <br><br>
 
-### C2 - Lección 4:
+### C2 - Lección 4: Cómo preparar datos categóricos para agrupar
+
+Funciones de Limpieza:
+| Paso | Fórmula | Original → Resultado |
+|-----------|-----------|-----------|
+| Quitar basura + espacios |  `=TRIM(CLEAN(A2))`        | `" Electronics "` → `"Electronics"`  |
+| Capitalizar cada palabra | `=PROPER(TRIM(CLEAN(A2)))` | `"electronics"` → `"Electronics"`  |
+| Mayúsculas globales      | `=UPPER(...)`              | `"Electronics"` → `"ELECTRONICS"` |
+| Separar y tomar 1ᵉʳ ítem | `=INDEX(SPLIT(A2,"/"),1)`  | `"ELECTRONICS/COMPUTERS"` → `"ELECTRONICS"`  |
+| Reemplazar cadena        | `=SUBSTITUTE(A2,"AND KITCHEN","")`  | `"HOME AND KITCHEN"` → `"HOME"` |
+| Recodificar variantes    | `=SWITCH(A2,"NA","NO CATEGORY","N/A","NO CATEGORY",A2)`  | `"N/A"` → `"NO CATEGORY"`  |
+| Todo-en-uno | `=UPPER(TRIM(CLEAN(SUBSTITUTE(A2,"AND KITCHEN",""))))`  | Limpieza completa  |
+
+💡 Mentalidad clave: no limpies manualmente; diseña el proceso una vez y reutilízalo.
+
+Plantilla reutilizable: 
+- crea una hoja formuleada, cada vez que aparece mas info en los datos crudos, la plantilla corrige todo de forma automática.
+- Protege las hojas para hacer la plantilla a prueba de errores: clic derecho > Proteger hoja
 <br><br>
+
+Quality Assurance checks (Control de Calidad)
+- Nombrar rangos: seleccionar rango > Data > Named ranges > poner nombre
+- Formato condicional: Seleccionar columna > Format > Conditional format rules
+- Registrar cambios en la hoja README <br><br>
+
+**Ejercicio** - Práctica aplicada
+empresa Mi Che quiere conocer:  
+Cual es la region con el mayor numero de ventas totales para todos los productos pertenecientes a dos unidades:  panadería y snacks
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/15TfduxFqRFtP0uv7OR2w8aOmczq5Qb-f/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
+- Ejercicio resuelto (cualquier persona de TT puede ver): 
 
 ### C2 - Lección 5:
 <br><br><br>
