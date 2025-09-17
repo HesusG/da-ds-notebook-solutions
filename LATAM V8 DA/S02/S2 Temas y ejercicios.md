@@ -132,9 +132,9 @@ Ejercicio resuelto: https://docs.google.com/spreadsheets/d/1bZGJNBsCFrxvNe8Di1TM
 
 **Ejercicio 2** - Ejercicios Aplicados – Facturación por categoría y región
 Datos crudos (cualquier persona con el link puede ver):
-- [ventas_1000.csv](https://drive.google.com/file/d/1EMjltVRbWv5I7n0X_Tpw838iFK7jJfsm/view?usp=sharing)
-- a
-- a
+- [ventas_2000.csv](https://drive.google.com/file/d/1EMjltVRbWv5I7n0X_Tpw838iFK7jJfsm/view?usp=sharing)
+- productos_2000.csv
+- sucursales_2000.csv
 
 Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1PIpZZkcKfjuAOgc57aW1derL2EOCPGcltrV3jDyEVek/edit?usp=sharing
 
@@ -194,12 +194,159 @@ Cual es la region con el mayor numero de ventas totales para todos los productos
 - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/15TfduxFqRFtP0uv7OR2w8aOmczq5Qb-f/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
 - Ejercicio resuelto (cualquier persona de TT puede ver): 
 
-### C2 - Lección 5:
+### C2 - Lección 5: Cómo usar LLMs para fórmulas y errores en hojas de cálculo
+
+Detectar errores comunes en las fórmulas (#N/A, #NUM, #VALUE!).
+- `#VALUE!`: cuando intentas operar con rangos incompatibles, tipos de dato distintos o inexistentes.
+- `#N/A`: cuando la búsqueda no encuentra coincidencias.
+- `#NUM!`: cuando una referencia apunta a una celda/columna fuera de Rango.<br><br>
+
+El LLM ayuda a corregir problemas como fórmulas rotas o mejorar formulas existentes. Para ello, hay que redactar prompts claros para que el LLM corrija correctamente. Por ejemplo, en ChatGPT escribir un buen prompt e incluir: 
+- una explicación detallada de tu problema
+- la fórmula que estás usando
+- los detalles del error que aparece o mejora que se desea hacer <br><br>
+
+Documentar la causa y la solución en README
+- crea un rastro de conocimiento
+- sirven de guía y referencia: muestran cómo se planteó el problema, contexto y solución de la IA
+
+
 <br><br><br>
 
 ---
 ## Capitulo 3: Resumir datos con funciones y filtros
-### C3 - Lección :
+### C3 - Lección 1: Filtrar y explorar patrones en los datos
+
+💡 Un **filtro** permite mostrar solo las filas que cumplen con ciertos criterios que tú defines. Todo lo demás se oculta, lo que ayuda a ver patrones y tendencias mucho más rápido.
+- Todos los datos deben de tener encabezados, es decir, nombres para cada columna.
+- Activar filtro: Clic en tabla > Clic en el icono de embudo o filtro en la barra de herramientas
+- Aparece un ícono junto a cada encabezado. Haz clic en el de la columna que quieras filtrar
+- Desmarca Seleccionar todo y 
+    - marca únicamente la categoría de interés
+    - filtra por condición, por ejemplo un rango de fechas
+Es posible filtrar diferentes columnas, para evaluar diferentes escenarios.
+<br><br>
+
+#### Visualizar patrones
+Las visualizaciones dentro de la hoja nos permiten encontrar patrones de negocio de un vistazo.
+
+- Mapas de Calor (Heatmaps): Asigna colores según los valores en tus datos
+  - Seleccionar el rango > Menu Fórmato > Formato Condicional > Seleccionar Escala de Colores
+- Barras de Datos (Stack Bar / Barras de Progreso en Celda): los gráficos en celdas (sparklines), rellenan las celdas con barras horizontales cuya longitud refleja el valor de cada dato.
+  - Sintaxis: `SPARKLINE(datos, [opciones])`. 
+  - Ejemplo: Gráfico de barras con color y tamaño `=SPARKLINE(A1:A10, {"charttype","bar"; "color","blue"; "max",100})`  
+    - `"max",100` → define el valor máximo de referencia, se toma el valor 100 como tope para escalar todas las barras proporcionalmente.
+  
+    Tipos de graficos:
+    - Línea `{"charttype","line"}`
+    - Barra	`{"charttype","bar"}`
+    - Columna `{"charttype","column"}`
+    - Win/Loss `{"charttype","winloss"}`
+<br><br>
+
+**Ejercicio** - Práctica Individual - Ventas por producto en una región específica - Ventas Cafetería
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1jNrlAoN4UCTcI_V7T7w1DHCwAgb2Er83bgHi6gESmuI/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1_YXQIyEoD-iwwTpp5xiqiZtAJpFg9_D9w7EPpVazdts/edit?usp=sharing <br><br>
+💡 Pistas:
+- Pregunta 1: menú de filtro > Filtrar por condición > Texto contiene "01/2024"
+- Ejercicio 1: menú de filtro > Filtrar por condición > Valores entre "01/04/2024" y "30/06/2024"
+- Ejercicio 2: menú de filtro > Filtrar por condición > Mayor a (Greater than) 65
+<br><br>
+Recursos adicionales
+- [Documentación oficial  Sparkline](https://support.google.com/docs/answer/3093289?hl=es) <br><br>
+
+### C3 - Lección 2: Funciones condicionales
+
+Las funciones de agregación condicional te permiten sumar, contar o promediar valores solo si estos cumplen con una o más condiciones.
+- `SUMIF`: Suma si se cumple una condición
+  - Sintaxis: `=SUMIF(rango_criterio, criterio, [rango_suma])`
+    - rango criterio: columna donde está el elemento a buscar
+    - criterio: lo que estamos buscando
+    - rango_suma (opcional): la columna de los que queremos sumar, si no se especifica, toma "rango criterio"
+  - Ejemplo: `=SUMIF(A2:A6, "Café*", B2:B6)`
+    - El asterisco se usa como comodín, la fórmula sumará cualquier producto que empiece con la palabra `Café`.
+
+- `COUNTIF`: Cuenta si se cumple una condición
+  - Sintaxis: `=COUNTIF(rango, criterio)`
+    - rango: columna donde vamos a buscar
+    - criterio: lo que queremos contar
+  - Ejemplo: `=COUNTIF(C:C, "Té Verde")`
+  - Ejemplo: `=COUNTIF(A:A,">18")` la condición van entre comillas
+
+- `AVERAGEIF`: Promedio si se cumple una condición
+  - Sintaxis: `= AVERAGEIF(rango_criterio, criterio, [rango_promedio]))`    
+    - rango criterio: columna donde está el elemento a buscar
+    - criterio: lo que estamos buscando
+    - rango_promedio (opcional): la columna de los que queremos promediar, si no se especifica, toma "rango criterio"
+  - Ejemplo: `= AVERAGEIF(C:C, "Café Clásico", G:G)`   
+<br><br>
+
+Referencias en fórmulas  
+**Referencia relativa**: Cuando copias o arrastras una fórmula hacia otras celdas, las referencias cambian automáticamente, ajusta la fórmula a la nueva posición.
+- Ejemplo: si tienes `=A2+B2` en la fila 2 y la copias a la fila 3, automáticamente se convierte en `=A3+B3`.
+Para que la referencia no cambie, se necesitan **referencias absolutas**.
+
+👉 Referencia relativa (dinámica): `A2` → se adapta al mover la fórmula (`A3`, `A4`,…).  
+👉 Referencia absoluta (fija): 
+- `$A$2` → siempre apunta exactamente a la celda `A2`.
+- `$A2` → fija la columna `A`, pero la fila cambia.
+- `A$2` → fija la fila `2`, pero la columna cambia. <br><br>
+
+💡 TIP: En Google Sheets, el atajo para fijar una celda o rango (poner los $ para referencias absolutas):
+- Windows: F4
+- Mac: ⌘ + T  
+Cada vez que presionas el atajo mientras editas una referencia, va ciclando entre:
+  - `A2` → relativo
+  - `$A$2` → columna y fila fijas
+  - `A$2` → fila fija
+  - `$A2` → columna fija 
+
+**Ejercicio** - Práctica Guiada: 
+- Ejercicio sin resolver - mismo que lección anterior (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1jNrlAoN4UCTcI_V7T7w1DHCwAgb2Er83bgHi6gESmuI/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): <br><br>
+
+Recursos adicionales:
+- [SUMAR.SI (SUMIF)](https://support.google.com/docs/answer/3093583?hl=es)
+  - más funciones, en misma página, barra de la derecha
+- [CONTAR.SI (COUNTIF)](https://support.google.com/docs/answer/3093480?hl=es)
+- [PROMEDIO.SI (AVERAGEIF)](https://support.google.com/docs/answer/3256529?hl=es-419) <br><br><br>
+  
+### C3 - Lección 3: Identificar datos “sucios”
+Los registros suelen venir con errores de entrada, duplicados, valores fuera de rango o categorías mal escritas.
+
+- **Duplicados**: registros que aparecen más de una vez en un conjunto de datos. Aparecen por errores de entrada, fallas en la importación o problemas en la recolección de datos.
+  - Por ejemplo: `=COUNTIF($A$2:$A$100, A2) > 1` → cuenta cuántas veces aparece el valor de la celda A2 dentro del rango de A2 a A100. Importante: usa referencias absolutas en el rango para poder arrastrar la fórmula.
+- **Outliers** o valores atípicos: dato que se aleja considerablemente del resto de valores. Aparecen porque alguien cometió un error al registrar la información o porque realmente hubo un evento poco común.
+  - Es importante detectarlos? Porque pueden distorsionar los cálculos como el promedio.<br><br>
+
+Encontrar Valores duplicados y outliers  
+El formato condicional también permite cambiar el color de las celdas o del texto automáticamente si cumplen una condición.
+- Seleccionar columna > Formato (Format) > Formato condicional (Conditional formatting)
+- Escribir la fórmula: 
+  - Resaltar valores duplicados: “La fórmula personalizada es” > `=COUNTIF($A$2:$A$101, A2) > 1`
+  - Resaltar valores atípicos: “Mayor que” > escribir número sin sentido
+- Selecciona un color de relleno
+
+Valores inconsistentes o inesperados  
+Datos que no coinciden con las categorías definidas  
+Ejemplo, tenemos unicamente 4 regiones: Norte, Sur, Este y Oeste.  
+Regla que resalte cualquier otro valor:
+- Seleccionar columna > Formato (Format) > Formato condicional (Conditional formatting)
+- “La fórmula personalizada es” > `=AND($E$2:$E$101<>"Sur", $E$2:$E$101<>"Norte", $E$2:$E$101<>"Este", $E$2:$E$101<>"Oeste")`
+  - Si una celda en esta columna no es Sur y no es Norte y no es Este y no es Oeste, entonces márcala como error.
+  - usamos el signo de pesos para indicar referencias absolutas <br><br>
+
+**Ejercicio** Práctica guiada - Ejercicio 1: Valores Extremos - Ventas Cafetería   
+**Ejercicio** Práctica Aplicada - Ejercicio 1: Análisis de datos y detección de errores  
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1jNrlAoN4UCTcI_V7T7w1DHCwAgb2Er83bgHi6gESmuI/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1K_Kplc2xCtL0pYZnQiTEW1IrJqBmscEK5sXD07M0ys4/edit?usp=sharing
+  - Valor no esta entre (Is not between) 0 y 180.
+  - Fórmula personalizada: `=AND($D$2:$D$101<>"Té", $D$2:$D$101<>"Café", $D$2:$D$101<>"Jugo")` <br><br>
+
+### C3 - Lección 4: Comparar segmentos con múltiples condiciones
+<br><br>
+
+### C3 - Lección : 
 <br><br><br>
 
 ---
@@ -214,4 +361,4 @@ Cual es la region con el mayor numero de ventas totales para todos los productos
 
 **Ejercicio** - 
 - Ejercicio sin resolver (cualquier persona con el link puede ver):
-- Ejercicio resuelto (cualquier persona de TT puede ver): 
+- Ejercicio resuelto (cualquier persona de TT puede ver): <br><br>
