@@ -1,6 +1,6 @@
 # Sprint 2: Transformar datos para insights de negocio
 🗓️ Fecha de creación: 10 septiembre 2025  
-🗓️ Fecha de actualización: 11 septiembre 2025<br><br>
+🗓️ Fecha de actualización: 17 septiembre 2025<br><br>
 
 ---
 ## Capitulo 1: Preguntas analíticas en contexto de negocio
@@ -258,7 +258,7 @@ Recursos adicionales
 ### C3 - Lección 2: Funciones condicionales
 
 Las funciones de agregación condicional te permiten sumar, contar o promediar valores solo si estos cumplen con una o más condiciones.
-- `SUMIF`: Suma si se cumple una condición
+- `SUMIF` (SUMAR.SI): Suma si se cumple una condición
   - Sintaxis: `=SUMIF(rango_criterio, criterio, [rango_suma])`
     - rango criterio: columna donde está el elemento a buscar
     - criterio: lo que estamos buscando
@@ -266,14 +266,14 @@ Las funciones de agregación condicional te permiten sumar, contar o promediar v
   - Ejemplo: `=SUMIF(A2:A6, "Café*", B2:B6)`
     - El asterisco se usa como comodín, la fórmula sumará cualquier producto que empiece con la palabra `Café`.
 
-- `COUNTIF`: Cuenta si se cumple una condición
+- `COUNTIF` (CONTAR.SI): Cuenta si se cumple una condición
   - Sintaxis: `=COUNTIF(rango, criterio)`
     - rango: columna donde vamos a buscar
     - criterio: lo que queremos contar
   - Ejemplo: `=COUNTIF(C:C, "Té Verde")`
   - Ejemplo: `=COUNTIF(A:A,">18")` la condición van entre comillas
 
-- `AVERAGEIF`: Promedio si se cumple una condición
+- `AVERAGEIF` (PROMEDIO.SI): Promedio si se cumple una condición
   - Sintaxis: `= AVERAGEIF(rango_criterio, criterio, [rango_promedio]))`    
     - rango criterio: columna donde está el elemento a buscar
     - criterio: lo que estamos buscando
@@ -344,7 +344,29 @@ Regla que resalte cualquier otro valor:
   - Fórmula personalizada: `=AND($D$2:$D$101<>"Té", $D$2:$D$101<>"Café", $D$2:$D$101<>"Jugo")` <br><br>
 
 ### C3 - Lección 4: Comparar segmentos con múltiples condiciones
+
+Funciones de agregación condicional con múltiples condiciones  
+- `SUMIFS` (SUMAR.SI.CONJUNTO): Suma si se cumplen múltiples condiciones:
+  - Sintaxis: `SUMAR.SI.CONJUNTO(rango_suma; rango_criterios1; criterios1; [rango_criterios2; criterios2];...)`
+  - Ejemplo: `SUMAR.SI.CONJUNTO(A2:A9;B2:B9;"=A*";C2:C9;"Juan")`
+
+- `COUNTIFS` (CONTAR.SI.CONJUNTO)   
+  - Sintaxis: `CONTAR.SI.CONJUNTO(rango_criterios1; criterios1; [rango_criterios2; criterios2];…)`
+    - Ejemplo: `=CONTAR.SI.CONJUNTO(B:B;"=Sí"; D:D;"=Sí")`
+
+-  `AVERAGEIFS` (PROMEDIO.SI.CONJUNTO):
+   - Sintaxis: `PROMEDIO.SI.CONJUNTO(rango_promedio; rango_criterio1; criterio1; [rango_criterio2; criterio2]; ...)`
+   - Ejemplo: `=PROMEDIO.SI.CONJUNTO(B2:B;B2:B;">=70";B2:B;"<=90")`
 <br><br>
+
+Recursos adicionales
+- [`SUMIFS` (SUMAR.SI.CONJUNTO)](https://support.microsoft.com/es-es/office/funci%C3%B3n-sumar-si-conjunto-c9e748f5-7ea7-455d-9406-611cebce642b)
+- [`COUNTIFS` (CONTAR.SI.CONJUNTO)](https://support.microsoft.com/es-es/office/funci%C3%B3n-contar-si-conjunto-dda3dc6e-f74e-4aee-88bc-aa8c2a866842)
+- [`AVERAGEIFS` (PROMEDIO.SI.CONJUNTO)](https://support.microsoft.com/es-es/office/funci%C3%B3n-promedio-si-conjunto-48910c45-1fc0-4389-a028-f7c5c3001690)
+<br><br>
+
+Tablas de resumen usando funciones
+
 
 ### C3 - Lección : 
 <br><br><br>
