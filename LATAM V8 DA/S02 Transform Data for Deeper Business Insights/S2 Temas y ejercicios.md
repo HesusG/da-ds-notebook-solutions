@@ -140,7 +140,7 @@ Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/
 
 No se han visto las tablas dinámicas, para responder el cuestionario, se pueden usar filtros. <br><br>
 
-Recursos adicionales
+Recursos adicionales (Google Sheets)
 - [Documentación oficial XLOOKUP](https://support.google.com/docs/answer/12405947)
 <br><br>
 
@@ -252,7 +252,7 @@ Las visualizaciones dentro de la hoja nos permiten encontrar patrones de negocio
 - Ejercicio 1: menú de filtro > Filtrar por condición > Valores entre "01/04/2024" y "30/06/2024"
 - Ejercicio 2: menú de filtro > Filtrar por condición > Mayor a (Greater than) 65
 <br><br>
-Recursos adicionales
+Recursos adicionales (Google Sheets)
 - [Documentación oficial  Sparkline](https://support.google.com/docs/answer/3093289?hl=es) <br><br>
 
 ### C3 - Lección 2: Funciones condicionales
@@ -305,7 +305,7 @@ Cada vez que presionas el atajo mientras editas una referencia, va ciclando entr
 - Ejercicio sin resolver - mismo que lección anterior (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1jNrlAoN4UCTcI_V7T7w1DHCwAgb2Er83bgHi6gESmuI/edit?usp=sharing
 - Ejercicio resuelto (cualquier persona de TT puede ver): <br><br>
 
-Recursos adicionales:
+Recursos adicionales (Google Sheets)
 - [SUMAR.SI (SUMIF)](https://support.google.com/docs/answer/3093583?hl=es)
   - más funciones, en misma página, barra de la derecha
 - [CONTAR.SI (COUNTIF)](https://support.google.com/docs/answer/3093480?hl=es)
@@ -359,16 +359,50 @@ Funciones de agregación condicional con múltiples condiciones
    - Ejemplo: `=PROMEDIO.SI.CONJUNTO(B2:B;B2:B;">=70";B2:B;"<=90")`
 <br><br>
 
-Recursos adicionales
-- [`SUMIFS` (SUMAR.SI.CONJUNTO)](https://support.microsoft.com/es-es/office/funci%C3%B3n-sumar-si-conjunto-c9e748f5-7ea7-455d-9406-611cebce642b)
-- [`COUNTIFS` (CONTAR.SI.CONJUNTO)](https://support.microsoft.com/es-es/office/funci%C3%B3n-contar-si-conjunto-dda3dc6e-f74e-4aee-88bc-aa8c2a866842)
-- [`AVERAGEIFS` (PROMEDIO.SI.CONJUNTO)](https://support.microsoft.com/es-es/office/funci%C3%B3n-promedio-si-conjunto-48910c45-1fc0-4389-a028-f7c5c3001690)
+Tablas de resumen usando funciones
+Ejemplo: 
+- En las filas, los productos (Café Clásico, Café con Leche, Té Verde).
+- En las columnas, las regiones (Norte, Sur, Oeste, Este).
+
+Fórmula `=SUMIFS($G:$G, $C:$C, $J5, $E:$E, K$4)`
+- `$G:$G` → Ventas Totales
+- `$C:$C` → Productos
+- `$J5` → fijamos columna J (productos) pero dejamos libre la fila, para poder arrastrar hacia abajo y cambiar el producto.
+- `$E:$E` → Región
+- `K$4` → fijamos la fila 4 (regiones) pero dejamos libre la columna, para poder arrastrar hacia la derecha y cambiar la región
+
+Arrastrar la fórmula hacia la derecha, cambiará automáticamente la región.
+Arrastrar hacia abajo, cambiará automáticamente el producto.
+<br>
+
+Ventas Totales
+| Producto        | Norte | Sur   | Oeste | Este  |
+|-----------------|-------|-------|-------|-------|
+| Café Clásico    | 575   | 462.5 | 250   | 237.5 |
+| Café con Leche  | 345   | 270   | 510   | 460   |
+| Té Verde        | 0     | 80    | 0     | 705   |
 <br><br>
 
-Tablas de resumen usando funciones
+¿Cuándo usar SUMIFS/COUNTIFS/AVERAGEIFS ?
+![alt text](image.png)
 
+**Ejercicio** - Ejercicio 1: Ventas por Región y Tipo de Producto
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1m_xfKbcCZTkbyT-dBRqYfo7t4j_MucMphzmczh7QBaM/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1OqVf7HiqEXVACEp_57nGmHW3BAMXCesnRRzN_8ph0qo/edit?usp=sharing <br><br>
 
-### C3 - Lección : 
+Recursos adicionales
+- `SUMIFS` (SUMAR.SI.CONJUNTO):
+  - [Google Sheets](https://support.google.com/docs/answer/3238496?hl=es)
+  - [Microsoft Excel](https://support.microsoft.com/es-es/office/funci%C3%B3n-sumar-si-conjunto-c9e748f5-7ea7-455d-9406-611cebce642b)
+- `COUNTIFS` (CONTAR.SI.CONJUNTO)
+  - [Google Sheets](https://support.google.com/docs/answer/3256550?hl=es)
+  - [Microsoft Excel](https://support.microsoft.com/es-es/office/funci%C3%B3n-contar-si-conjunto-dda3dc6e-f74e-4aee-88bc-aa8c2a866842)
+- `AVERAGEIFS` (PROMEDIO.SI.CONJUNTO)
+  - [Google Sheets](https://support.google.com/docs/answer/3256534?hl=es)
+  - [Microsoft Excel](https://support.microsoft.com/es-es/office/funci%C3%B3n-promedio-si-conjunto-48910c45-1fc0-4389-a028-f7c5c3001690)
+<br><br><br>
+
+### C3 - Lección 5: Hojas resumen con métricas clave 
 <br><br><br>
 
 ---
