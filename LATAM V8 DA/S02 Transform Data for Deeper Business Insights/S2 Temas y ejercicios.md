@@ -9,10 +9,10 @@
 Cómo identificar y priorizar Stakeholders
 - Decisión – “¿Qué necesitas decidir exactamente con estos datos?”
 - Plazo – “¿Para cuándo debes tener la respuesta?”
-- Involucrados – “¿Quién más participa o puede bloquear/impulsar la acción y cómo prefieren recibir actualizaciones?” <br><br>
+- Involucrados – “¿Quién más participa o puede bloquear/impulsar la acción?” <br><br>
   
 **1. Definir Tarea:** Definir el éxito antes de medir  
-- ¿Cuál es la meta concreta? → **Identificar el canal que más vende Accesorios en Primavera–Verano para redirigir presupuesto.
+- ¿Cuál es la meta concreta? → Identificar el canal que más vende Accesorios en Primavera–Verano para redirigir presupuesto.
 - ¿Cómo se mide ese éxito? → Ventas netas y ticket promedio por canal.
 - ¿Cuál es la ruta de medición? → Históricos mar–ago 2025 y entrega antes de la reunión del miércoles.
 
@@ -39,11 +39,13 @@ KPIs y OKR
 - El Objetivo (O) marca hacia dónde queremos ir.
 - Los Resultados Clave (KRs) miden si lo estamos logrando.
 - Y esos KRs se cuantifican con KPIs, es decir, métricas específicas (absolutas o relativas).
+
 🎯 Los OKR definen los objetivos estratégicos, y los KPI permiten monitorear si se están cumpliendo.
 <br><br>
 
 KPIs vs. Guardrails (métricas de control)
 - Guardrails: métricas de control que se monitorean en paralelo a los KPIs para alertar sobre posibles problemas para el negocio. 
+
 💡 Los KPIs dicen si avanzas, los guardrails se aseguran de que avances sin generar un problema mayor.
 <br><br>
 
@@ -403,18 +405,68 @@ Recursos adicionales
 <br><br><br>
 
 ### C3 - Lección 5: Hojas resumen con métricas clave 
+
+ Hoja de resumen dedicada:  
+ "índice" o un "resumen ejecutivo" que muestra lo más importante
+ - Claridad: Las métricas clave no se pierden entre un mar de datos.
+ - Accesibilidad: Quien necesite la información importante, la encuentra de inmediato.
+ - Profesionalismo: Muestra que tu análisis está bien estructurado.
+ - Base para Reportes: Es el punto de partida ideal para copiar y pegar en un informe, o para crear gráficos.<br><br>
+
+Formato básico para la legibilidad  
+- Paso 1: Usa negritas para las etiquetas o encabezados
+- Paso 2: Alinea tus columnas: números a la derecha y texto a la izquierda
+- Paso 3: Aplica formato de número adecuado: moneda, porcentajes o quitar decimales a enteros.
+- Paso 4: Considera encabezados y espacios: Usa una fila para un título general y deja filas o columnas en blanco para separar grupos de métricas.
+
+<p align="center">
+  <img src="image-1.png" width="500">
+</p>
+
+La hoja resumen se puede reutilizar para:
+- Reportes: todas las métricas en un solo lugar, listas para cualquier informe o presentación.
+- Construir gráficos: mostrar tendencias, comparaciones o resultados de manera visual.
+- Seguimiento interno de KPIs: monitorear indicadores críticos rápidamente.
+- Dashboards interactivos: alimentar visualizaciones dinámicas que se actualizan en tiempo real. <br><br>
+
+Adaptando la hoja de resumen a diferentes audiencias  
+No le muestras lo mismo a todo el mundo. El nivel de detalle, el tipo de métricas y el lenguaje que usas deben adaptarse a quién está viendo el informe. <br><br>
+
+**Ejercicio** -  Hoja de resumen de ventas regionales - Ventas Cafeterías
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1jNrlAoN4UCTcI_V7T7w1DHCwAgb2Er83bgHi6gESmuI/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): <br><br>
 <br><br><br>
 
 ---
 ## Capitulo 4: Analizar datos con tablas dinámicas
-### C4 - Lección :
+### C4 - Lección 1: Cómo crear tu primera tabla dinámica
+
+Una tabla dinámica o PivotTable es una herramienta que te permite resumir y reagrupar datos de forma automática e interactiva.
+
+Creando una tabla dinámica desde un conjunto de datos  
+<br><br><br>
+
+### C4 - Lección 2: 
+<br><br><br>
+
+### C4 - Lección 3: 
+<br><br><br>
+
+### C4 - Lección 4: 
+<br><br><br>
+
+### C4 - Lección 5: 
 <br><br><br>
 
 ---
 ## Capitulo 5: Visualizar y destacar hallazgos clave
-### C5 - Lección :
+### C5 - Lección : 
+<br><br><br>
 
 
+
+
+---
 **Ejercicio** - 
 - Ejercicio sin resolver (cualquier persona con el link puede ver):
 - Ejercicio resuelto (cualquier persona de TT puede ver): <br><br>
