@@ -441,15 +441,46 @@ No le muestras lo mismo a todo el mundo. El nivel de detalle, el tipo de métric
 ## Capitulo 4: Analizar datos con tablas dinámicas
 ### C4 - Lección 1: Cómo crear tu primera tabla dinámica
 
-Una tabla dinámica o PivotTable es una herramienta que te permite resumir y reagrupar datos de forma automática e interactiva.
+Una tabla dinámica o PivotTable es una herramienta que permite resumir, agrupar y reorganizar datos de forma automática e interactiva.
 
-Creando una tabla dinámica desde un conjunto de datos  
+Creando una tabla dinámica
+1. Datos limpios: sin filas en blanco, encabezados únicos y tipos de datos correctos.
+2. Insertar la tabla dinámica: Seleccionamos datos > Menu: Insertar (Insert)> Tabla dinámica (Pivot Table) > nueva hoja.<br><br>
+  
+Editor de tabla dinámica (Pivot table editor):
+- Filas (Rows): filas de la tabla, primera forma en que quieres agrupar tus datos.
+- Columnas (Columns): encabezados de las columnas, segunda forma de agrupar, creando así un resumen cruzado.
+- Valores (Values): campo que quieres resumir. Por ejemplo: "Ventas Totales", resumirlas por: SUMA, PROMEDIO, CONTEO, MÁXIMO, etc.
+- Filtros (Filters): permite agregar filtros o condiciones a la tabla dinámica. <br><br>
+
+**Ejercicio** - Práctica guiada - Ejercicio: Ventas Totales por región y categoría de producto
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1jNrlAoN4UCTcI_V7T7w1DHCwAgb2Er83bgHi6gESmuI/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): <br><br>
+
+Recursos adicionales  
+- [Tabla dinámica con Excel](https://support.microsoft.com/es-es/office/crear-una-tabla-din%C3%A1mica-para-analizar-datos-de-una-hoja-de-c%C3%A1lculo-a9a84538-bfe9-40a9-a8e9-f99134456576)
+- [Tabla dinámica con Google Sheets](https://support.google.com/docs/answer/1272900?hl=es)
 <br><br><br>
 
-### C4 - Lección 2: 
+### C4 - Lección 2: Filtrar y ordenar en una tabla dinámica
+
+Uso de filtros en tablas dinámicas:
+- Valor específico: Arrastrar campo de interés a la sección de `Filtros`
+- valores mayores/menores que cierto número: Arrastrar campo > Eliegir "Mayor o igual que", escribir valor de interés
+
+Ordenar datos:  
+En editor de tabla dinámica
+- Numéricamente: en filas > menú desplegable "Ordenar por" > escoger criterio > menú desplegable "Orden" > Ascendente o Descendente
+- Alfabéticamente: ordenar por el campo que está en la Fila o en la Columna. <br><br>
+
+**Ejercicio**  
+Práctica guiada - Ordenar para mostrar los productos principales por región  
+Actividad práctica -    
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1jNrlAoN4UCTcI_V7T7w1DHCwAgb2Er83bgHi6gESmuI/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): <br><br> https://docs.google.com/spreadsheets/d/1Ec6CXMI0gqocZgrOBI9j4VzKzD12ADDlMemJuaUWV58/edit?usp=sharing
 <br><br><br>
 
-### C4 - Lección 3: 
+### C4 - Lección 3: Resumir datos con distintos cálculos
 <br><br><br>
 
 ### C4 - Lección 4: 
