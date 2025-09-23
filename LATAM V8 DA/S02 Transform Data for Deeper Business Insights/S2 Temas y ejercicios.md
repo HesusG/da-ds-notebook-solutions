@@ -481,9 +481,32 @@ Actividad práctica -
 <br><br><br>
 
 ### C4 - Lección 3: Resumir datos con distintos cálculos
-<br><br><br>
 
-### C4 - Lección 4: 
+ Cambiar el tipo de cálculo de resumen
+ - Construir tabla dinámica
+ - Arrastrar elemento a filas y valores
+ - Hacer clic en "Suma de ..." > cambiar por operación necesaria:
+   - AVERAGE (Promedio)
+   - COUNT (Conteo)
+   - MAX (Máximo)
+   - MIN (Mínimo)
+  💡 Para ver dos métricas a la vez, arrastrar dos métricas y asignarles operaciones diferentes.
+<br><br>
+
+Cantidad VS Promedio  
+Al contrastar múltiples métricas, como **cantidad** vendida contra **promedio** de ventas, descubres que un producto puede tener bajo volumen pero alto valor por transacción.<br><br>
+
+
+**Ejercicio** - Práctica guiada: Ejercicio: Múltiples métricas para el rendimiento del producto
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1jNrlAoN4UCTcI_V7T7w1DHCwAgb2Er83bgHi6gESmuI/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1VSgd6yTip0Apu3SJ-IKgb7scTn7YOvoOBsDlH2-L23s/edit?usp=sharing
+ <br><br><br>
+
+### C4 - Lección 4: Mejorar el diseño e interpretar los resultados
+
+ Diseño de la tabla dinámica para obtener una mayor claridad
+<br><br>
+
 <br><br><br>
 
 ### C4 - Lección 5: 
