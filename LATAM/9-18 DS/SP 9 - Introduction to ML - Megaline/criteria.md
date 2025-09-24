@@ -93,93 +93,13 @@ Los revisores evalúan: lectura de datos, segmentación correcta, tamaño de con
 
 ## Rúbrica de Evaluación - Checklist para Revisores
 
-### BÁSICO 
-
-**Dataset y Carga**
-- [ ] Carga users_behavior.csv
-- [ ] Código ejecuta sin errores
-- [ ] Reconoce features básicos
-
-**Modelos**
-- [ ] Al menos 1 modelo implementado
-- [ ] Usa train_test_split básico
-- [ ] Accuracy > 0.60
-
-**NO requiere:**
-- EDA detallado
-- Cross-validation
-- GridSearchCV
-- Sanity check
-
-### SUFICIENTE (Solución Actual)
-
-**Dataset y Exploración**
-- [ ] Carga dataset correcto
-- [ ] info(), describe(), head() implementados
-- [ ] Maneja tipos de datos correctamente
-- [ ] Visualizaciones (no tiene)
-- [ ] Análisis por clases (no tiene)
-
-**Segmentación**
-- [ ] Train/validation/test split correcto (60/20/20)
-- [ ] Usa random_state para reproducibilidad
-- [ ] Cross-validation (no tiene)
-
-**Modelos**
-  - Mínimo 2 modelos diferentes
-    - [ ] DecisionTree implementado
-    - [ ] RandomForest implementado
-- [ ] LogisticRegression implementado
-- [ ] GridSearchCV para optimización
-- [ ] Accuracy >= 0.75 alcanzado
-
-**Evaluación**
-- [ ] Evaluación en conjunto de prueba
-- [ ] Comparación sistemática entre modelos
-- [ ] Selección justificada del mejor modelo
-- [ ] Prueba de cordura implementada (básica)
-  
-**Código**
-- [ ] Estructura clara del notebook
-- [ ] Comentarios explicativos
-- [ ] Flujo lógico
-
-
-### EXCELENTE 
-
-**Exploración Avanzada**
-- [ ] Visualizaciones de distribuciones
-- [ ] Análisis de correlaciones
-- [ ] Comparación Smart vs Ultra
-- [ ] Detección de outliers
-- [ ] Feature engineering
-
-**Validación Robusta**
-- [ ] Cross-validation implementada (StratifiedKFold)
-- [ ] Learning curves o validation curves
-- [ ] Múltiples métricas de evaluación
-- [ ] Análisis de overfitting/underfitting
-
-**Modelos Avanzados**
-- [ ] Ensemble methods
-- [ ] Feature scaling para LogisticRegression
-- [ ] Optimización sistemática de hiperparámetros
-- [ ] Pipeline de sklearn
-
-**Interpretación Profunda**
-- [ ] Matriz de confusión
-- [ ] ROC curves
-- [ ] Insights de negocio específicos
-- [ ] Análisis de errores (reflexionar sobre los casos mal clasificados)
-
-**Sanity Check Sofisticado**
-- [ ] Comparación con modelo aleatorio
-- [ ] Análisis de distribución de predicciones
-
-**Código Profesional**
-- [ ] Funciones modulares
-- [ ] Documentación detallada
-- [ ] Manejo de errores
+| Categoría | BÁSICO | SUFICIENTE | EXCELENTE |
+|-----------|--------|------------|-----------|
+| **Dataset y Exploración** | - [ ] Carga `users_behavior.csv` <br> - [ ] Código ejecuta sin errores <br> - [ ] Reconoce features básicos | - [ ] Carga dataset correcto <br> - [ ] `info()`, `describe()`, `head()` <br> - [ ] Manejo correcto de tipos de datos <br> - [ ] (No tiene) Visualizaciones <br> - [ ] (No tiene) Análisis por clases | - [ ] Visualizaciones de distribuciones <br> - [ ] Análisis de correlaciones <br> - [ ] Comparación Smart vs Ultra <br> - [ ] Detección de outliers <br> - [ ] Feature engineering |
+| **Segmentación / Validación** | - [ ] Usa `train_test_split` básico | - [ ] Split 60/20/20 correcto <br> - [ ] Usa `random_state` <br> - [ ] (No tiene) Cross-validation | - [ ] Cross-validation (StratifiedKFold) <br> - [ ] Learning/validation curves <br> - [ ] Múltiples métricas <br> - [ ] Análisis overfitting/underfitting |
+| **Modelos** | - [ ] ≥1 modelo implementado <br> - [ ] Accuracy > 0.60 | - [ ] DecisionTree <br> - [ ] RandomForest <br> - [ ] LogisticRegression <br> - [ ] GridSearchCV <br> - [ ] Accuracy ≥ 0.75 | - [ ] Ensemble methods <br> - [ ] Feature scaling (LogisticRegression) <br> - [ ] Optimización hiperparámetros <br> - [ ] Pipeline sklearn |
+| **Evaluación / Interpretación** | - [ ] *(No requiere EDA, CV, GridSearch, Sanity check)* | - [ ] Evaluación en test set <br> - [ ] Comparación entre modelos <br> - [ ] Selección justificada <br> - [ ] Prueba de cordura básica | - [ ] Matriz de confusión <br> - [ ] ROC curves <br> - [ ] Insights de negocio <br> - [ ] Análisis de errores <br> - [ ] Comparación con modelo aleatorio <br> - [ ] Distribución de predicciones |
+| **Código / Documentación** | - [ ] *(No requiere extra)* | - [ ] Notebook claro <br> - [ ] Comentarios explicativos <br> - [ ] Flujo lógico | - [ ] Funciones modulares <br> - [ ] Documentación detallada <br> - [ ] Manejo de errores |
 
 ## Criterios de Descalificación
 
