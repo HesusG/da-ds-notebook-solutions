@@ -97,7 +97,7 @@ Los revisores evalúan: lectura de datos, segmentación correcta, tamaño de con
 |-----------|--------|------------|-----------|
 | **Dataset y Exploración** | - [ ] Carga `users_behavior.csv` <br> - [ ] Código ejecuta sin errores <br> - [ ] Reconoce features básicos | - [ ] Carga dataset correcto <br> - [ ] `info()`, `describe()`, `head()` <br> - [ ] Manejo correcto de tipos de datos <br> - [ ] (No tiene) Visualizaciones <br> - [ ] (No tiene) Análisis por clases | - [ ] Visualizaciones de distribuciones <br> - [ ] Análisis de correlaciones <br> - [ ] Comparación Smart vs Ultra <br> - [ ] Detección de outliers <br> - [ ] Feature engineering |
 | **Segmentación / Validación** | - [ ] Usa `train_test_split` básico | - [ ] Split 60/20/20 correcto <br> - [ ] Usa `random_state` <br> - [ ] (No tiene) Cross-validation | - [ ] Cross-validation (StratifiedKFold) <br> - [ ] Verificación de overfitting/underfitting (explica cómo lo detecta) |
-| **Modelos** | - [ ] ≥1 modelo implementado <br> - [ ] Accuracy > 0.60 | - [ ] DecisionTree <br> - [ ] RandomForest <br> - [ ] LogisticRegression <br> - [ ] GridSearchCV <br> - [ ] Accuracy ≥ 0.75 | - [ ] Feature scaling (LogisticRegression): **muestra el escalado de datos y explica por qué es necesario** <br> - [ ] Optimización avanzada de hiperparámetros: **explica la diferencia con GridSearchCV** (ej. uso de RandomizedSearchCV u otras técnicas) <br> - [ ] Pipeline sklearn implementado |
+| **Modelos** | - [ ] ≥1 modelo implementado <br> - [ ] Accuracy > 0.60 | - [ ] DecisionTree <br> - [ ] RandomForest <br> - [ ] LogisticRegression <br> - [ ] Optimización con ciclo for <br> - [ ] Accuracy ≥ 0.75 | - [ ] Feature scaling (LogisticRegression): **muestra el escalado de datos y explica por qué es necesario** <br> - [ ] Optimización avanzada de hiperparámetros: **explica la diferencia con GridSearchCV** (ej. uso de RandomizedSearchCV u otras técnicas) <br> - [ ] Pipeline sklearn implementado |
 | **Evaluación / Interpretación** | - [ ] *(No requiere EDA, CV, GridSearch, Sanity check)* | - [ ] Evaluación en test set <br> - [ ] Comparación entre modelos <br> - [ ] Selección justificada <br> - [ ] Prueba de cordura básica | - [ ] Matriz de confusión <br> - [ ] ROC curves <br> - [ ] Insights de negocio <br> - [ ] Análisis de errores <br> - [ ] Distribución de predicciones: **mostrar gráficamente cómo se reparten las predicciones y qué concluye** |
 | **Código / Documentación** | - [ ] *(No requiere extra)* | - [ ] Notebook claro <br> - [ ] Comentarios explicativos <br> - [ ] Flujo lógico | - [ ] Funciones modulares <br> - [ ] Documentación detallada <br> - [ ] Manejo de errores |
 
@@ -144,7 +144,7 @@ Los revisores evalúan: lectura de datos, segmentación correcta, tamaño de con
 - [ ] DecisionTree implementado
 - [ ] RandomForest implementado
 - [ ] LogisticRegression implementado
-- [ ] GridSearchCV usado
+- [ ] Optimización con ciclo for
 - [ ] Accuracy ≥ 0.75
 
 **Evaluación**
