@@ -96,10 +96,104 @@ Los revisores evalúan: lectura de datos, segmentación correcta, tamaño de con
 | Categoría | BÁSICO | SUFICIENTE | EXCELENTE |
 |-----------|--------|------------|-----------|
 | **Dataset y Exploración** | - [ ] Carga `users_behavior.csv` <br> - [ ] Código ejecuta sin errores <br> - [ ] Reconoce features básicos | - [ ] Carga dataset correcto <br> - [ ] `info()`, `describe()`, `head()` <br> - [ ] Manejo correcto de tipos de datos <br> - [ ] (No tiene) Visualizaciones <br> - [ ] (No tiene) Análisis por clases | - [ ] Visualizaciones de distribuciones <br> - [ ] Análisis de correlaciones <br> - [ ] Comparación Smart vs Ultra <br> - [ ] Detección de outliers <br> - [ ] Feature engineering |
-| **Segmentación / Validación** | - [ ] Usa `train_test_split` básico | - [ ] Split 60/20/20 correcto <br> - [ ] Usa `random_state` <br> - [ ] (No tiene) Cross-validation | - [ ] Cross-validation (StratifiedKFold) <br> - [ ] Learning/validation curves <br> - [ ] Múltiples métricas <br> - [ ] Análisis overfitting/underfitting |
-| **Modelos** | - [ ] ≥1 modelo implementado <br> - [ ] Accuracy > 0.60 | - [ ] DecisionTree <br> - [ ] RandomForest <br> - [ ] LogisticRegression <br> - [ ] GridSearchCV <br> - [ ] Accuracy ≥ 0.75 | - [ ] Ensemble methods <br> - [ ] Feature scaling (LogisticRegression) <br> - [ ] Optimización hiperparámetros <br> - [ ] Pipeline sklearn |
-| **Evaluación / Interpretación** | - [ ] *(No requiere EDA, CV, GridSearch, Sanity check)* | - [ ] Evaluación en test set <br> - [ ] Comparación entre modelos <br> - [ ] Selección justificada <br> - [ ] Prueba de cordura básica | - [ ] Matriz de confusión <br> - [ ] ROC curves <br> - [ ] Insights de negocio <br> - [ ] Análisis de errores <br> - [ ] Comparación con modelo aleatorio <br> - [ ] Distribución de predicciones |
+| **Segmentación / Validación** | - [ ] Usa `train_test_split` básico | - [ ] Split 60/20/20 correcto <br> - [ ] Usa `random_state` <br> - [ ] (No tiene) Cross-validation | - [ ] Cross-validation (StratifiedKFold) <br> - [ ] Verificación de overfitting/underfitting (explica cómo lo detecta) |
+| **Modelos** | - [ ] ≥1 modelo implementado <br> - [ ] Accuracy > 0.60 | - [ ] DecisionTree <br> - [ ] RandomForest <br> - [ ] LogisticRegression <br> - [ ] GridSearchCV <br> - [ ] Accuracy ≥ 0.75 | - [ ] Feature scaling (LogisticRegression): **muestra el escalado de datos y explica por qué es necesario** <br> - [ ] Optimización avanzada de hiperparámetros: **explica la diferencia con GridSearchCV** (ej. uso de RandomizedSearchCV u otras técnicas) <br> - [ ] Pipeline sklearn implementado |
+| **Evaluación / Interpretación** | - [ ] *(No requiere EDA, CV, GridSearch, Sanity check)* | - [ ] Evaluación en test set <br> - [ ] Comparación entre modelos <br> - [ ] Selección justificada <br> - [ ] Prueba de cordura básica | - [ ] Matriz de confusión <br> - [ ] ROC curves <br> - [ ] Insights de negocio <br> - [ ] Análisis de errores <br> - [ ] Distribución de predicciones: **mostrar gráficamente cómo se reparten las predicciones y qué concluye** |
 | **Código / Documentación** | - [ ] *(No requiere extra)* | - [ ] Notebook claro <br> - [ ] Comentarios explicativos <br> - [ ] Flujo lógico | - [ ] Funciones modulares <br> - [ ] Documentación detallada <br> - [ ] Manejo de errores |
+
+# 📋 Rúbrica de Evaluación - Checklist
+
+<details>
+<summary>🔹 BÁSICO</summary>
+
+**Dataset y Carga**
+- [ ] Carga `users_behavior.csv`
+- [ ] Código ejecuta sin errores
+- [ ] Reconoce features básicos
+
+**Modelos**
+- [ ] ≥1 modelo implementado
+- [ ] Usa `train_test_split` básico
+- [ ] Accuracy > 0.60
+
+**NO requiere**
+- [ ] EDA detallado
+- [ ] Cross-validation
+- [ ] GridSearchCV
+- [ ] Sanity check
+
+</details>
+
+
+<details>
+<summary>🔸 SUFICIENTE</summary>
+
+**Dataset y Exploración**
+- [ ] Carga dataset correcto
+- [ ] `info()`, `describe()`, `head()`
+- [ ] Maneja tipos de datos correctamente
+- [ ] (No tiene) Visualizaciones
+- [ ] (No tiene) Análisis por clases
+
+**Segmentación**
+- [ ] Split 60/20/20 correcto
+- [ ] Usa `random_state`
+- [ ] (No tiene) Cross-validation
+
+**Modelos**
+- [ ] DecisionTree implementado
+- [ ] RandomForest implementado
+- [ ] LogisticRegression implementado
+- [ ] GridSearchCV usado
+- [ ] Accuracy ≥ 0.75
+
+**Evaluación**
+- [ ] Evaluación en test set
+- [ ] Comparación entre modelos
+- [ ] Selección justificada
+- [ ] Prueba de cordura básica
+
+**Código**
+- [ ] Notebook con estructura clara
+- [ ] Comentarios explicativos
+- [ ] Flujo lógico
+
+</details>
+
+
+<details>
+<summary>🌟 EXCELENTE</summary>
+
+**Exploración Avanzada**
+- [ ] Visualizaciones de distribuciones
+- [ ] Análisis de correlaciones
+- [ ] Comparación Smart vs Ultra
+- [ ] Detección de outliers
+- [ ] Feature engineering
+
+**Validación Robusta**
+- [ ] Cross-validation (StratifiedKFold)
+- [ ] Verificación de overfitting/underfitting (explica cómo lo detecta)
+
+**Modelos Avanzados**
+- [ ] Feature scaling (LogisticRegression): **muestra el escalado de datos y explica por qué es necesario**
+- [ ] Optimización avanzada de hiperparámetros: **explica la diferencia con GridSearchCV** (ej. uso de RandomizedSearchCV u otras técnicas)
+- [ ] Pipeline sklearn implementado
+
+**Interpretación Profunda**
+- [ ] Matriz de confusión
+- [ ] ROC curves
+- [ ] Insights de negocio
+- [ ] Análisis de errores
+- [ ] Distribución de predicciones: **mostrar gráficamente cómo se reparten las predicciones y qué concluye**
+
+**Código Profesional**
+- [ ] Funciones modulares
+- [ ] Documentación detallada
+- [ ] Manejo de errores
+
+</details>
+
 
 ## Criterios de Descalificación
 
