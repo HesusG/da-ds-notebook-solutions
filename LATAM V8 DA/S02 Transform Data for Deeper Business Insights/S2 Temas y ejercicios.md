@@ -504,12 +504,28 @@ Al contrastar múltiples métricas, como **cantidad** vendida contra **promedio*
 
 ### C4 - Lección 4: Mejorar el diseño e interpretar los resultados
 
- Diseño de la tabla dinámica para obtener una mayor claridad
+ Diseño de la tabla dinámica para obtener una mayor claridad  
+ En el panel lateral de la tabla dinámica:
+ - activar `Repetir etiquetas de filas`: rellena los campos de la columna de la izquierda, eliminando los espacios en blanco.
+ - desactivar `Mostrar Totales`: se eliminan las filas adicionales para quitar ruido innecesario.
+ - Renombrar columnas: dar clic en titulo y escribir nuevo nombre
+ - Dar formato: Seleccionar columna, formato de moneda o quitar/agregar decimales
 <br><br>
 
+Interpretar y comunicar los resultados:
+ 1. Observa los patrones → Describe qué ves: tendencias, anomalías, etc
+ 2. Identifica  los hallazgos clave → El "por qué" y "qué significa": Pregúntate “¿por qué sucede esto?” y “¿qué significa para el negocio?”.
+ 3. Conecta con las preguntas de negocio → El "ahora qué": Relaciona tus hallazgos con los objetivos o problemas del negocio; úsalos para responder lo que la empresa necesita saber. 
+ 4. Propón acciones → El "ahora qué": Sugiere al menos una acción concreta
+ 5. Adapta tu mensaje al público: Cambia el nivel de detalle y el enfoque según con quién hables 
+<br><br>
+
+**Ejercicio** - Práctica guiada: Ejercicio: Refinar una tabla dinámica y redactar un resumen gerencial
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1jNrlAoN4UCTcI_V7T7w1DHCwAgb2Er83bgHi6gESmuI/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1zw6jJTOVIAAHHirKYFSD2ejUqkZzMwOWFeyOMBgA7Bk/edit?usp=sharing
 <br><br><br>
 
-### C4 - Lección 5: 
+### C4 - Lección 5: IA: Filtrar y resumir datos con modelos de lenguaje
 <br><br><br>
 
 ---
