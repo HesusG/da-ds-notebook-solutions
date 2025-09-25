@@ -526,11 +526,30 @@ Interpretar y comunicar los resultados:
 <br><br><br>
 
 ### C4 - Lección 5: IA: Filtrar y resumir datos con modelos de lenguaje
-<br><br><br>
+
+Al trabajar con IA, podemos cambiar funciones por preguntas a la IA:
+- `SUMIF` → "calcula el total de ventas para la categoría Café"
+- `COUNTIF` → "¿cuántas ventas se registraron en la región Norte?"
+- `AVERAGEIF` → "¿cuál es el precio promedio de los productos vendidos en el mes de marzo?"<br><br>
+
+Una hoja de cálculo que te muestra cada paso del cálculo, el LLM te da un resultado sin explicar el proceso.
+- Tratamiento de los valores nulos: cómo los trato
+- Falta de transparencia: ¿uso la columna correcta?, ¿qué rango uso?
+- Alucinaciones en cálculos complejos:  A mayor complejidad, mayor la probabilidad de error. <br><br>
+
+Mejores prácticas:
+- Calidad de los datos: por ejemplo, revisar valores nulos
+- Usa hipótesis: pedir calculos simples para validar hipótesis
+- Verifica siempre los números clave: si el LLM te da un resultado que usarás en un reporte, reprodúcelo tú mismo.
+<br><br>
+
+**Ejercicio** - Práctica guiada: Filtrando y agregando con LLMs - Potencial y riesgos
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1jNrlAoN4UCTcI_V7T7w1DHCwAgb2Er83bgHi6gESmuI/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1gOmBFenLtOQeQw1ihLXuvVVv3QrBDfbenVyUdRYBLtI/edit?usp=sharing <br><br>
 
 ---
 ## Capitulo 5: Visualizar y destacar hallazgos clave
-### C5 - Lección : 
+### C5 - Lección 1: De la tabla dinámica al gráfico
 <br><br><br>
 
 
