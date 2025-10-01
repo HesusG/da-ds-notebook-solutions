@@ -3,7 +3,7 @@
 
 💻 Herramienta: Google Sheets o Excel
 
-📅 Fecha de actualización: 10 Septiembre 2025
+📅 Fecha de actualización: 1 Octubre 2025
 
 ✅ El proyecto tiene plantilla o precodigo para el estudiante.
 
@@ -26,9 +26,9 @@ Tu misión es transformar estos datos caóticos en un informe profesional y comp
 - Proyecto resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1iE5UBVc8MxQnI8eJ6mdGS-g2wlh5YKhG/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true <br><br><br>
 
 
-
-
 - Instrucciones (link a plataforma): https://tripleten.com/trainer/data-analyst/lesson/03bacd09-864c-423b-ad34-e789aca973ac/?from=program
+- Información: https://coding-bootcamps.notion.site/5-Proyecto-1-Limpieza-y-resumen-de-datos-en-hojas-de-c-lculo-2336ed1efc938021a041f809e4c01522
+- Criterios de evaluación: https://coding-bootcamps.notion.site/Grading-Rubric-2456ed1efc9380579998f0e8e20b5d0d
 
 ## 💡 Tips
 

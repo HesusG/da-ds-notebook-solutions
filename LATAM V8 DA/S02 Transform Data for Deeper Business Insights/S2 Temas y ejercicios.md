@@ -643,15 +643,51 @@ Recursos adicionales
 ### C5 - Lección 4: Diseñar un dashboard de resumen
 1. Preparar la hoja Dashboard como un lienzo ordenado (rejilla, columnas y áreas definidas).
 2. Construir 3 tarjetas KPI conectadas a Selected_Month.
+   - Se combinan celdas para simular tarjeta > escribir formula para sumar o promediar rango.
 3. Insertar 1 gráfico vinculado a los rangos correctos (tipo columna o línea, según el caso).
 4. Maquetar un bloque de insight C→F→I aplicando los principios de diseño: alineación, espaciado y agrupación.
 <br><br>
 
-Quitar cuadrícula: Ver → Mostrar, desactiva las líneas de cuadrícula.
+- Quitar cuadrícula: Ver → Mostrar, desactiva las líneas de cuadrícula.
+- Agregar Sparkline a Tarjeta KPI
+  - Sintaxis: `SPARKLINE(datos, [opciones])`. 
+  - Ejemplo: Gráfico de barras con color y tamaño `=SPARKLINE(A1:A10, {"charttype","bar"; "color","blue"; "max",100})<br><br>
 
+**Ejercicio - videos** 
+- Sheets resuelto (cualquier persona con el link puede ver):https://docs.google.com/spreadsheets/d/1O1K-KNZlJgkGWshz8H0dNpyiGSUOoWRN51Ocrx1uIss/edit?usp=sharing<br><br>
+
+**Ejercicio** - Ejercicios del 1 al 4
+- Ejercicio sin resolver - se parte desde el mismo link anterior (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1O1K-KNZlJgkGWshz8H0dNpyiGSUOoWRN51Ocrx1uIss/edit?usp=sharing
+- Ejercicios resuelto (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1GHSRFa3ZOBV0LXKTDPT8odY_Z-CLAy6ubY0vUknKCX0/edit?usp=sharing
 <br><br><br>
 
 ### C5 - Lección 5: Comunicar hallazgos
+
+Comunicar de manera efectiva para tomar decisiones
+1. Elegir una idea por visual (evitar mezclar mensajes).
+2. Redactar el titular y bullets en formato **C→F→I**.
+3. Ajustar para la audiencia (Ejecutivos / Comercial / Operaciones).
+4. Curar: decidir qué no incluir para enfocar y en el rango de tiempo.<br><br>
+
+Cómo generar Insights en formato C→F→I (Context → Finding → Implication)
+1. **Context** (Contexto): Toma la información del contexto que tienes, por ejemplo, de dashboard y apoyándote en gráficos
+   - Busca cambios importantes: subidas/bajadas visibles.
+   - Relevancia: Prioriza los segmentos que expliquen una parte importante del total o del cambio.
+   - Trazabilidad: Los valores deben de coincidir, por ejemplo el valor etiquetado en el pico del gráfico debe coincidir con el SUMIFS y el KPI de ese mes.
+2. **Finding F** (Hallazgo) ¿Qué encontraste?: dato más importante que encontraste en tus números. Elige el comparador correcto según el objetivo:
+   - Ejemplo: Ventas subieron 15% vs mes pasado - m/m (Mes vs mes anterior)
+   - Ejemplo: Producto A cayó 8% vs objetivo
+3. **Implication** (Implicación): Implicación del insight → Formato: Verbo + Plazo + Dueño (y, si aplica, palanca/driver).<br><br>
+
+Audiencias y foco (qué no incluir)  
+💡 Regla de oro: misma verdad, distinto “envoltorio”. La adaptación no cambia el dato, cambia qué resaltas y cuánta explicación das según quién decide
+
+Rsumen de una sola página diseñado para ser presentado en cualquier momento. 
+- El diseño es claro y coherente: 
+  - título sencillo que resume el hallazgo clave
+  - un gráfico relevante a la izquierda que sustenta el dato
+  - un bloque de texto C→F→I a la derecha que explica contexto, hallazgo y acción recomendada.
+  ![alt text](image-2.png)
 <br><br><br>
 
 ---
