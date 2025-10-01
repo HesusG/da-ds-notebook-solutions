@@ -645,6 +645,10 @@ Recursos adicionales
 2. Construir 3 tarjetas KPI conectadas a Selected_Month.
 3. Insertar 1 gráfico vinculado a los rangos correctos (tipo columna o línea, según el caso).
 4. Maquetar un bloque de insight C→F→I aplicando los principios de diseño: alineación, espaciado y agrupación.
+<br><br>
+
+Quitar cuadrícula: Ver → Mostrar, desactiva las líneas de cuadrícula.
+
 <br><br><br>
 
 ### C5 - Lección 5: Comunicar hallazgos
