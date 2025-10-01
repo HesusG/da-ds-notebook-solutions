@@ -186,7 +186,7 @@ Plantilla reutilizable:
 <br><br>
 
 Quality Assurance checks (Control de Calidad)
-- Nombrar rangos: seleccionar rango > Data > Named ranges > poner nombre
+- Nombrar rangos: seleccionar rango > Data (Datos) > Named ranges (Rangos con nombre) > poner nombre 
 - Formato condicional: Seleccionar columna > Format > Conditional format rules
 - Registrar cambios en la hoja README <br><br>
 
@@ -194,7 +194,7 @@ Quality Assurance checks (Control de Calidad)
 empresa Mi Che quiere conocer:  
 Cual es la region con el mayor numero de ventas totales para todos los productos pertenecientes a dos unidades:  panadería y snacks
 - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/15TfduxFqRFtP0uv7OR2w8aOmczq5Qb-f/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
-- Ejercicio resuelto (cualquier persona de TT puede ver): 
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/132FpalCg8tI0_wKQ5IVjZXbZRy2xFnHJ/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
 
 ### C2 - Lección 5: Cómo usar LLMs para fórmulas y errores en hojas de cálculo
 
@@ -550,10 +550,105 @@ Mejores prácticas:
 ---
 ## Capitulo 5: Visualizar y destacar hallazgos clave
 ### C5 - Lección 1: De la tabla dinámica al gráfico
+
+**Ejercicio** - Verificando estructura y agregando cálculos
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1lNUwshtxIOeWzS9ZyGtfSQixw4lD_B4bXZdpKXn-hoU/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/138ELDLfPklC5g-9PBySyhKv0f5kcTRNFZd8TspnQvv4/edit?usp=sharing<br><br>
+  
+**Ejercicio** - Práctica guiada: Construir la tabla Resumen para la columna Profits
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/138ELDLfPklC5g-9PBySyhKv0f5kcTRNFZd8TspnQvv4/edit?usp=sharing
+  - Comenzamos con el ejercicio resuelto del punto anterior
+- Ejercicio resuelto Link de plataforma (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/16-QoMHz_j0gjHqbrWNntTN8L5BXQyPrbbkLTgADTwko/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1soVO3xW2WGpT5nB-sLdRvAUezv0tNnyqAxXf45P2ZAM/edit?usp=sharing<br><br>
+
+Recursos adicionales:
+- [Google Sheets — Charts](https://support.google.com/docs/answer/190718)
+- [Google Sheets — Pivot tables](https://support.google.com/docs/answer/1272900)
 <br><br><br>
 
+### C5 - Lección 2: Títulos, ejes y series
+
+Título y leyenda 
+- Cambiar título: Doble clic en título actual y modificar, responde la pregunta “¿qué estoy viendo?”
+- Agrega leyenda: panel derecho, sección Personalizar → Leyenda > cambia la opción a Arriba ("top").
+
+Formato de ejes y series  
+panel derecho > Personalizar (Customize)
+- En el menú desplegable de Series, selecciona una serie y asígnale un color.
+- Selecciona todas las series y cambia el ancho de línea, por ejemplo a 1, para mejorar la visibilidad.
+- En el eje horizontal, cambia el tamaño de fuente, por ejemplo a 10.
+- En el eje vertical, establece el valor mínimo en 0 y cambia el formato de número a moneda redondeada (si aplica).
+
+**Ejercicio** - Videos "Títulos, ejes y leyendas" y "Formato de ejes y series"
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1A3wY0QGTZOtDNqEjxKW2OUjxl6OeIhqqOS8oQlHSDrM/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona con el link puede ver):https://docs.google.com/spreadsheets/d/1zGcjB_XDSHdAplDcFd4-jibW3Kl5OguXq9FFCn1f8Tk/edit?usp=sharing <br><br>
+
+**Ejercicio** - Práctica Guiada: 
+- Ejercicio 1: Formato de ejes y series para lectura en 5s 
+- Ejercicio 2: Título claro y leyenda útil
+  - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1L6eE4ieU9qHBt-pj10ayZ_Zhq9ldnz8qAvk7LN6F_Ms/edit?usp=sharing
+  - Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1rN8BKiLR3EdElCQSMAMscyhkBZd9DiQkpjD6l9QgR1I/edit?usp=sharing<br><br>
+
+Recursos adicionales:
+- Google Sheets — [Tipos de gráfico](https://support.google.com/docs/answer/190718)
+- Google Sheets — [Dar formato a los números de una hoja de cálculo](https://support.google.com/docs/answer/56470)
+<br><br><br>
+
+### C5 - Lección 3: Destacar valores con formato condicional
+Plan de acción en 4 pasos
+1. Definir **umbrales y segmentos clave** usando rangos con nombre en la hoja Summary.
+2. Aplicar **reglas condicionales para resaltar productos** según el desempeño (meta alcanzada o bajo rendimiento) y detectar **outliers**.
+3. Usar **escalas de color e íconos visuales** (simulados en Sheets) para mostrar variaciones en intensidad o comportamiento.
+4. Combinar **filtros o segmentadores** (slicers) con reglas para enfocarnos en características específicas. <br><br>
 
 
+Reglas por umbral para detectar el desempeño sobre o por debajo de la meta
+- Definir meta: menú Datos → Rangos con nombre, escribe `monthly_target`, guarda y cierra.
+- Aplicar formato: menú Formato → Formato condicional:
+  - Ejemplo: verde si alcanzo meta `=F2 >= INDIRECT("monthly_target")`
+  - Ejemplo: rojo si no ha llegado a la meta `=F2 < INDIRECT("monthly_target")`
+  - `INDIRECT()` convierte un texto en una referencia de celda real <br><br>
+
+Detección simple de outliers  
+- Límites de negocio (mín/máx) 
+  - Ejemplo: ventas negativas, Tickets inusualmente altos podrían ser errores.
+- Crear columna para detectar Outliers
+  - Ejemplo: `=IF(OR($F2<Lower_Limit,$F2>Upper_Limit),TRUE,"")`<br><br>
+
+📊 ¿Qué es un percentil?  
+El número del percentil indica el porcentaje de valores que quedan por debajo de ese punto
+- `=PERCENTILE(data, percentile)`
+- Limites estrictos: `0.01 - 0.99`
+- Limites comunes: `0.05 - 0.95`
+- Ejemplo: Fórmula para etiqueta de percentil: `=IF(OR($F2<Lower_Limit,$F2>Upper_Limit),TRUE,IF($F2>Upper_percentile,"P99",IF($F2<Lower_percentile,"P01","")))`<br><br>
+
+Escalas de color para productos  
+- Selecciona rango >  Formato → Formato condicional > abre la pestaña Escala de color > elige paleta amigable
+💡 Consejo: evita usar paletas multicolor o tipo “arcoíris”. <br><br>
+
+Slicer y vistas de filtro  
+- Slicer o segmentador: clic en Datos → Agregar segmentador > elige característica a filtrar.
+- Guardar vista: tras aplicar un filtro, Datos → Vistas de filtro → Crear vista. 
+  - Cualquier persona puede abrir exactamente esta vista con un clic y ver los mismos detalles filtrados.<br><br>
+
+**Ejercicio** - Práctica guiada: Ejercicio 1: Meta por Quantity (verde/rojo)
+- Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1YVUtMTGrFHK_3tIzpTcLWsCfPQt-sid5Uka21ML_CWo/edit?usp=sharing
+- Ejercicio resuelto (cualquier persona de TT puede ver): <br><br>
+
+Recursos adicionales
+- [Google Sheets — Formato condicional](https://support.google.com/docs/answer/78413)
+- [Google Sheets — Ordenar y filtrar tus datos](https://support.google.com/docs/answer/3540681)
+<br><br><br>
+
+### C5 - Lección 4: Diseñar un dashboard de resumen
+1. Preparar la hoja Dashboard como un lienzo ordenado (rejilla, columnas y áreas definidas).
+2. Construir 3 tarjetas KPI conectadas a Selected_Month.
+3. Insertar 1 gráfico vinculado a los rangos correctos (tipo columna o línea, según el caso).
+4. Maquetar un bloque de insight C→F→I aplicando los principios de diseño: alineación, espaciado y agrupación.
+<br><br><br>
+
+### C5 - Lección 5: Comunicar hallazgos
+<br><br><br>
 
 ---
 **Ejercicio** - 
