@@ -5,12 +5,34 @@
 ---
 ## Capitulo 1: Entender la estructura de una base de datos relacional
 ### C1 - Lección 1: Explorar bases de datos relacionales
+
+Componentes esenciales de una base de datos relacional
+- Tablas (Tables)
+- Filas (Rows): Cada fila en una tabla representa un registro individual o una entrada única.
+- Columnas (Columns): Cada columna representa un atributo o característica del registro.
 <br><br>
 
-### C1 - Lección 2:
+Claves (Keys)  
+💡 Las claves son un tipo especial de columna que nos permite conectar las tablas entre sí.
+ Clave Primaria (Primary Key - PK) → columna que contiene un valor único para cada fila en una tabla, nunca se repite.
+- Clave Foránea (Foreign Key - FK) → columna que conecta una tabla con otra, haciendo referencia a una clave primaria. Es el "enlace" que crea la relación.
+
+SQL (Structured Query Language) es el lenguaje que usamos para consultar y trabajar con bases de datos relacionales. 
+![alt text](image.png)
+
+Recursos adicionales:
+- [Introducción a SQL](https://www-w3schools-com.translate.goog/sql/sql_intro.asp?_x_tr_sl=auto&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=wapp)
 <br><br>
 
-### C1 - Lección 3:
+### C1 - Lección 2: Identificar claves y relaciones entre tablas
+- Clave Primaria (Primary Key - PK): es un identificador único para cada fila en una tabla.
+- Clave Foránea (Foreign Key - FK): es una columna en una tabla que hace referencia a la clave primaria de otra tabla.
+
+¿Por qué importan?  
+por ejemplo, si no existieran claves, cada vez que un cliente hiciera una compra, deberías guardar su nombre, apellido, correo y demás datos en cada fila de la tabla de ventas. Esto es ineficiente y propenso a errores.
+<br><br>
+
+### C1 - Lección 3: Interpretar esquemas del mundo real
 <br><br>
 
 ### C1 - Lección 4:
