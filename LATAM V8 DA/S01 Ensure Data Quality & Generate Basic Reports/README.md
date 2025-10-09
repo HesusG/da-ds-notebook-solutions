@@ -1,9 +1,9 @@
 # Sprint 1: Ensure Data Quality & Generate Basic Reports: Project
 ## ESP: Asegura la calidad de los datos y genera reportes: Proyecto
 
-💻 Herramienta: Google Sheets o Excel
-
 📅 Fecha de actualización: 1 Octubre 2025
+
+💻 Herramienta: Google Sheets o Excel
 
 ✅ El proyecto tiene plantilla o precodigo para el estudiante.
 
