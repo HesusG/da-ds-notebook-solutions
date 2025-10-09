@@ -1,6 +1,6 @@
 # Sprint 2: Transformar datos para insights de negocio
 🗓️ Fecha de creación: 10 septiembre 2025  
-🗓️ Fecha de actualización: 17 septiembre 2025<br><br>
+🗓️ Fecha de actualización: 8 octubre 2025<br><br>
 
 ---
 ## Capitulo 1: Preguntas analíticas en contexto de negocio
@@ -72,7 +72,7 @@ Dos tipos de métricas:
 LLMs como aliados: Utiliza la IA
 - como Subject Matter Expert (SME): pide explicación sobre conceptos desconocidos
 - para construir una pregunta 4Q 
-- Selector de métrica con guardrails en el prompt
+- como selector de métrica con guardrails en el prompt
 - para generar las funciones de Google Sheets
 
 💡 Diseña una vez, reutiliza siempre: guarda tus prompts SME, conversación 4Q y selector con guardrails para el próximo canal “caótico”.
@@ -89,18 +89,18 @@ LLMs como aliados: Utiliza la IA
 💡 Regla de oro: si la clave no es única en la hoja de lookup (por ejemplo Tiendas), el join generará duplicados y métricas infladas.
 
 Cómo unir las hojas de transactions y stores
-- Tipos de JOIN: LEFT, RIGHT, INNER y FULL
+- Tipos de JOIN: LEFT, RIGHT, INNER y FULL (en sheets, solo existe LEFT JOIN)
 
 1. Tener los datos en un solo libro de sheets.
 2. Posicionarse en una tabla/hoja, en columna nueva, escribe la formula de VLOOKUP. Syntax: 
 `=VLOOKUP(search_key, range, index, [is_sorted])`
 2. Revisa algunas filas al azar para confirmar que los datos sean correctos.
+<br><br>
 
-**Ejercicio** - 
-Datos crudos (cualquier persona con el link puede ver):
-- [stores.csv](https://drive.google.com/file/d/1UajQdAnrhWP19uBnWIRM7BxZBZPM-96H/view?usp=sharing)
-- [transactions.csv](https://drive.google.com/file/d/1Ei3CKnP7LPLb2aqrygVzyqE7s7fnOCx_/view?usp=sharing)
-
+**Ejercicio** -  
+- Datos crudos (cualquier persona con el link puede ver):
+  - [stores.csv](https://drive.google.com/file/d/1UajQdAnrhWP19uBnWIRM7BxZBZPM-96H/view?usp=sharing)
+  - [transactions.csv](https://drive.google.com/file/d/1Ei3CKnP7LPLb2aqrygVzyqE7s7fnOCx_/view?usp=sharing)
 - Ejercicio resuelto (aparece en la plataforma, cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1wnYElfJBinIjvNsZOlkn17k3BgG2YDWM1VLwRTGbTwI/edit?usp=sharing
 <br><br>
 
@@ -159,6 +159,7 @@ Crear un cuaderno limpio y profesional, con reglas claras y documentación míni
      -  qué información contiene cada dataset
      -  cómo fue procesada
      -  cuál es el objetivo del análisis
+<br><br>
 
 **Ejercicio** - Practica aplicada - Crea tu propio README - empresa Mi Che
 - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/18pXwhiRwo7ZsV3F9EHudanjdnX9_Cria/edit?usp=sharing&rtpof=true&sd=true
@@ -220,10 +221,8 @@ Documentar la causa y la solución en README
 ### C3 - Lección 1: Filtrar y explorar patrones en los datos
 
 💡 Un **filtro** permite mostrar solo las filas que cumplen con ciertos criterios que tú defines. Todo lo demás se oculta, lo que ayuda a ver patrones y tendencias mucho más rápido.
-- Todos los datos deben de tener encabezados, es decir, nombres para cada columna.
 - Activar filtro: Clic en tabla > Clic en el icono de embudo o filtro en la barra de herramientas
-- Aparece un ícono junto a cada encabezado. Haz clic en el de la columna que quieras filtrar
-- Desmarca Seleccionar todo y 
+- Filtrar la columna deseada: 
     - marca únicamente la categoría de interés
     - filtra por condición, por ejemplo un rango de fechas
 Es posible filtrar diferentes columnas, para evaluar diferentes escenarios.
@@ -319,7 +318,7 @@ Los registros suelen venir con errores de entrada, duplicados, valores fuera de 
 - **Duplicados**: registros que aparecen más de una vez en un conjunto de datos. Aparecen por errores de entrada, fallas en la importación o problemas en la recolección de datos.
   - Por ejemplo: `=COUNTIF($A$2:$A$100, A2) > 1` → cuenta cuántas veces aparece el valor de la celda A2 dentro del rango de A2 a A100. Importante: usa referencias absolutas en el rango para poder arrastrar la fórmula.
 - **Outliers** o valores atípicos: dato que se aleja considerablemente del resto de valores. Aparecen porque alguien cometió un error al registrar la información o porque realmente hubo un evento poco común.
-  - Es importante detectarlos? Porque pueden distorsionar los cálculos como el promedio.<br><br>
+  - Es importante detectarlos porque pueden distorsionar los cálculos como el promedio.<br><br>
 
 Encontrar Valores duplicados y outliers  
 El formato condicional también permite cambiar el color de las celdas o del texto automáticamente si cumplen una condición.
@@ -682,15 +681,10 @@ Cómo generar Insights en formato C→F→I (Context → Finding → Implication
 Audiencias y foco (qué no incluir)  
 💡 Regla de oro: misma verdad, distinto “envoltorio”. La adaptación no cambia el dato, cambia qué resaltas y cuánta explicación das según quién decide
 
-Rsumen de una sola página diseñado para ser presentado en cualquier momento. 
+Resumen de una sola página diseñado para ser presentado en cualquier momento. 
 - El diseño es claro y coherente: 
   - título sencillo que resume el hallazgo clave
   - un gráfico relevante a la izquierda que sustenta el dato
   - un bloque de texto C→F→I a la derecha que explica contexto, hallazgo y acción recomendada.
   ![alt text](image-2.png)
 <br><br><br>
-
----
-**Ejercicio** - 
-- Ejercicio sin resolver (cualquier persona con el link puede ver):
-- Ejercicio resuelto (cualquier persona de TT puede ver): <br><br>

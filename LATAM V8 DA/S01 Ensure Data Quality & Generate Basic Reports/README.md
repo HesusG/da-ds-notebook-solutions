@@ -31,6 +31,13 @@ Tu misión es transformar estos datos caóticos en un informe profesional y comp
 - Criterios de evaluación: https://coding-bootcamps.notion.site/Grading-Rubric-2456ed1efc9380579998f0e8e20b5d0d
 
 ## 💡 Tips
+Para estandarizar fechas, si hay problemas
+- ve a `Archivo` (File) → `Configuración` (Settings) → `Configuración regional` (General)
+- Selecciona `México` o el país de tu preferencia
+
+Limpiar los nombres de las ciudades:
+- Primer letra mayuscula: usar `=PROPER(texto)`
+- Elimina los espacios extra con `TRIM()`
 
 Mes con los mejores resultados: Filtra por mes, usa =SUM() en los montos totales para cada período.  
 - Posible solución: Filter by condition >> Text contains >> 10/2024
