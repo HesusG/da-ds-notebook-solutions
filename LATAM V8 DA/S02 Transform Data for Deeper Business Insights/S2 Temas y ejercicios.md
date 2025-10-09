@@ -454,7 +454,7 @@ Editor de tabla dinámica (Pivot table editor):
 
 **Ejercicio** - Práctica guiada - Ejercicio: Ventas Totales por región y categoría de producto
 - Ejercicio sin resolver (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1jNrlAoN4UCTcI_V7T7w1DHCwAgb2Er83bgHi6gESmuI/edit?usp=sharing
-- Ejercicio resuelto (cualquier persona de TT puede ver): <br><br>
+- Ejercicio resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1oQ4G0REeHnE4jHqIm8QYRqhe97NhYYge-Ec8AUO-biI/edit?usp=sharing<br><br>
 
 Recursos adicionales  
 - [Tabla dinámica con Excel](https://support.microsoft.com/es-es/office/crear-una-tabla-din%C3%A1mica-para-analizar-datos-de-una-hoja-de-c%C3%A1lculo-a9a84538-bfe9-40a9-a8e9-f99134456576)
