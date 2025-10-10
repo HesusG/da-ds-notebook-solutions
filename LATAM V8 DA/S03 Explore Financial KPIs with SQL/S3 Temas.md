@@ -51,8 +51,8 @@ Recursos adicionales
 - `LIMIT N`: limita la cantidad de filas que se muestran
 
 💡 El orden importa
-
-Ejemplo: `SELECT * FROM fitness_trackers LIMIT 10;`  
+- Ejemplo: `SELECT * FROM fitness_trackers LIMIT 10;`
+- Para seleccionar ciertas columnas:  `SELECT Titulo, Artista FROM Canciones;` 
 <br><br>
 
 Tipos de datos
@@ -61,13 +61,16 @@ Tipos de datos
 - **Fechas (DATE/TIMESTAMP):** valores que representan fechas y/o horas (ej. 01/01/2024, 2024-01-01 10:30:00).
 
 💡 La correcta identificación del tipo de datos es crucial porque te dice qué tipo de análisis puedes realizar. No puedes sumar un texto, ni promediar una fecha.
+<br><br>
 
-
+Recursos adicionales:
+- [SQL W3Schools:](https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_columns) una herramienta gratuita y en línea para practicar tus consultas SQL sin necesidad de instalar un programa de base de datos
+- [Tutoriales de SQL básico](https://www.w3schools.com/sql/sql_select.asp)
 <br><br><br>
 
 ---
 ## Capitulo 2:  Consultas SQL para selección, filtrado y organización de datos
-### C2 - Lección 1:
+### C2 - Lección 1: Seleccionar columnas específicas
 <br><br>
 
 ### C2 - Lección 2:
