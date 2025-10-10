@@ -2,4 +2,4 @@
 
 🚀 Versión 8
 
-🗓️ Fecha de lanzamiento: 2025
+🗓️ Fecha de lanzamiento: 30 Septiembre 2025

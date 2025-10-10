@@ -1,6 +1,6 @@
 # Sprint 3: Explorar KPIs con SQL
 🗓️ Fecha de creación: 9 octubre 2025  
-🗓️ Fecha de actualización: 9 octubre 2025<br><br>
+🗓️ Fecha de actualización: 10 octubre 2025<br><br>
 
 ---
 ## Capitulo 1: Entender la estructura de una base de datos relacional
@@ -33,9 +33,36 @@ por ejemplo, si no existieran claves, cada vez que un cliente hiciera una compra
 <br><br>
 
 ### C1 - Lección 3: Interpretar esquemas del mundo real
+Un **Diagrama de Entidad-Relación** (ERD) es como un mapa visual de la base de datos. Muestra las tablas (entidades), sus columnas y las relaciones entre ellas. Leer un ERD te permite entender cómo fluye la información dentro de una empresa.
+
+![alt text](image-1.png)
+💡 El verdadero valor de este esquema es la capacidad de combinar datos de distintas tablas para responder preguntas de negocio complejas. Cada relación habilita un nuevo tipo de análisis.
+
+
+Recursos adicionales
+- YouTube: [Diagramas de Entidad-Relación (ERD) en Lucid Chart](https://www.youtube.com/watch?v=TKuxYHb-Hvc)
 <br><br>
 
-### C1 - Lección 4:
+### C1 - Lección 4: Inspeccionar tablas con SQL
+
+ Primer vistazo a los datos:
+- `SELECT *`: el asterisco significa "muéstrame todas las columnas".
+- `FROM nombre_tabla`: le indica a la base de datos de qué tabla quieres ver los datos.
+- `LIMIT N`: limita la cantidad de filas que se muestran
+
+💡 El orden importa
+
+Ejemplo: `SELECT * FROM fitness_trackers LIMIT 10;`  
+<br><br>
+
+Tipos de datos
+- **Texto (TEXT/VARCHAR):** letras o caracteres especiales (ej. "Café Clásico", "clientes@email.com").
+- **Números (INTEGER/FLOAT):** valores numéricos , pueden ser enteros (INTEGER) o números con decimales (FLOAT).
+- **Fechas (DATE/TIMESTAMP):** valores que representan fechas y/o horas (ej. 01/01/2024, 2024-01-01 10:30:00).
+
+💡 La correcta identificación del tipo de datos es crucial porque te dice qué tipo de análisis puedes realizar. No puedes sumar un texto, ni promediar una fecha.
+
+
 <br><br><br>
 
 ---

@@ -2,6 +2,10 @@
 🗓️ Fecha de creación: 10 septiembre 2025  
 🗓️ Fecha de actualización: 8 octubre 2025<br><br>
 
+
+Drive con los sheets en este Repo: [Version 8](https://drive.google.com/drive/folders/1MXbT5yCMkbJxuzT5TGbWjfgMtMvVUazz?usp=sharing)
+- Cualquier persona de TT puede ver el Drive
+- En caso de requerir acceso o permisos, contactar a Irene Reynoso (usuario Discord: `irene_1996`)
 ---
 ## Capitulo 1: Preguntas analíticas en contexto de negocio
 ### C1 - Lección 1: Formular preguntas a partir del negocio

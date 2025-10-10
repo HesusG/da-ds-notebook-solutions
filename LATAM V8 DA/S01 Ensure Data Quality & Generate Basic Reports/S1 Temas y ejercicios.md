@@ -2,6 +2,10 @@
 🗓️ Fecha de creación: 4 septiembre 2025  
 🗓️ Fecha de actualización: 10 septiembre 2025<br><br>
 
+
+Drive con los sheets en este Repo: [Version 8](https://drive.google.com/drive/folders/1MXbT5yCMkbJxuzT5TGbWjfgMtMvVUazz?usp=sharing)
+- Cualquier persona de TT puede ver el Drive
+- En caso de requerir acceso o permisos, contactar a Irene Reynoso (usuario Discord: `irene_1996`)
 ---
 ## Capitulo 2: Explorando datos
 ### C2 - Lección 1: Datos estructurados
