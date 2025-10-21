@@ -24,8 +24,8 @@ Tu misión es transformar estos datos caóticos en un informe profesional y comp
 ---
 - Plantilla inicial de Proyecto (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1wrX0skTcqi1sh5vh6mbWqBuoII14Vrd3/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
 - Proyecto resuelto (cualquier persona de TT puede ver): 
-  - Solución de equipo de contenido: https://docs.google.com/spreadsheets/d/1iE5UBVc8MxQnI8eJ6mdGS-g2wlh5YKhG/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
-  - Solución de instructor: https://docs.google.com/spreadsheets/d/1iE5UBVc8MxQnI8eJ6mdGS-g2wlh5YKhG/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true <br><br><br>
+  - Solución de equipo de contenido (pendiente de actualizar): https://docs.google.com/spreadsheets/d/1Rvz0GoGd4SZ-4d53pOnMfmt-ZTJKyrqe/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
+  - Solución de instructor (pendiente de actualizar): https://docs.google.com/spreadsheets/d/1ddECie5H5Wnf_2kko-pei36ZDNaeVPs4/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true <br><br><br>
 
 
 - Instrucciones (link a plataforma): https://tripleten.com/trainer/data-analyst/lesson/03bacd09-864c-423b-ad34-e789aca973ac/?from=program

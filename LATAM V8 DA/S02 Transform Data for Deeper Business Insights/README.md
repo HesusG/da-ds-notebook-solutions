@@ -16,8 +16,8 @@ Imagina que eres analista en Walmart: la Dirección Comercial necesita un resume
 
 - Plantilla inicial de Proyecto (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1PlqJH8t5q_Jwpf8K4mBEXnPUY3cyywAJ/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
 - Proyecto resuelto (cualquier persona de TT puede ver): 
-  - Solución de equipo de contenido (pendiente de actualizar): https://docs.google.com/spreadsheets/d/1ydlK8dyfj7i5OLQHbx3mFPr6nIotegrXt-lMSpQb8s0/edit?usp=sharing
-  - Solución de instructor (pendiente de actualizar): https://docs.google.com/spreadsheets/d/1B4PHq1kNPAwRc1z0U_q78TmH6dpSl8bU/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true <br><br><br>
+  - Solución de equipo de contenido: https://docs.google.com/spreadsheets/d/1ydlK8dyfj7i5OLQHbx3mFPr6nIotegrXt-lMSpQb8s0/edit?usp=sharing
+  - Solución de instructor: https://docs.google.com/spreadsheets/d/1B4PHq1kNPAwRc1z0U_q78TmH6dpSl8bU/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true <br><br><br>
 
 - Instrucciones (link a plataforma): https://tripleten.com/trainer/data-analyst/lesson/a979922b-959c-4720-9896-aa53ffe20c00/
 - Información: https://coding-bootcamps.notion.site/6-Proyecto-2-Resumen-Ejecutivo-de-Ventas-Walmart-26b6ed1efc93804e93befda4d68f7c21
