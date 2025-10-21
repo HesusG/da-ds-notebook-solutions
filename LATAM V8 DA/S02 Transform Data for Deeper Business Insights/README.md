@@ -11,7 +11,9 @@
 **Proyecto 2: Resumen Ejecutivo de Ventas Walmart**
 
 Imagina que eres analista en Walmart: la Dirección Comercial necesita un resumen ejecutivo para decidir determinados ajustes de presupuesto e inventario.
+
 ---
+
 - Plantilla inicial de Proyecto (cualquier persona con el link puede ver): https://docs.google.com/spreadsheets/d/1PlqJH8t5q_Jwpf8K4mBEXnPUY3cyywAJ/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true
 - Proyecto resuelto (cualquier persona de TT puede ver): https://docs.google.com/spreadsheets/d/1B4PHq1kNPAwRc1z0U_q78TmH6dpSl8bU/edit?usp=sharing&ouid=105341058430000280825&rtpof=true&sd=true <br><br><br>
 
