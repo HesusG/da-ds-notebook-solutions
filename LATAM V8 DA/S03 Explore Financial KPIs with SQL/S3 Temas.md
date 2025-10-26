@@ -7,7 +7,7 @@
 ### C1 - Lección 1: Explorar bases de datos relacionales
 
 Componentes esenciales de una base de datos relacional
-- Tablas (Tables)
+- Tablas (Tables).
 - Filas (Rows): Cada fila en una tabla representa un registro individual o una entrada única.
 - Columnas (Columns): Cada columna representa un atributo o característica del registro.
 <br><br>
