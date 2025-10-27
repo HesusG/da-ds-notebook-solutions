@@ -505,7 +505,7 @@ Con `GROUP BY` defines por qué campo resumir; con las funciones de agregación 
 
 Cada columna seleccionada que no esté dentro de una función de agregación, debe aparecer en el `GROUP BY`.
 
-1. **Ejemplo  — Máximo precio por modelo (solo Xiaomi)**
+1. **Ejemplo  — Máximo precio por modelo (solo Xiaomi)** 
 
 “Una fila por modelo mostrando su precio de venta máximo (marca: Xiaomi).”
 
@@ -561,12 +561,16 @@ Notas:
 
 **Filtra filas (previas al agregado):**
 
--- Solo modelos lanzados desde 2024; luego se agrupa
+-- Solo modelos lanzados desde 2024; luego se agrupa 
+<br>
+
 `WHERE launch_date >= '2024-01-01'`
 
 **Filtra grupos (resultado del agregado):**
 
 -- Marcas cuyo precio promedio supera 20,000
+<br>
+
 `SELECT brand_name, AVG(selling_price) AS avg_price`
 `FROM fitness_trackers`
 `GROUP BY brand_name`
