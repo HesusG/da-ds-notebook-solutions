@@ -439,7 +439,7 @@ Si se omite `ASC/DESC`, el orden por defecto es ascendente `(ASC)`.
 - ❌ Resultados “raros” por nulos. ✅ Revisar si hay `NULL` y usar `NULLS FIRST/LAST` si el motor lo soporta, o filtrar con `WHERE Rating IS NOT NULL`.
 - ❌ Empates no deseados. ✅ Añadir claves secundarias: `ORDER BY Selling_Price DESC, Rating DESC, Model_Name ASC.`
 
-**Actividad práctica**
+**Actividad práctica 1**
 
 
 
