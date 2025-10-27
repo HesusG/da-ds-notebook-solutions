@@ -593,6 +593,41 @@ Notas:
 
 **Práctica guiada**
 
+![alt text](image-6.png)
+
+1. **Contexto:** El equipo de R&D quiere saber cuántos productos ofrece cada marca en el dataset.
+
+**Tu objetivo:**
+
+- Seleccionar Brand_Name y COUNT(Model_Name).
+- Agrupar por marca.
+- Indica los alias marca y total_productos para cada una de las columnas.
+
+**Respuesta:**
+
+`SELECT Brand_Name as marca,` 
+       `count(Model_Name) as total_productos`
+`FROM fitness_trackers`
+`GROUP BY Brand_Name`
+
+2. **Contexto:** El equipo de estrategia quiere una lista de los productos con rating mayor a 4.8. De estos productos quieren el precio promedio de venta y el precio promedio original. 
+
+**Tu objetivo:**
+
+- Seleccionar brand_name, model_name , avg(original_price) y avg(selling_price).
+- Agrupar por brand_name y por model_name.
+- Ordenar por brand_name.
+
+**Respuesta:**
+
+`SELECT brand_name,`
+        `model_name,`
+        `avg(original_price),`
+        `avg(selling_price)`
+`FROM fitness_trackers`
+`WHERE rating > 4.8`
+`GROUP BY brand_name,model_name`
+`ORDER BY brand_name`
 
 <br>
 
