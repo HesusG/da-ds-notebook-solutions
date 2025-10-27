@@ -117,7 +117,7 @@ En SQL siempre respondemos dos cosas, en este orden:
 
 - ✅ Costo: menos transferencia y cómputo.
 
-- 3. Hacer que el resultado “hable negocio” con alias (AS)
+3. Hacer que el resultado “hable negocio” con alias (AS)
 
 Los alias renombran las columnas en el resultado sin tocar la tabla.
 
@@ -439,14 +439,158 @@ Si se omite `ASC/DESC`, el orden por defecto es ascendente `(ASC)`.
 - ❌ Resultados “raros” por nulos. ✅ Revisar si hay `NULL` y usar `NULLS FIRST/LAST` si el motor lo soporta, o filtrar con `WHERE Rating IS NOT NULL`.
 - ❌ Empates no deseados. ✅ Añadir claves secundarias: `ORDER BY Selling_Price DESC, Rating DESC, Model_Name ASC.`
 
-**Actividad práctica 1**
+**Actividad práctica**
 
+![alt text](image-4.png)
 
+1. **Contexto:** El equipo de R&D quiere ver los smartwatch de marca Apple con mejor rating y que sean de color negro. 
+
+**Tu objetivo:**
+
+- Seleccionar device_type, brand_name, color, Rating.
+- Filtrar por device_Type = 'Smartwatch', brand_name = 'APPLE' y color = 'Black'. En este punto respeta - las mayúsculas y minúsculas.
+- Ordenar de mayor a menor por Rating.
+- Limita los resultados a 3 (queremos ver el top 3).
+
+**Respuesta:**
+
+`SELECT device_type, brand_name, color, Rating`
+`FROM fitness_trackers`
+`WHERE Device_Type = 'Smartwatch'`
+`AND brand_name = 'APPLE'`
+`AND COLOR = 'Black'`
+`ORDER BY Rating DESC`
+`LIMIT 3;`
+
+2. **Contexto:** El equipo de finanzas quiere identificar los 5 productos con menores rating.
+
+**Tu objetivo:**
+
+- Seleccionar brand_name, Model_Name y rating.
+- Renombrar con un alias la columna brand_name. Llamarla Marca.
+- Renombrar con un alias la columna Model_Name. Llamarla Modelo.
+- Ordenar de menor a mayor por rating.
+- Limitar a las 5 primeras filas.
+
+**Respuesta:**
+
+`SELECT brand_name as Marca,`
+       `model_name as Modelo,`
+       `Rating`
+`FROM fitness_trackers`
+`ORDER BY Rating ASC`
+`LIMIT 5;`
 
 <br>
 
 ### C2 - Lección 4: Agrupar y agregar datos
-<br><br>
+<br>
+
+**🎯 Propósito de la lección**
+
+Aprender a transformar tablas de registros en resúmenes ejecutivos usando:
+
+- `GROUP BY` para agrupar filas por categorías (marca, modelo, etc.).
+
+- Funciones de agregación: `COUNT`, `SUM`, `AVG`, `MIN`, `MAX`.
+
+- Interpretación de resultados agrupados y su uso para responder preguntas de negocio.
+
+**🧠 Idea central**
+
+Los equipos no analizan filas sueltas: necesitan resúmenes.
+Con `GROUP BY` defines por qué campo resumir; con las funciones de agregación defines qué cálculo aplicar a cada grupo.
+
+![alt text](image-5.png)
+
+Cada columna seleccionada que no esté dentro de una función de agregación, debe aparecer en el `GROUP BY`.
+
+1. **Ejemplo  — Máximo precio por modelo (solo Xiaomi)**
+
+“Una fila por modelo mostrando su precio de venta máximo (marca: Xiaomi).”
+
+`SELECT`
+  `model_name AS modelo,`
+  `MAX(selling_price) AS precio_venta_max`
+`FROM fitness_trackers`
+`WHERE brand_name = 'Xiaomi'`
+`GROUP BY model_name;`
+
+**Lectura:** agrupas por `model_name` y, para cada grupo, reportas el mayor `selling_price`.
+
+2. **Ejemplo — Promedio por marca**
+
+_“¿Cuál es el precio promedio por marca?”_
+
+`SELECT`
+  `brand_name,`
+  `ROUND(AVG(selling_price), 2) AS avg_price`
+`FROM fitness_trackers`
+`GROUP BY brand_name`
+`ORDER BY brand_name ASC;`
+
+Notas:
+
+- `ROUND` mejora la presentación (2 decimales).
+
+- `ORDER BY` ordena el resultado final (alfabético por marca).
+
+3. **Ejemplo — Conteo de reseñas perfectas (rating = 5) por marca**
+
+`SELECT`
+  `brand_name,`
+  `COUNT(rating) AS cnt_rating_5`
+`FROM fitness_trackers`
+`WHERE rating = 5`
+`GROUP BY brand_name`
+`ORDER BY cnt_rating_5 DESC;`
+
+**🧱 Orden correcto de cláusulas (pipeline mental)**
+
+`SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT`
+
+- `WHERE` filtra filas antes de agrupar.
+
+- `HAVING` filtra grupos después de agrupar.
+
+- `ORDER BY` ordena el resultado agregado.
+
+- `LIMIT` recorta el top final.
+
+**WHERE vs HAVING (cuándo usar cada uno)**
+
+**Filtra filas (previas al agregado):**
+
+-- Solo modelos lanzados desde 2024; luego se agrupa
+`WHERE launch_date >= '2024-01-01'`
+
+**Filtra grupos (resultado del agregado):**
+
+-- Marcas cuyo precio promedio supera 20,000
+`SELECT brand_name, AVG(selling_price) AS avg_price`
+`FROM fitness_trackers`
+`GROUP BY brand_name`
+`HAVING AVG(selling_price) > 20000`
+`ORDER BY avg_price DESC;`
+
+**Regla:** Si el filtro se refiere a una agregación `(AVG(...)`, `COUNT(...)`, etc.), usar `HAVING`.
+
+**Errores comunes (y cómo evitarlos)**
+
+- ❌ Seleccionar columnas no agregadas que no están en el `GROUP BY`. ✅ Inclúyelas en `GROUP BY` o envolverlas en una función de agregación.
+
+- ❌ Usar `WHERE` para filtrar por un promedio/total. ✅ Usar `HAVING` para filtrar después del `GROUP BY`.
+
+- ❌ Confundir `COUNT(col)` con `COUNT(*)`. ✅ `COUNT(col)` ignorar NULL; `COUNT(*)` cuenta todas las filas.
+
+- ❌ Resultados con demasiados decimales. ✅ Usar `ROUND(AVG(...), 2)` o `CAST(... AS NUMERIC(12,2))`.
+
+- ❌ Olvidar el orden de cláusulas. ✅ Repetir el pipeline: `SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT`.
+
+**Práctica guiada**
+
+
+<br>
 
 ### C2 - Lección 5: Limpiar y preparar datos
 <br><br>
