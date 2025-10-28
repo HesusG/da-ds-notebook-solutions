@@ -647,5 +647,37 @@ Notas:
 <br><br><br>
 
 ---
-## Capitulo 4: Estructurar, entregar y comunicar reportes financieros
+## Capitulo 4: Analizar datos con tablas dinámicas
 ### C4 - Lección 1:
+<br><br><br>
+
+### C4 - Lección 1:
+<br><br><br>
+
+### C4 - Lección 2:
+<br><br><br>
+
+### C4 - Lección 3:
+<br><br><br>
+
+### C4 - Lección 4:
+<br><br><br>
+
+### C4 - Lección 5:
+<br><br><br>
+
+## Capitulo 5: Visualizar y destacar hallazgos clave
+### C4 - Lección 1:
+<br><br><br>
+
+### C4 - Lección 2:
+<br><br><br>
+
+### C4 - Lección 3:
+<br><br><br>
+
+### C4 - Lección 4:
+<br><br><br>
+
+### C4 - Lección 5:
+<br><br><br>
