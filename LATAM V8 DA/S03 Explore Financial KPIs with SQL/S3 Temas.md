@@ -632,7 +632,11 @@ Notas:
 <br>
 
 ### C2 - Lección 5: Limpiar y preparar datos
-<br><br>
+<br>
+...
+
+
+<br>
 
 ### C2 - Lección 6: Asegurar la precisión con tipos de datos y funciones
 <br><br><br>
