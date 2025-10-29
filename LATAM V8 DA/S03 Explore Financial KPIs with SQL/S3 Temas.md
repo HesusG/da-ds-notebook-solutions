@@ -719,21 +719,21 @@ En SQL, limpiar = **detectar** (qué falta o sobra), **decidir** (qué hacer) y 
     A. **Estandarizar textos**
 
     `SELECT`
-      `TRIM(brand_name)  AS brand_name_clean,`
-      `UPPER(color)      AS color_upper`
+    `TRIM(brand_name)  AS brand_name_clean,`
+    `UPPER(color)      AS color_upper`
     `FROM fitness_trackers;`
 
     B. **Asegurar tipos**
 
     `SELECT`
-      `CAST(selling_price AS NUMERIC(12,2)) AS selling_price_num`
+    `CAST(selling_price AS NUMERIC(12,2)) AS selling_price_num`
     `FROM fitness_trackers;`
 
     C. Fechas
 
     -- Según motor, CONVERT/TO_DATE/CAST
     `SELECT`
-      `CAST(release_date AS DATE) AS release_dt`
+    `CAST(release_date AS DATE) AS release_dt`
     `FROM fitness_trackers;`
 
 **Pipeline recomendado**
@@ -746,11 +746,11 @@ En SQL, limpiar = **detectar** (qué falta o sobra), **decidir** (qué hacer) y 
 
 **Errores comunes (y cómo evitarlos)**
 
-- ❌ Suponer que AVG promedia “ceros” ocultos. ✅ AVG ignora NULL; comprueba el porcentaje de nulos.
-- ❌ Imputar rating con 0. ✅ Prefiere filtrar o imputar con mediana/segmento si es obligatorio.
-- ❌ Creer que DISTINCT “elimina duplicados” en toda la fila. ✅ Sólo hace únicas las columnas listadas; usa ROW_NUMBER() para deduplicar de verdad.
-- ❌ No convertir tipos antes de cálculos. ✅ Usa CAST/CONVERT; valida rangos y formatos.
-- ❌ Mezclar limpieza y análisis sin claridad. ✅ Usa CTE o vistas para dejar un dataset “clean_...” y reutilizar.
+- ❌ Suponer que `AVG` promedia “ceros” ocultos. ✅ `AVG` ignora `NULL`; comprueba el porcentaje de nulos.
+- ❌ Imputar `rating` con `0`. ✅ Prefiere filtrar o imputar con mediana/segmento si es obligatorio.
+- ❌ Creer que `DISTINCT` “elimina duplicados” en toda la fila. ✅ Sólo hace únicas las columnas listadas; usar `ROW_NUMBER()` para deduplicar de verdad.
+- ❌ No convertir tipos antes de cálculos. ✅ Usar `CAST/CONVERT`; valida rangos y formatos.
+- ❌ Mezclar limpieza y análisis sin claridad. ✅ Usar `CTE` o vistas para dejar un dataset `“clean_...”` y reutilizar.
 
 **Práctica guiada**
 
