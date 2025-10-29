@@ -633,7 +633,128 @@ Notas:
 
 ### C2 - Lección 5: Limpiar y preparar datos
 <br>
-...
+
+**🎯 Propósito de la lección**
+
+- Aprender a detectar, tratar y estandarizar datos antes del análisis:
+
+- Identificar y manejar valores faltantes (NULL) con IS NULL, IS NOT NULL y COALESCE.
+
+- Excluir filas irrelevantes/incompletas con WHERE.
+
+- Quitar duplicados con DISTINCT (y alternativas).
+
+- Conocer transformaciones básicas de tipos y textos para dejar la tabla lista para KPIs.
+
+**🧠 Idea central**
+
+Un dashboard sólo es tan bueno como sus datos.
+En SQL, limpiar = **detectar** (qué falta o sobra), **decidir** (qué hacer) y **aplicar** (con funciones y filtros).
+
+1. **Detectando y manejando NULL**
+
+- En SQL, los faltantes son `NULL`.
+
+- `AVG(col)` ignora `NULL`; el resultado puede ocultar que faltan datos.
+
+  A. **Ver filas con `rating` nulo**
+
+  `SELECT *`
+  `FROM fitness_trackers`
+  `WHERE rating IS NULL;`
+
+  B. **Ver filas con `rating` no nulo**
+
+  `SELECT *`
+  `FROM fitness_trackers`
+  `WHERE rating IS NOT NULL;`
+
+  C. **Reemplazar nulos con un valor (con coalesce)**
+
+  `SELECT`
+  `model_name,`
+  `COALESCE(rating, 0) AS clean_rating`
+  `FROM fitness_trackers;`
+
+  Úsarlo sólo si el 0 representa un valor de negocio válido. Para rating, normalmente no lo es.
+
+  D. **Recalcular promedios evidenciando el impacto**
+
+  -- Promedio “natural” (ignora NULL)
+  <br>
+  `SELECT AVG(rating) AS avg_rating_no_nulls`
+  `FROM fitness_trackers;`
+
+  -- Promedio imputando 0 (suele sesgar hacia abajo)
+  <br>
+  `SELECT AVG(COALESCE(rating, 0)) AS avg_rating_with_zeros`
+  `FROM fitness_trackers;`
+
+**💡 Criterio de negocio ante nulos en rating:**
+
+- **Reporte de satisfacción:** filtra a `WHERE rating IS NOT NULL`.
+- **Exposición de productos:** separa “con rating” vs “sin rating” con conteos (`COUNT(rating)` vs `COUNT(*)`).
+- **Imputación robusta:** si se debe imputar, considerar median/mode o un valor por categoría (p. ej., por marca) usando subconsultas.
+
+2. **Eliminando filas irrelevantes o incompletas**
+
+**Caso:** Marketing necesita un listado de marcas y modelos actuales con precio válido.
+
+  A. **Quitar filas sin precio**
+
+  `SELECT *`
+  `FROM fitness_trackers`
+  `WHERE selling_price IS NOT NULL;`
+
+  B. **Listado único Marca–Modelo**
+
+  `SELECT DISTINCT brand_name, model_name`
+  `FROM fitness_trackers`
+  `WHERE selling_price IS NOT NULL;`
+
+  `DISTINCT` retorna combinaciones únicas de las columnas listadas.
+
+3. **Otras transformaciones útiles de limpieza**
+
+  A. **Estandarizar textos**
+
+  `SELECT`
+    `TRIM(brand_name)  AS brand_name_clean,`
+    `UPPER(color)      AS color_upper`
+  `FROM fitness_trackers;`
+
+  B. **Asegurar tipos**
+
+  `SELECT`
+    `CAST(selling_price AS NUMERIC(12,2)) AS selling_price_num`
+  `FROM fitness_trackers;`
+
+  C. Fechas
+
+  -- Según motor, CONVERT/TO_DATE/CAST
+  `SELECT`
+    `CAST(release_date AS DATE) AS release_dt`
+  `FROM fitness_trackers;`
+
+**Pipeline recomendado**
+
+`SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT`
+
+- Limpiar primero con WHERE/COALESCE/casts/normalizaciones.
+
+- Luego agrega (GROUP BY) y presenta (ORDER BY, LIMIT).
+
+**Errores comunes (y cómo evitarlos)**
+
+- ❌ Suponer que AVG promedia “ceros” ocultos. ✅ AVG ignora NULL; comprueba el porcentaje de nulos.
+- ❌ Imputar rating con 0. ✅ Prefiere filtrar o imputar con mediana/segmento si es obligatorio.
+- ❌ Creer que DISTINCT “elimina duplicados” en toda la fila. ✅ Sólo hace únicas las columnas listadas; usa ROW_NUMBER() para deduplicar de verdad.
+- ❌ No convertir tipos antes de cálculos. ✅ Usa CAST/CONVERT; valida rangos y formatos.
+- ❌ Mezclar limpieza y análisis sin claridad. ✅ Usa CTE o vistas para dejar un dataset “clean_...” y reutilizar.
+
+**Práctica guiada**
+
+
 
 
 <br>
