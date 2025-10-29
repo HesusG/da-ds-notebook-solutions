@@ -657,38 +657,38 @@ En SQL, limpiar = **detectar** (qué falta o sobra), **decidir** (qué hacer) y 
 
 - `AVG(col)` ignora `NULL`; el resultado puede ocultar que faltan datos.
 
-  A. **Ver filas con `rating` nulo**
+    A. **Ver filas con `rating` nulo**
 
-  `SELECT *`
-  `FROM fitness_trackers`
-  `WHERE rating IS NULL;`
+    `SELECT *`
+    `FROM fitness_trackers`
+    `WHERE rating IS NULL;`
 
-  B. **Ver filas con `rating` no nulo**
+    B. **Ver filas con `rating` no nulo**
 
-  `SELECT *`
-  `FROM fitness_trackers`
-  `WHERE rating IS NOT NULL;`
+    `SELECT *`
+    `FROM fitness_trackers`
+    `WHERE rating IS NOT NULL;`
 
-  C. **Reemplazar nulos con un valor (con coalesce)**
+    C. **Reemplazar nulos con un valor (con coalesce)**
 
-  `SELECT`
-  `model_name,`
-  `COALESCE(rating, 0) AS clean_rating`
-  `FROM fitness_trackers;`
+    `SELECT`
+    `model_name,`
+    `COALESCE(rating, 0) AS clean_rating`
+    `FROM fitness_trackers;`
 
-  Úsarlo sólo si el 0 representa un valor de negocio válido. Para rating, normalmente no lo es.
+    Úsarlo sólo si el 0 representa un valor de negocio válido. Para rating, normalmente no lo es.
 
-  D. **Recalcular promedios evidenciando el impacto**
+    D. **Recalcular promedios evidenciando el impacto**
 
-  -- Promedio “natural” (ignora NULL)
-  <br>
-  `SELECT AVG(rating) AS avg_rating_no_nulls`
-  `FROM fitness_trackers;`
+    -- Promedio “natural” (ignora NULL)
+    <br>
+    `SELECT AVG(rating) AS avg_rating_no_nulls`
+    `FROM fitness_trackers;`
 
-  -- Promedio imputando 0 (suele sesgar hacia abajo)
-  <br>
-  `SELECT AVG(COALESCE(rating, 0)) AS avg_rating_with_zeros`
-  `FROM fitness_trackers;`
+    -- Promedio imputando 0 (suele sesgar hacia abajo)
+    <br>
+    `SELECT AVG(COALESCE(rating, 0)) AS avg_rating_with_zeros`
+    `FROM fitness_trackers;`
 
 **💡 Criterio de negocio ante nulos en rating:**
 
@@ -700,41 +700,41 @@ En SQL, limpiar = **detectar** (qué falta o sobra), **decidir** (qué hacer) y 
 
 **Caso:** Marketing necesita un listado de marcas y modelos actuales con precio válido.
 
-  A. **Quitar filas sin precio**
+    A. **Quitar filas sin precio**
 
-  `SELECT *`
-  `FROM fitness_trackers`
-  `WHERE selling_price IS NOT NULL;`
+    `SELECT *`
+    `FROM fitness_trackers`
+    `WHERE selling_price IS NOT NULL;`
 
-  B. **Listado único Marca–Modelo**
+    B. **Listado único Marca–Modelo**
 
-  `SELECT DISTINCT brand_name, model_name`
-  `FROM fitness_trackers`
-  `WHERE selling_price IS NOT NULL;`
+    `SELECT DISTINCT brand_name, model_name`
+    `FROM fitness_trackers`
+    `WHERE selling_price IS NOT NULL;`
 
-  `DISTINCT` retorna combinaciones únicas de las columnas listadas.
+    `DISTINCT` retorna combinaciones únicas de las columnas listadas.
 
 3. **Otras transformaciones útiles de limpieza**
 
-  A. **Estandarizar textos**
+    A. **Estandarizar textos**
 
-  `SELECT`
-    `TRIM(brand_name)  AS brand_name_clean,`
-    `UPPER(color)      AS color_upper`
-  `FROM fitness_trackers;`
+    `SELECT`
+      `TRIM(brand_name)  AS brand_name_clean,`
+      `UPPER(color)      AS color_upper`
+    `FROM fitness_trackers;`
 
-  B. **Asegurar tipos**
+    B. **Asegurar tipos**
 
-  `SELECT`
-    `CAST(selling_price AS NUMERIC(12,2)) AS selling_price_num`
-  `FROM fitness_trackers;`
+    `SELECT`
+      `CAST(selling_price AS NUMERIC(12,2)) AS selling_price_num`
+    `FROM fitness_trackers;`
 
-  C. Fechas
+    C. Fechas
 
-  -- Según motor, CONVERT/TO_DATE/CAST
-  `SELECT`
-    `CAST(release_date AS DATE) AS release_dt`
-  `FROM fitness_trackers;`
+    -- Según motor, CONVERT/TO_DATE/CAST
+    `SELECT`
+      `CAST(release_date AS DATE) AS release_dt`
+    `FROM fitness_trackers;`
 
 **Pipeline recomendado**
 
