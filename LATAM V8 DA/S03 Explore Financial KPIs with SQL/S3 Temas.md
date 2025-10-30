@@ -804,12 +804,19 @@ En SQL, limpiar = **detectar** (qué falta o sobra), **decidir** (qué hacer) y 
 
 4. **Contexto:** Marketing necesita ampliar el análisis revisando aquellas marcas que no tienen reviews nulas.
 
-**Tu objetivo:
+**Tu objetivo:**
 
-Seleccionar brand_name.
-Elimina duplicados utilizando DISTINCT.
-Filtra por valores de reviews no nulos.
-Ordena por brand_name de manera ascendente.
+- Seleccionar `brand_name`.
+- Elimina duplicados utilizando `DISTINCT`.
+- Filtra por valores de `reviews` no nulos.
+- Ordena por `brand_name` de manera ascendente.
+
+**Respuesta:**
+
+`SELECT distinct brand_name`
+`FROM fitness_trackers`
+`WHERE reviews IS NOT NULL`
+`ORDER BY brand_name ASC`
 
 
 <br>
