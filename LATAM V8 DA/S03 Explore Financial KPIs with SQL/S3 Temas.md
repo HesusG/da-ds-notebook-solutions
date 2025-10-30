@@ -818,11 +818,160 @@ En SQL, limpiar = **detectar** (qué falta o sobra), **decidir** (qué hacer) y 
 `WHERE reviews IS NOT NULL`
 `ORDER BY brand_name ASC`
 
-
 <br>
 
 ### C2 - Lección 6: Asegurar la precisión con tipos de datos y funciones
-<br><br><br>
+<br>
+
+**🎯 Propósito de la lección**
+
+- Asegurar precisión y consistencia antes de publicar KPIs: elegir tipos correctos y formatos adecuados.
+
+- Diferenciar `ROUND` (presentación) vs `CAST` (tipo de dato) y cuándo usar `DECIMAL(p,s)` para métricas financieras.
+
+- Normalizar catálogos/textos con `DISTINCT`, `UPPER`, `TRIM` y validar con `LENGTH/LEN`.
+
+- Prevenir errores comunes: truncamientos por CAST … AS INT, collation en ordenamientos y uso indebido de FLOAT.
+
+- Dejar una vista limpia para BI que sea legible y reutilizable.
+
+**🧠 Idea central**
+
+La precisión se logra en dos capas: (1) tipo correcto para calcular (p. ej., `DECIMAL`), y (2) formato correcto para comunicar (p. ej., `ROUND`). `CAST` cambia el tipo; `ROUND` solo cambia cómo se ve. Limpia y normaliza antes de reportar.
+
+1. **Impacto de la precisión en el análisis**
+
+Un promedio como `2333.3333333333` es correcto pero poco comunicable. Usar `ROUND` lo vuelve claro para reportes; usar `CAST` define el tipo que tendrá ese dato aguas abajo (BI, cálculos posteriores).
+
+2. **ROUND: redondear decimales**
+
+Caso: precio promedio por producto, a 0 y a 1 decimal.
+
+`SELECT`
+  `model_name,`
+  `ROUND(AVG(selling_price), 0) AS avg_price_0,`
+  `ROUND(AVG(selling_price), 1) AS avg_price_1`
+`FROM fitness_trackers`
+`GROUP BY model_name;`
+
+**Claves**
+
+- `ROUND(x, 0)` → entero redondeado.
+- Úsalo para presentación; conserva los valores originales para cálculos finos.
+
+3. **CAST: convertir tipos de datos**
+
+**Caso:** marketing quiere entero sin decimales (truncado si tu motor así lo hace).
+
+`SELECT`
+  `CAST(AVG(selling_price) AS INT) AS avg_price_int`
+`FROM fitness_trackers;`
+
+**¿Cuándo CAST y no ROUND?**
+
+- `ROUND` controla cómo se muestra el número.
+- `CAST` cambia el tipo (decimal → entero; texto → número; etc.).
+- Para números financieros, prefiere fijar tipo a `DECIMAL` en vez de convertir a `INT`.
+
+**Recomendado (finanzas):**
+
+`SELECT`
+  `CAST(AVG(selling_price) AS DECIMAL(12,2)) AS avg_price_2d`
+`FROM fitness_trackers;`
+
+**🔎 Motores:**
+
+- PostgreSQL: `CAST(... AS INTEGER)` trunca; `DECIMAL(p,s)` redondea al ajustar escala.
+- SQL Server: `CAST(... AS INT)` trunca; `DECIMAL(p,s)` redondea.
+- MySQL: `CAST(... AS SIGNED)` trunca; `DECIMAL(p,s)` redondea.
+
+4. **DISTINCT + UPPER: listar valores únicos y normalizar**
+
+**Caso:** listado de marcas en mayúscula, sin duplicados.
+
+`SELECT DISTINCT UPPER(brand_name) AS brand`
+`FROM fitness_trackers`
+`ORDER BY UPPER(brand);`
+
+5. **TRIM + LENGTH/LEN: espacios y validación de texto**
+
+**Caso:** detectar espacios invisibles y limpiar.
+
+-- PostgreSQL/MySQL
+<br>
+`SELECT DISTINCT`
+  `brand_name,`
+  `TRIM(brand_name)                 AS brand_trim,`
+  `LENGTH(brand_name)               AS len_raw,`
+  `LENGTH(TRIM(brand_name))         AS len_trim`
+`FROM fitness_trackers;`
+
+-- SQL Server (equivalentes)
+<br>
+`SELECT DISTINCT`
+  `brand_name,`
+  `LTRIM(RTRIM(brand_name))         AS brand_trim,`
+  `LEN(brand_name)                  AS len_raw,`
+  `LEN(LTRIM(RTRIM(brand_name)))    AS len_trim`
+`FROM fitness_trackers;`
+
+6. **Elección de tipos para precisión**
+
+- Precios, tasas, montos → `DECIMAL(p,s)` (p.ej., `DECIMAL(12,2)`).
+- Contadores → `INT/BIGINT`.
+- Mediciones científicas → `FLOAT/DOUBLE` (si aceptas error por punto flotante).
+- Fechas → `DATE/TIMESTAMP`.
+- Códigos/IDs con ceros a la izquierda → texto, no entero.
+
+**Errores comunes**
+
+- ❌ Usar INT para precios. ✅ Usa DECIMAL(p,s).
+- ❌ Suponer que CAST … AS INT = ROUND(...,0). ✅ CAST INT trunca; ROUND redondea.
+- ❌ Ordenar por alias sin exponer la misma expresión. ✅ ORDER BY UPPER(brand) (o por posición si tu motor lo permite y es legible).
+- ❌ Mezclar funciones que cambian tipo (CAST) con las que cambian presentación (ROUND). ✅ Decide: persistencia del tipo vs formato del reporte.
+- ❌ Ignorar collation en listas alfabéticas con acentos/ñ. ✅ Define collation/locale de ordenamiento.
+
+**Práctica guiada**
+
+![alt text](image-8.png)
+
+1. **Contexto:** Estrategia quiere saber el precio promedio de la marca FitBit, redondeado a 0 decimales (usando `ROUND`).
+
+**Instrucciones:**
+
+- Calcular el precio promedio (columna selling_price).
+- Redondear el resultado a 0 decimales.
+- Usa el alias avg_price.
+- Filtra por el la marca FitBit
+
+**Respuesta:**
+
+`SELECT` 
+`ROUND(avg(selling_price),0) as avg_price`
+`FROM fitness_trackers`
+`WHERE brand_name = 'FitBit'`
+
+2. **Contexto:** Marketing quiere analizar el mercado, viendo cuántos productos distintos existen por marca para precios de venta mayores a 25000.
+
+**Tu objetivo:**
+
+- Agrupar los productos por marca (columna brand_name).
+- Usar COUNT(DISTINCT + columna) para contar productos únicos por marca.
+- Ordenar los resultados de mayor a menor cantidad.
+- Muestra solo las primeras 5 marcas.
+- Filtrar por precio mayor a 25000 (columna selling_price).
+
+**Respuesta:**
+
+`SELECT brand_name,`
+        `COUNT(distinct model_name)`
+`FROM fitness_trackers`
+`WHERE selling_price > 25000`
+`GROUP BY brand_name`
+`ORDER BY  count(distinct model_name) DESC`
+`LIMIT 5`
+
+<br><br>
 
 ---
 ## Capitulo 3: Cálculo de métricas financieras clave
