@@ -975,7 +975,116 @@ Caso: precio promedio por producto, a 0 y a 1 decimal.
 
 ---
 ## Capitulo 3: Cálculo de métricas financieras clave
-### C3 - Lección 1:
+### C3 - Lección 1: Unir tablas para análisis integrados
+<br>
+
+**🎯 Propósito de la lección**
+
+- Integrar datos de múltiples tablas con `JOINs` para análisis financieros y de negocio.
+- Elegir correctamente entre `INNER JOIN` (coincidencias) y `LEFT JOIN` (conservar todo lo de la tabla base).
+- Manejar valores nulos `(NULL)` que aparecen al unir tablas, sin sesgar métricas.
+- Unir ingresos, costos y campañas en un solo dataset listo para KPIs.
+
+**🧠 Idea central**
+
+Un buen análisis integrado depende de cómo unes. Decide la estrategia de `JOIN` según el objetivo (completitud vs exactitud de match) y controla los `NULL` con reglas explícitas para que sumas, promedios y márgenes no se rompan.
+
+**Resumen ejecutivo**
+
+- `INNER JOIN:` solo filas con match en ambas tablas. Útil para “datos completos” (p.ej., viajes con costo cargado).
+- `LEFT JOIN:` conserva todas las filas de la tabla izquierda; la derecha aporta datos cuando hay match; si no, quedan `NULL`. Ideal para no perder ingresos aún sin costos cargados.
+- `NULL` al unir: decide si tratarlo como 0 (con COALESCE) o excluirlo (IS NOT NULL) según la métrica/uso.
+- **Regla de oro del `LEFT`:** filtros de la tabla derecha en ON si no quieres convertirlo involuntariamente en `INNER`.
+
+**INNER JOIN vs LEFT JOIN**
+
+- ¿Quieres completitud (solo casos con toda la info)? → `INNER JOIN`.
+- ¿Quieres conservar la base (p. ej., todos los ingresos aunque falte costo)? → `LEFT JOIN`.
+- ¿Métrica a calcular se rompe con nulos? → `COALESCE()` o filtra con `IS NOT NULL` según el caso.
+
+**Caso Uber — consultas base**
+
+`INNER JOIN` (solo viajes con ingreso y costo):
+
+`SELECT`
+  `uvb.booking_id,`
+  `uvb.valor_booking,`
+  `ucv.costo_total`
+`FROM uber_viajes_bookings AS uvb`
+`INNER JOIN uber_costo_viajes AS ucv`
+  `ON uvb.booking_id = ucv.booking_id;`
+
+`LEFT JOIN` (conservar todos los ingresos):
+
+`SELECT`
+  `uvb.booking_id,`
+  `uvb.valor_booking,`
+  `ucv.costo_total`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_costo_viajes AS ucv`
+  `ON uvb.booking_id = ucv.booking_id;`
+-- Si no hay costo, ucv.costo_total será NULL
+
+**Manejo de valores nulos (NULL) tras el LEFT**
+
+**Opción A — Tratar NULL como 0 (reporting sin “hoyos”):**
+
+`SELECT`
+  `uvb.booking_id,`
+  `uvb.valor_booking,`
+  `COALESCE(ucv.costo_total, 0) AS costo_total`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_costo_viajes AS ucv`
+  `ON uvb.booking_id = ucv.booking_id;`
+
+**Opción B — Excluir filas sin costo (análisis que exige completitud):**
+
+`SELECT`
+  `uvb.booking_id,`
+  `uvb.valor_booking,`
+  `ucv.costo_total`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_costo_viajes AS ucv`
+  `ON uvb.booking_id = ucv.booking_id`
+`WHERE ucv.costo_total IS NOT NULL;`  -- esto hace que el resultado sea equivalente a un INNER
+
+**🔎 Cuidado:** ese `WHERE` ucv.costo_total `IS NOT NULL` “mata” el efecto del `LEFT`. Si se necesita conservar el `LEFT` pero solo excluir costos nulos para una métrica puntual, aplicar la condición dentro de la métrica (p. ej., `SUM(COALESCE(ucv.costo_total,0)))` o usa `CTEs`.
+
+**JOINs con campañas (dimensión opcional)**
+
+`SELECT`
+  `uvb.booking_id,`
+  `uvb.valor_booking,`
+  `ucm.campana_descripcion`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_campanas_mercadeo AS ucm`
+  `ON uvb.campana_id = ucm.campana_id;`
+
+**Cardinalidad y duplicados (punto fino que evita dolores)**
+
+- Si una reserva `(booking_id)` tiene múltiples costos o múltiples campañas, el `JOIN` generará duplicados y las sumas se inflarán.
+
+**Errores comunes**
+
+- ❌ Filtrar tabla derecha en WHERE con LEFT JOIN → lo convierte en INNER. ✅ Pon la restricción en la métrica (COALESCE) o acepta conscientemente el INNER.
+- ❌ COUNT(*) con LEFT JOIN sobrestima en presencia de duplicados. ✅ Usa COUNT(DISTINCT uvb.booking_id) según tu unidad de análisis.
+- ❌ Sumar NULL da 0 silencioso pero promedios y divisiones con NULL pueden sesgar. ✅ SUM(COALESCE(col,0)), y para promedios define denominador explícito.
+- ❌ Unir por columnas de texto con formatos inconsistentes. ✅ Normaliza claves (trim, case), o idealmente usa IDs numéricos/indexados.
+- ❌ Rendimiento: SELECT * + sin índice en la clave de unión. ✅ Selecciona solo columnas necesarias y asegura índice en booking_id, campana_id.
+
+**Práctica guiada**
+
+
+
+<br><br>
+
+### C3 - Lección 2: Agregación de datos de ingresos y costos
+<br><br><br>
+
+### C3 - Lección 3: Calculando ganancia y margen
+<br><br><br>
+
+### C3 - Lección 4: midiendo el ROI por campaña
 <br><br><br>
 
 ---
