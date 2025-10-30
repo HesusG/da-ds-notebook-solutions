@@ -754,7 +754,62 @@ En SQL, limpiar = **detectar** (qué falta o sobra), **decidir** (qué hacer) y 
 
 **Práctica guiada**
 
+![alt text](image-7.png)
 
+1. **Contexto:** Tu jefe te pide controlar la tabla `fitness_trackers` antes de calcular promedios. Algunos registros no tienen valores.
+
+**Tu objetivo:** 
+- Seleccionar `Brand_Name`, `model_name`, `selling_price`, `rating` y `reviews`.
+- Reemplazar valores nulos de `selling_price`, `rating` y `reviews` con 0 usando `COALESCE`.
+
+**Respuesta:**
+
+`SELECT brand_name,` 
+        `model_name,` 
+        `COALESCE(selling_price,0),`
+        `COALESCE(rating,0),` 
+        `COALESCE(reviews,0)`
+`FROM fitness_trackers`
+
+2. **Contexto:** En base al ejercicio anterior, tu jefe ha analizado los resultados y quiere actualizarlo. Solamente quiere las columnas `brand_name`, `model_name` y `selling_price`. Para esta última, los valores nulos deben reemplazarse por -1. Los valores de rating nulos no deben mostrarse, tampoco las reviews nulas. 
+
+**Tu objetivo:**
+
+- Seleccionar `brand_name`, `model_name` y `selling_price`.
+- Reemplazar valores nulos de `selling_price` con -1 usando `COALESCE`.
+- Filtra con `NOT NULL` para `rating` y `reviews`.
+
+**Respuesta:**
+
+`SELECT brand_name,`
+        `model_name,` 
+        `COALESCE(selling_price,-1)`
+`FROM fitness_trackers`
+`WHERE rating is not null`
+`AND reviews is not null`
+
+3. **Contexto:** Marketing necesita analizar aquellas marcas que tienen rating nulos.
+
+**Tu objetivo:**
+
+- Seleccionar `brand_name`.
+- Elimina duplicados.
+- Filtra por valores de `rating` nulos.
+
+**Respuesta:**
+
+`SELECT distinct brand_name`
+`FROM fitness_trackers`
+`WHERE rating IS NULL`
+
+4. **Contexto:** Marketing necesita ampliar el análisis revisando aquellas marcas que no tienen reviews nulas.
+
+**Tu objetivo:
+
+Seleccionar brand_name.
+Elimina duplicados utilizando DISTINCT.
+Filtra por valores de reviews no nulos.
+Ordena por brand_name de manera ascendente.
 
 
 <br>
