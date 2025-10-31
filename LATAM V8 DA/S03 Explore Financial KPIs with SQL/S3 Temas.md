@@ -1074,12 +1074,64 @@ Un buen análisis integrado depende de cómo unes. Decide la estrategia de `JOIN
 
 **Práctica guiada**
 
+**Tabla 1**
 
+![Tabla 1](image-9.png)
+
+**Tabla 2**
+
+![Tabla 2](image-10.png)
+
+**Tabla 3**
+
+![Tabla 3](image-11.png)
+
+1. **Contexto:**  Finanzas necesita una vista limpia de la tabla `uber_viajes_bookings`. Algunos registros traen campos vacíos por carga incompleta (p. ej., `valor_booking` o `tipo_vehiculo`). 
+
+**Tu objetivo:**
+
+- Reemplazar el valor nulo en `valor_booking` por `0` → Utiliza alias `clean_revenue`.
+- Si `campana_id` viene con un valor nulo, mostrar `0`.
+
+**Respuesta:**
+
+`SELECT`
+  `booking_id,`
+  `COALESCE(valor_booking, 0) AS clean_revenue,`
+  `COALESCE(campana_id, 0)AS campana_id_clean`
+`FROM uber_viajes_bookings;`
+
+2. **Contexto:** Marketing quiere saber qué viajes provinieron de campañas y cuánto ingresaron.
+
+**Tu objetivo:**
+
+- Seleccionar `campana_descripcion`.
+- Añadir la columna calculada `SUM(valor_booking)` como `total_revenue`.
+- Unir `uber_viajes_bookings` con `uber_campanas_mercadeo`. Utiliza los alias `uvb` y `ucm` para cada tabla respectivamente.
+- Agrupar los resultados por `campana_descripcion`.
+
+**Respuesta:**
+
+`SELECT ucm.campana_descripcion,`
+			 `SUM(uvb.valor_booking) AS total_revenue`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_campanas_mercadeo AS ucm`
+  `ON uvb.campana_id = ucm.campana_ID`
+`GROUP BY ucm.campana_descripcion;`
 
 <br><br>
 
 ### C3 - Lección 2: Agregación de datos de ingresos y costos
-<br><br><br>
+<br>
+
+
+
+
+
+
+
+
+<br><br>
 
 ### C3 - Lección 3: Calculando ganancia y margen
 <br><br><br>
