@@ -1343,7 +1343,7 @@ Agrupamos por `tipo_vehiculo`, sumamos ingresos y costos, calculamos utilidad y 
 
   - ✅ Asegurar que `valor_booking` y `costo_total` sean DECIMAL; multiplicar por 100.0 (punto flotante) para evitar división entera en algunos motores.
 
-**Practica guiada (4 Etapas)**
+**Practica guiada (4 Etapas) Pt.1**
 
 **Contexto:** Finanzas quiere conocer la utilidad bruta y el margen de cada tipo de vehículo en Q1 2024.
 
@@ -1477,6 +1477,126 @@ A continuación, se detallan las columnas de cada tabla, que serán cruciales pa
 `WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31'`
 `GROUP BY uvb.tipo_vehiculo`
 `ORDER BY margin_pct DESC;`
+
+**Practica guiada (4 Etapas) Pt.2**
+
+Contexto: El equipo ejecutivo quiere un reporte comparativo de utilidad y margen por ciudad en Q2 2024.
+
+**Etapa 1: Unir tablas**
+
+**Objetivo:** Unir viajes con costos por `booking_id` y traer `ubicacion_inicio`.
+
+**Etapa 2: Calcular totales de ingresos y costos**
+
+**Objetivo:** Sumar ingresos y costos por ciudad (`ubicacion_inicio`) 
+
+**Etapa 3: Utilidad bruta (gross_profit)**
+
+**Objetivo:** Agregar una columna calculada `gross_profit = total_revenue - total_cost` por ciudad 
+
+**Etapa 4: Calcular el margen de utilidad (%)**
+
+**Objetivo:** Calcular `margin_pct = (gross_profit / total_revenue) * 100` por ciudad y ordenar los resultados por ese valor.
+
+**Estructura de las Tablas (Esquema)**
+
+A continuación, se detallan las columnas de cada tabla, que serán cruciales para los ejercicios:
+
+![uber_viajes_bookings](image-15.png)
+
+![uber_costo_viajes](image-16.png)
+
+![uber_campanas_mercadeo](image-17.png)
+
+
+1. **Etapa 1: Unir tablas**
+
+**Objetivo:**
+
+Unir viajes con costos por `booking_id` y traer `ubicacion_inicio`.
+
+**Instrucciones:**
+
+  - Usa la tabla principal `uber_viajes_bookings` con alias `uvb`.
+  - Haz un `LEFT JOIN` con la tabla `uber_costo_viajes (ucv)` en la columna `booking_id`.
+  - Selecciona las columnas `uvb.ubicacion_inicio` y `ucv.costo_total` para verificar que el join funciona.
+  - Filtra las filas de Q2 2024 `(uvb.fecha BETWEEN '2024-04-01' AND '2024-06-30')`.
+
+**Respuesta:**
+
+`SELECT`
+  `uvb.ubicacion_inicio,`
+  `ucv.costo_total`
+`FROM uber_viajes_bookings uvb`
+`LEFT JOIN uber_costo_viajes ucv`
+  `ON ucv.booking_id = uvb.booking_id`
+`WHERE uvb.fecha BETWEEN '2024-04-01' AND '2024-06-30';`
+
+2. **Etapa 2: Calcular totales de ingresos y costos**
+
+**Objetivo:** Agregar los totales de ingresos `(total_revenue)` y costos `(total_cost)` por ciudad (ubicacion_inicio).
+
+**Instrucciones:** 
+
+Partimos de la consulta anterior y seguimos los siguientes pasos:
+
+- Selecciona `uvb.ubicacion_inicio`.
+- Calcula:
+  - `SUM(uvb.valor_booking)` → alias `total_revenue`.
+  - `SUM(COALESCE(ucv.costo_total, 0)` → `alias total_cost`.
+  - Filtra por fechas `Q2 2024`.
+  - Agrupa por `uvb.ubicacion_inicio`.
+
+**Respuesta:**
+
+`SELECT`
+  `uvb.ubicacion_inicio,`
+  `SUM(uvb.valor_booking) AS total_revenue,`
+  `SUM(COALESCE(ucv.costo_total, 0)) AS total_cost`
+`FROM uber_viajes_bookings uvb`
+`LEFT JOIN uber_costo_viajes ucv`
+  `ON ucv.booking_id = uvb.booking_id`
+`WHERE uvb.fecha BETWEEN '2024-04-01' AND '2024-06-30'`
+`GROUP BY uvb.ubicacion_inicio;`
+
+3. **Etapa 3: Calcular utilidad bruta**
+
+**Objetivo:** Agregar la columna de `utilidad bruta (gross_profit)` por ciudad.
+
+**Instrucciones:**
+
+Partimos de la consulta anterior y seguimos los siguientes pasos:
+  - Agrega una nueva columna calculada `gross_profit (total_revenue - total_cost)`
+  - Usa las expresiones de agregación directamente en el cálculo (no los alias).
+  - Mantén el mismo `GROUP BY` y `WHERE`.
+
+**Respuesta:**
+
+`SELECT`
+  `uvb.ubicacion_inicio,`
+  `SUM(uvb.valor_booking) AS total_revenue,`
+  `SUM(COALESCE(ucv.costo_total, 0)) AS total_cost,`
+  `(SUM(uvb.valor_booking) - SUM(COALESCE(ucv.costo_total, 0))) AS gross_profit`
+`FROM uber_viajes_bookings uvb`
+`LEFT JOIN uber_costo_viajes ucv`
+  `ON ucv.booking_id = uvb.booking_id`
+`WHERE uvb.fecha BETWEEN '2024-04-01' AND '2024-06-30'`
+`GROUP BY uvb.ubicacion_inicio;`
+
+4. **Etapa 4: Calcular el margen (%) y ordenar resultados**
+
+**Objetivo:**
+
+- Calcular el margen porcentual (margin_pct) por ciudad y ordenar los resultados por ese valor.
+- Instrucciones paso a paso si las necesitas
+- Parte del código de la etapa anterior y sigue los siguientes pasos:
+
+Agrega una nueva columnamargin_pct. Recuerda la formula general: (gross_profit / total_revenue) * 100
+Usa NULLIF(SUM(uvb.valor_booking), 0) para evitar división por cero.
+Ordena los resultados con ORDER BY margin_pct DESC.
+
+
+
 
 <br><br>
 
