@@ -1281,18 +1281,18 @@ Usar `LEFT JOIN` por `booking_id`, `COALESCE` en costos y `ROUND` solo para most
 
 Agrupamos por `tipo_vehiculo`, sumamos ingresos y costos, calculamos utilidad y margen.
 
-`SELECT
-  `uvb.tipo_vehiculo,`
-  `SUM(uvb.valor_booking)                           AS total_revenue,`
-  `SUM(COALESCE(ucv.costo_total, 0))                AS total_cost,`
-  `SUM(uvb.valor_booking) - SUM(COALESCE(ucv.costo_total, 0)) AS gross_profit,`
-  `ROUND(`
-    `(SUM(uvb.valor_booking) - SUM(COALESCE(ucv.costo_total, 0)))/ NULLIF(SUM(uvb.valor_booking), 0) * ``100,2)                                            AS net_margin_pct`
-`FROM uber_viajes_bookings AS uvb`
-`LEFT JOIN uber_costo_viajes AS ucv`
-       `ON ucv.booking_id = uvb.booking_id`
-`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31'`
-`GROUP BY uvb.tipo_vehiculo;`
+  `SELECT`
+    `uvb.tipo_vehiculo,`
+    `SUM(uvb.valor_booking)                           AS total_revenue,`
+    `SUM(COALESCE(ucv.costo_total, 0))                AS total_cost,`
+    `SUM(uvb.valor_booking) - SUM(COALESCE(ucv.costo_total, 0)) AS gross_profit,`
+    `ROUND(`
+      `(SUM(uvb.valor_booking) - SUM(COALESCE(ucv.costo_total, 0)))/ NULLIF(SUM(uvb.valor_booking), 0) * ``100,2)                                            AS net_margin_pct`
+  `FROM uber_viajes_bookings AS uvb`
+  `LEFT JOIN uber_costo_viajes AS ucv`
+        `ON ucv.booking_id = uvb.booking_id`
+  `WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31'`
+  `GROUP BY uvb.tipo_vehiculo;`
 
 **Claves**
 
