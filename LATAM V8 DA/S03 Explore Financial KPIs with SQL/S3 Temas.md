@@ -1587,15 +1587,28 @@ Partimos de la consulta anterior y seguimos los siguientes pasos:
 
 **Objetivo:**
 
-- Calcular el margen porcentual (margin_pct) por ciudad y ordenar los resultados por ese valor.
+- Calcular el margen porcentual `(margin_pct)` por ciudad y ordenar los resultados por ese valor.
 - Instrucciones paso a paso si las necesitas
 - Parte del código de la etapa anterior y sigue los siguientes pasos:
+  - Agrega una nueva columnamargin_pct. Recuerda la formula general: `(gross_profit / total_revenue) * 100`
+  - Usa `NULLIF(SUM(uvb.valor_booking), 0)` para evitar división por cero.
+  - Ordena los resultados con `ORDER BY margin_pct DESC`.
 
-Agrega una nueva columnamargin_pct. Recuerda la formula general: (gross_profit / total_revenue) * 100
-Usa NULLIF(SUM(uvb.valor_booking), 0) para evitar división por cero.
-Ordena los resultados con ORDER BY margin_pct DESC.
+**Respuesta:**
 
-
+`SELECT
+  `uvb.ubicacion_inicio,`
+  `SUM(uvb.valor_booking) AS total_revenue,`
+  `SUM(COALESCE(ucv.costo_total, 0)) AS total_cost,`
+  `(SUM(uvb.valor_booking) - SUM(COALESCE(ucv.costo_total, 0))) AS gross_profit,`
+  `((SUM(uvb.valor_booking) - SUM(COALESCE(ucv.costo_total, 0))) * 100.0`
+   `/ NULLIF(SUM(uvb.valor_booking), 0)) AS margin_pct`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_costo_viajes AS ucv`
+  `ON ucv.booking_id = uvb.booking_id`
+`WHERE uvb.fecha BETWEEN '2024-04-01' AND '2024-06-30'`
+`GROUP BY uvb.ubicacion_inicio`
+`ORDER BY margin_pct DESC;`
 
 
 <br><br>
