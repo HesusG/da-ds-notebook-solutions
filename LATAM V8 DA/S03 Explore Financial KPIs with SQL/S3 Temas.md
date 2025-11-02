@@ -1122,6 +1122,135 @@ Un buen análisis integrado depende de cómo unes. Decide la estrategia de `JOIN
 <br><br>
 
 ### C3 - Lección 2: Agregación de datos de ingresos y costos
+
+**🎯 Propósito de la lección**
+
+- Aprender a agregar ingresos y costos por categorías de negocio (p. ej., tipo_vehiculo, ubicacion_inicio).
+- Comparar métricas lado a lado (ingresos vs. costos) en una sola consulta.
+- Aplicar filtros de tiempo (Q1, Q2…) con WHERE y con agregación condicional (CASE WHEN).
+- Entregar resultados legibles con alias (AS) y tipos adecuados (CAST, sin perder precisión).
+
+**🧠 Idea central**
+
+Un buen resumen financiero en SQL = `unir (JOIN)` lo necesario + `agrupar (GROUP BY)` por la dimensión correcta + `sumar (SUM)` con cuidado de nulos y duplicaciones + presentar con claridad (alias, tipos, periodos).
+
+1. **Contexto de negocio**
+
+- **Ingresos (revenue):** dinero cobrado por cada viaje (valor_booking).
+- **Costos:** lo que cuesta operar ese viaje (gasolina, chofer, seguro, etc.; costo_total).
+- **Relaciones:** un viaje (booking_id) puede tener uno o más registros de costo → si no se cuida, se duplican los ingresos al unir.
+
+**Objetivo:** construir resúmenes por categorías (p. ej., tipo_vehiculo o ubicacion_inicio) y por periodos (Q1, Q2…), para responder preguntas ejecutivas: ¿qué vehículo genera más ingresos?, ¿dónde son más altos los costos?, ¿cómo se comportaron Q1 vs Q2?
+
+2. **¿Qué significa “agregar”?**
+
+- Pasar de registros fila a fila a resúmenes por una dimensión: “total por tipo de vehículo”, “total por ciudad”, etc.
+- La operación base es SUM (sumas), acompañada de GROUP BY (la categoría).
+- La clave conceptual: elegir la dimensión que responde la pregunta (vehículo, origen, ciudad, periodo).
+
+3. **Comparar ingresos vs. costos “lado a lado”**
+
+- Para que la comparación sea válida, ingresos y costos deben estar en el mismo nivel de detalle (misma dimensión).
+- **Riesgo común:** si la tabla de costos tiene múltiples filas por booking, unir directo puede duplicar ingresos al sumar.
+- **Práctica sana:** consolidar costos primero por booking_id y recién ahí compararlos con ingresos en la dimensión elegida.
+
+**Métricas clave del comparativo:**
+
+    - **Ingresos totales** (Total Revenue)
+    - **Costos totales** (Total Cost)
+    - **Utilidad bruta** (Gross Profit = Revenue − Cost)
+    - **Margen %** (Profit / Revenue)
+
+4. **Manejo de valores faltantes (NULLs)**
+
+- Al unir, es normal que algunos viajes no tengan costo aún.
+- Dos caminos válidos, según el propósito:
+  - Tratar los faltantes como 0 (útil para ver “agujeros” sin romper sumas).
+  - Excluir filas sin costo cuando el análisis exige completitud (solo viajes con costo cargado).
+- **Punto conceptual:** la decisión de negocio guía la técnica (no al revés).
+
+5. **Periodos de tiempo: dos enfoques**
+
+- Filtrar con WHERE: sirve cuando quieres solo un periodo (ej. Q1).
+- Agregación condicional (CASE WHEN): te permite comparar varios periodos en una sola consulta (ej. Q1 vs Q2 en columnas).
+- Buenas prácticas:
+    - Recordar que BETWEEN es inclusivo (incluye extremos).
+    - Alternativa robusta: rangos tipo [>= inicio AND < inicio_siguiente] para evitar dudas de límites.
+
+6. **Presentación y precisión**
+
+- Alias claros (ej.: total_revenue, total_cost, margin_pct) → reportes legibles y consistentes.
+- **Tipos:** evitar truncar montos financieros (no forzar enteros si pierdes decimales); si el objetivo es “mostrar bonito”, se redondea en la capa de visualización o con funciones de formato, sin alterar el cálculo.
+- Ordenar por métricas relevantes (revenue, margen) ayuda a la lectura ejecutiva.
+
+**Errores típicos y cómo evitarlos**
+
+- ❌ Duplicación de ingresos por unir a una tabla de costos con varias filas por booking. ✅ consolidar costos primero.
+- ❌ Granularidad mezclada: sumar por vehículo ingresos y por ciudad costos. ✅ comparar “peras con manzanas”.
+- ❌ Fechas mal definidas (off-by-one). ✅ confirmar límites e inclusividad.
+- ❌ Nulos no decididos: tratar 0 cuando debías excluir, o viceversa. ✅ define el criterio de negocio.
+- ❌Alias/formatos inconsistentes: dificulta QA y el consumo del resultado.
+
+**Práctica guiada**
+
+![Tabla 1](image-12.png)
+
+![Tabla 2](image-13.png)
+
+1. **Contexto:** Finanzas quiere saber los ingresos y costos totales por tipo de vehículo en Q1 2024.
+
+**Tu objetivo:**
+
+- Seleccionar `tipo_vehiculo`.
+- Calcular `SUM(valor_booking)` como ingresos (`total_revenue`).
+- Calcular `SUM(costo_total)` como costos (`total_cost`).
+- Hacer un `LEFT JOIN` con la tabla `uber_costo_viajes` para obtener los costos.
+- Asigna los alias a las tablas: `uber_viajes_bookings` → `uvb` y `uber_costo_viajes` → `ucv`.
+- Filtrar por fechas entre 2024-01-01 y 2024-03-31.
+- Agrupar los resultados por `tipo_vehiculo`.
+
+**Respuesta:**
+
+`SELECT uvb.tipo_vehiculo,`
+`SUM(uvb.valor_booking) AS total_revenue,`
+`SUM(ucv.costo_total)   AS total_cost`
+`FROM uber_viajes_bookings uvb`
+`LEFT JOIN uber_costo_viajes ucv`
+`ON ucv.booking_id = uvb.booking_id`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31'`
+`GROUP BY uvb.tipo_vehiculo;`
+
+2. **Contexto:** 
+
+El equipo ejecutivo quiere comparar la distancia total recorrida en Q1 vs. Q2 de 2024 por tipo de vehículo.
+
+**Tu objetivo:**
+
+- Selecciona `tipo_vehiculo`.
+- Calcula `km_q1` con agregación condicional con `CASE WHEN `sobre `distancia_booking` para fechas de Q1 (2024-01-01 a 2024-03-31).
+- Calcula `km_q2` con agregación condicional con `CASE WHEN` sobre `distancia_booking` para fechas de Q2 (2024-04-01 a 2024-06-30).
+- Agrupa por `tipo_vehiculo`.
+- Tabla principal: uber_viajes_bookings 
+
+- Columnas clave:
+  - `uvb.tipo_vehiculo`.
+  - `uvb.fecha` (tipo fecha).
+  - `uvb.distancia_booking` (en kilómetros).
+
+**Respuesta:**
+
+`SELECT uvb.tipo_vehiculo,`
+`SUM(uvb.valor_booking) AS total_revenue,`
+`SUM(ucv.costo_total)   AS total_cost`
+`FROM uber_viajes_bookings uvb`
+`LEFT JOIN uber_costo_viajes ucv`
+`ON ucv.booking_id = uvb.booking_id`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31'`
+`GROUP BY uvb.tipo_vehiculo;`
+
+<br><br>
+
+### C3 - Lección 3: Calculando ganancia y margen
 <br>
 
 
@@ -1131,10 +1260,11 @@ Un buen análisis integrado depende de cómo unes. Decide la estrategia de `JOIN
 
 
 
-<br><br>
 
-### C3 - Lección 3: Calculando ganancia y margen
-<br><br><br>
+
+
+
+<br><br>
 
 ### C3 - Lección 4: midiendo el ROI por campaña
 <br><br><br>
