@@ -1253,15 +1253,95 @@ El equipo ejecutivo quiere comparar la distancia total recorrida en Q1 vs. Q2 de
 ### C3 - Lección 3: Calculando ganancia y margen
 <br>
 
+**🎯 Propósito de la lección**
 
+- Calcular utilidad bruta (Gross Profit) = ingresos – costos.
+- Calcular margen de ganancia (%) = (Gross Profit / Ingresos) × 100.
+- Integrar ingresos y costos con JOINs al mismo nivel de detalle (booking_id).
+- Evitar errores con COALESCE (nulos), NULLIF (división entre cero) y ROUND (presentación).
+- **Construir dos vistas:** por categoría (p.ej., tipo_vehículo) y ejecutiva (una sola fila con el margen global de un período).
 
+**🧠 Idea central**
 
+No basta con sumar ingresos: hay que cruzarlos con los costos y expresar eficiencia. El indicador clave es el margen (%), que responde: “de cada $100 de ingreso, ¿cuánto queda como ganancia?”
+Fórmula base en SQL:
 
+![alt text](image-14.png)
 
+Usar `LEFT JOIN` por `booking_id`, `COALESCE` en costos y `ROUND` solo para mostrar.
 
+1. **Recordatorio del modelo**
 
+- **Ingresos:** uber_viajes_bookings (valor_booking, fecha, tipo_vehiculo, etc.).
+- **Costos:** uber_costo_viajes (costo_total, componentes).
+- **Clave de unión:** booking_id.
+- Analizamos períodos (ej. Q1-2024) y comparamos por categorías (ej. tipo_vehiculo).
 
+2. **Vista por categoría (tipo de vehículo)**
 
+Agrupamos por `tipo_vehiculo`, sumamos ingresos y costos, calculamos utilidad y margen.
+
+`SELECT
+  `uvb.tipo_vehiculo,`
+  `SUM(uvb.valor_booking)                           AS total_revenue,`
+  `SUM(COALESCE(ucv.costo_total, 0))                AS total_cost,`
+  `SUM(uvb.valor_booking) - SUM(COALESCE(ucv.costo_total, 0)) AS gross_profit,`
+  `ROUND(`
+    `(SUM(uvb.valor_booking) - SUM(COALESCE(ucv.costo_total, 0)))/ NULLIF(SUM(uvb.valor_booking), 0) * ``100,2)                                            AS net_margin_pct`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_costo_viajes AS ucv`
+       `ON ucv.booking_id = uvb.booking_id`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31'`
+`GROUP BY uvb.tipo_vehiculo;`
+
+**Claves**
+
+- `COALESCE` evita que un costo faltante rompa la resta.
+- `NULLIF` previene división entre cero.
+- `ROUND(…, 2)` redondea solo para mostrar.
+
+3. **Interpretación gerencial (cómo leer los resultados)**
+
+- Gross Profit alto con margen bajo ⇒ costos están presionando la operación.
+- Margen alto, aunque el ingreso sea menor ⇒ categoría eficiente (buena relación ingreso/costo).
+- Decide dónde crecer o recortar: vehículo, ciudad, campaña, etc.
+
+**Errores comunes (y cómo evitarlos)**
+
+- **División por cero en el margen**
+
+  - ✅ Envolver el denominador con `NULLIF(SUM(ingresos), 0)`.
+
+- **Doble conteo de costos (varias filas de costo por booking)**
+
+  - ✅ Pre-agregar costos por `booking_id` (subconsulta o CTE) antes del JOIN.
+
+- **Perder filas sin costo**
+
+  - ❌ `INNER JOIN` cuando el costo no existe aún.
+  - ✅ Usar `LEFT JOIN` si quiere conservar todos los ingresos.
+
+- **Resultados nulos o restas rotas**
+
+  - ❌ No usar `COALESCE` en costo.
+  - ✅ `COALESCE(ucv.costo_total, 0)` para tratar “no cargado” como 0 temporal.
+
+- **Margen mal agregado**
+
+  - ❌ Promediar márgenes por fila.
+  - ✅ Usa razón de sumas: `(SUM(revenue) - SUM(cost)) / NULLIF(SUM(revenue),0)`.
+
+- **Filtros de tiempo inconsistentes**
+
+  - ✅ Aplicar el mismo rango (p.ej., Q1) sobre la tabla base de ingresos y verificar alineación con costos.
+
+- **Redondear en cálculos intermedios**
+
+  - ✅ Aplicar `ROUND` solo al final para presentación, conserva precisión en los cálculos.
+
+- **Tipos de dato/precisión**
+
+  - ✅ Asegurar que `valor_booking` y `costo_total` sean DECIMAL; multiplicar por 100.0 (punto flotante) para evitar división entera en algunos motores.
 
 
 <br><br>
