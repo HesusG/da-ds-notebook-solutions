@@ -1824,19 +1824,135 @@ Partimos de la consulta anterior y seguimos los siguientes pasos:
 `GROUP BY uvb.campana_id, ucm.costo_campana`
 `ORDER BY ROI_pct DESC;`
 
+**Practica guiada Pt.2**
 
+**Contexto:** La gerencia quiere saber qué campaña tuvo el ROI más alto en el primer semestre de 2024.
 
+**Etapa 1: Unir tablas**
 
+**Objetivo:** unir viajes con campañas por campana_id y traer campana_id (para validar el join).
 
+**Etapa 2: Ingresos y gasto de marketing**
 
+**Objetivo:** calcular ingresos totales por campaña y traer costo de marketing.
 
+**Etapa 3: Contribución (ingresos − gasto)**
 
+**Objetivo:** agregar la columna ROI_pct basada en ingresos y gasto por campaña.
 
+**Etapa 4: ROI (%) y orden**
 
+**Objetivo:** ordenar las campañas de mayor a menor ROI y limitar el resultado a la campaña con ROI más alto.
 
+**Estructura de las Tablas (Esquema)**
 
+A continuación, se detallan las columnas de cada tabla, que serán cruciales para los ejercicios:
 
+![uber_viajes_bookings](image-15.png)
 
+![uber_costo_viajes](image-16.png)
+
+![uber_campanas_mercadeo](image-17.png)
+
+1. **Etapa 1: Unir tablas**
+
+**Objetivo:** Unir viajes con campañas por `campana_id` y traer `campana_id` (para validar el join).
+
+**Instrucciones:**
+
+- Usa `uber_viajes_bookings` como `uvb` y `uber_campanas_mercadeo` como `ucm`.
+- Haz un `JOIN` con la `clave uvb.campana_id = ucm.campana_ID`.
+- Selecciona `uvb.campana_id` y `ucm.costo_campana` para verificar el join.
+- Filtra por el 1er semestre de 2024: `uvb.fecha BETWEEN '2024-01-01' AND '2024-06-30'`.
+
+**Respuesta:**
+
+`SELECT`
+  `uvb.campana_id,`
+  `ucm.costo_campana`
+`FROM uber_viajes_bookings AS uvb`
+`JOIN uber_campanas_mercadeo AS ucm`
+  `ON uvb.campana_id = ucm.campana_ID`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-06-30';`
+
+2. **Etapa 2: Ingresos y gasto de marketing por campaña**
+
+**Objetivo:** Calcular ingresos totales por campaña y traer costo de marketing.
+
+**Instrucciones:**
+
+Partimos de la consulta anterior y seguimos los siguientes pasos:
+
+- Selecciona `uvb.campana_id`.
+- Calcula `SUM(uvb.valor_booking)` como `total_revenue`.
+- Selecciona `ucm.costo_campana` como `marketing_cost`.
+- Filtra por `H1 2024`.
+- Agrupa por `uvb.campana_id` y `ucm.costo_campana`.
+
+**Respuesta:**
+
+`SELECT`
+  `uvb.campana_id,`
+  `SUM(uvb.valor_booking) AS total_revenue,`
+  `ucm.costo_campana      AS marketing_cost`
+`FROM uber_viajes_bookings AS uvb`
+`JOIN uber_campanas_mercadeo AS ucm`
+  `ON uvb.campana_id = ucm.campana_ID`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-06-30'`
+`GROUP BY uvb.campana_id, ucm.costo_campana;`
+
+3. **Etapa 3: Calcular ROI (%) por campaña**
+
+**Objetivo:** Agregar la columna ROI_pct basada en ingresos y gasto por campaña.
+
+**Instrucciones:**
+
+Partimos de la consulta anterior y seguimos los siguientes pasos:
+
+- Agrega ROI_pct con la fórmula:
+  - `((SUM(uvb.valor_booking) - ucm.costo_campana) * 100.0 / NULLIF(ucm.costo_campana, 0))`
+- Mantén el mismo `GROUP BY` y `WHERE`.
+
+**Respuesta:**
+
+`SELECT`
+  `uvb.campana_id,`
+  `SUM(uvb.valor_booking) AS total_revenue,`
+  `ucm.costo_campana      AS marketing_cost,`
+  `((SUM(uvb.valor_booking) - ucm.costo_campana) * 100.0`
+     `/ NULLIF(ucm.costo_campana, 0)) AS ROI_pct`
+`FROM uber_viajes_bookings AS uvb`
+`JOIN uber_campanas_mercadeo AS ucm`
+  `ON uvb.campana_id = ucm.campana_ID`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-06-30'`
+`GROUP BY uvb.campana_id, ucm.costo_campana;`
+
+4. **Etapa 4: Ordenar y devolver solo la campaña top**
+
+**Objetivo:** Ordenar las campañas de mayor a menor ROI y limitar el resultado a la campaña con ROI más alto.
+
+**Instrucciones:** 
+
+Partimos de la consulta anterior y seguimos los siguientes pasos:
+
+- Añade `ORDER BY ROI_pct DESC`.
+- Limita a una fila con `LIMIT 1`.
+
+**Respuesta:**
+
+`SELECT
+  `uvb.campana_id,`
+  `SUM(uvb.valor_booking) AS total_revenue,`
+  `ucm.costo_campana      AS marketing_cost,`
+  `((SUM(uvb.valor_booking) - ucm.costo_campana) * 100.0`
+     `/ NULLIF(ucm.costo_campana, 0)) AS ROI_pct`
+`FROM uber_viajes_bookings AS uvb`
+`JOIN uber_campanas_mercadeo AS ucm`
+  `ON uvb.campana_id = ucm.campana_ID`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-06-30'`
+`GROUP BY uvb.campana_id, ucm.costo_campana`
+`ORDER BY ROI_pct DESC`
+`LIMIT 1;`
 
 <br><br>
 
