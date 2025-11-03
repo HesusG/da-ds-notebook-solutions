@@ -1624,21 +1624,216 @@ Partimos de la consulta anterior y seguimos los siguientes pasos:
 
 `ROI = ((Revenue – Costo de campaña) / Costo de campaña) × 100` usando un `LEFT JOIN` entre `uber_viajes_bookings` (ingresos) y `uber_campanas_mercadeo` (inversión), agrupado por campaña.
 
-Concepto & lectura del ROI
+1. **Concepto & lectura del ROI**
 
-ROI positivo: la campaña fue rentable; negativo: quemó presupuesto.
+- **ROI positivo:** la campaña fue rentable; **negativo:** quemó presupuesto.
 
-No mide solo ventas, mide eficiencia de la inversión (ver lámina de fórmula).
+- No mide solo ventas, mide eficiencia de la inversión.
 
-Modelo y flujo
+2. **Modelo y flujo**
 
-Hechos: uber_viajes_bookings → valor_booking + campana_id.
+- **Hechos:** `uber_viajes_bookings` → valor_booking + campana_id.
+- **Dimensión:** `uber_campanas_mercadeo` → costo_campana.
+- **Flujo:** JOIN → agregar revenue por campaña → calcular ROI → ordenar.
 
-Dimensión: uber_campanas_mercadeo → costo_campana.
+3. **SQL base (revenue + costo por campaña)**
 
-Flujo: JOIN → agregar revenue por campaña → calcular ROI → ordenar (ver diagrama).
+`SELECT`
+  `uvb.campana_id,`
+  `ucm.campana_descripcion,`
+  `SUM(uvb.valor_booking)       AS total_revenue,`
+  `MAX(ucm.costo_campana)       AS marketing_cost   -- costo a nivel campaña`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_campanas_mercadeo AS ucm`
+       `ON ucm.campana_ID = uvb.campana_id`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31'  -- opcional`
+`GROUP BY uvb.campana_id, ucm.campana_descripcion;`
 
-SQL base (revenue + costo por campaña)
+4. **SQL con ROI y ranking**
+
+`SELECT`
+  `uvb.campana_id,`
+  `ucm.campana_descripcion AS campaign_name,`
+  `SUM(CAST(uvb.valor_booking AS numeric))         AS total_revenue,`
+  `MAX(ucm.costo_campana)                          AS marketing_cost,`
+  `ROUND(`
+    `(SUM(uvb.valor_booking) - MAX(ucm.costo_campana))`
+    `/ NULLIF(MAX(ucm.costo_campana), 0) * 100, 2`
+  `) AS ROI_pct`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_campanas_mercadeo AS ucm`
+       `ON ucm.campana_ID = uvb.campana_id`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31'`
+`GROUP BY uvb.campana_id, ucm.campana_descripcion`
+`ORDER BY ROI_pct DESC;`
+
+5. **Interpretación ejecutiva**
+
+- **“ROI 120%”** ⇒ por cada $1 invertido regresaron $2.20 (inversión $1 + ganancia $1.20).
+- **Úsarlo para priorizar:** subir presupuesto a campañas con ROI alto y volumen suficiente; revisar creatividades, segmentación o precios en ROI bajo.
+
+**Cómo hacerlo** 
+
+- Une bookings ↔ campañas por campana_ID (`LEFT JOIN`).
+- Agregar `SUM(valor_booking)` por campaña.
+- Traer una sola vez el `costo_campana` (usar `MAX/MIN`, no `SUM`).
+- Calcular `ROI_pct` con `NULLIF(costo,0)` y redondear con `ROUND(...,2)`.
+- Ordenar por ROI y revisar top/bottom para decisiones de inversión.
+
+**Errores comunes (y cómo evitarlos)**
+
+- ❌ Duplicar el costo al sumarlo por cada booking ✅ usar `MAX(ucm.costo_campana)` o agrupa costo antes.
+
+- ❌ División por cero ✅ `NULLIF(costo_campana, 0)`.
+
+- ❌ JOIN interno que “pierde” campañas sin bookings ✅ usar `LEFT JOIN`.
+
+- ❌ Fechas mal filtradas o mezcla de periodos ✅ fijar la ventana en `WHERE`.
+
+- ❌ Tipos numéricos que truncan porcentajes ✅ castear a `numeric/decimal`.
+
+- ❌ Confundir margen con ROI: margen divide por ingresos; ROI divide por costo de campaña.
+
+**Practica guiada Pt.1**
+
+**Contexto:** Marketing quiere un reporte del ROI de cada campaña en Q1 2024.
+
+**Etapa 1: Unir tablas**
+
+**Objetivo:** Unir viajes con campañas por `campaign_id` y traer `campana_id` (para validar el join).
+
+**Etapa 2: Ingresos y gasto de marketing**
+
+**Objetivo:** Calcular ingresos totales por campaña y traer costo de marketing.
+
+**Etapa 3: Contribución (ingresos − gasto)**
+
+**Objetivo:** Agregar una columna de contribución (o “utilidad bruta de campaña”): `revenue - spend`.
+
+**Etapa 4:** ROI (%) y orden
+
+**Objetivo:** Agregar ROI (%) y ordenar de mayor a menor ROI.
+
+**Estructura de las Tablas (Esquema)**
+
+A continuación, se detallan las columnas de cada tabla, que serán cruciales para los ejercicios:
+
+![uber_viajes_bookings](image-15.png)
+
+![uber_costo_viajes](image-16.png)
+
+![uber_campanas_mercadeo](image-17.png)
+
+1. **Etapa 1: Unir tablas**
+
+**Objetivo:** Unir viajes con campañas por `campaign_id `y traer `campana_id` (para validar el join).
+
+**Instrucciones:**
+
+- Usa `uber_viajes_bookings` como `uvb` y `uber_campanas_mercadeo` como `ucm`.
+- Haz un `LEFT JOIN` con la clave `uvb.campana_id = ucm.campana_ID`.
+- Selecciona `uvb.campana_id` y `ucm.costo_campana` para verificar el join.
+- Filtra por Q1 2024: `uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31'`.
+
+**Respuesta:**
+
+`SELECT`
+  `uvb.campana_id,`
+  `ucm.costo_campana`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_campanas_mercadeo AS ucm`
+  `ON uvb.campana_id = ucm.campana_ID`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31';`
+
+2. **Etapa 2: Ingresos y gasto de marketing**
+
+**Objetivo:** Calcular ingresos totales por campaña y traer costo de marketing.
+
+**Instrucciones**
+
+Partimos de la consulta anterior y seguimos los siguientes pasos:
+
+- Selecciona `uvb.campana_id`.
+- Calcula `SUM(uvb.valor_booking)` como total_revenue.
+- Selecciona `ucm.costo_campana` como marketing_cost.
+- Filtra por `Q1 2024`.
+- Agrupa por `uvb.campana_id` y `ucm.costo_campana`.
+
+**Respuesta:**
+
+`SELECT`
+  `uvb.campana_id,`
+  `SUM(uvb.valor_booking) AS total_revenue,`
+  `ucm.costo_campana      AS marketing_cost`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_campanas_mercadeo AS ucm`
+  `ON uvb.campana_id = ucm.campana_ID`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31'`
+`GROUP BY uvb.campana_id, ucm.costo_campana;`
+
+3. **Etapa 3: Contribución (ingresos − gasto)**
+
+**Objetivo:** Agregar una columna de contribución (o “utilidad bruta de campaña”): `revenue - spend`.
+
+**Instrucciones:**
+
+Partimos de la consulta anterior y seguimos los siguientes pasos:
+
+- Parte del código de la Etapa 2.
+- Agrega una columna calculada:
+  - `contribution = SUM(uvb.valor_booking) - ucm.costo_campana`
+- Mantén el mismo `GROUP BY` y `WHERE`.
+
+**Respuesta:**
+
+`SELECT`
+  `uvb.campana_id,`
+  `SUM(uvb.valor_booking) AS total_revenue,`
+  `ucm.costo_campana      AS marketing_cost,`
+  `(SUM(uvb.valor_booking) - ucm.costo_campana) AS contribution`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_campanas_mercadeo AS ucm`
+  `ON uvb.campana_id = ucm.campana_ID`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31'`
+`GROUP BY uvb.campana_id, ucm.costo_campana;`
+
+4. **Etapa 4: ROI (%) y orden**
+
+**Objetivo:** Agregar ROI (%) y ordenar de mayor a menor ROI.
+
+**Instrucciones:**
+
+Partimos de la consulta anterior y seguimos los siguientes pasos:
+
+- Agrega `ROI_pct = ((SUM(uvb.valor_booking) - ucm.costo_campana) * 100.0 / NULLIF(ucm.costo_campana, 0)).`
+- Ordena con `ORDER BY ROI_pct DESC`.
+
+**Respuesta:**
+
+`SELECT`
+  `uvb.campana_id,`
+  `SUM(uvb.valor_booking) AS total_revenue,`
+  `ucm.costo_campana      AS marketing_cost,`
+  `(SUM(uvb.valor_booking) - ucm.costo_campana) AS contribution,`
+  `((SUM(uvb.valor_booking) - ucm.costo_campana) * 100.0`
+    `/ NULLIF(ucm.costo_campana, 0)) AS ROI_pct`
+`FROM uber_viajes_bookings AS uvb`
+`LEFT JOIN uber_campanas_mercadeo AS ucm`
+  `ON uvb.campana_id = ucm.campana_ID`
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31'`
+`GROUP BY uvb.campana_id, ucm.costo_campana`
+`ORDER BY ROI_pct DESC;`
+
+
+
+
+
+
+
+
+
+
+
 
 
 
