@@ -1596,7 +1596,7 @@ Partimos de la consulta anterior y seguimos los siguientes pasos:
 
 **Respuesta:**
 
-`SELECT
+`SELECT`
   `uvb.ubicacion_inicio,`
   `SUM(uvb.valor_booking) AS total_revenue,`
   `SUM(COALESCE(ucv.costo_total, 0)) AS total_cost,`
@@ -1610,11 +1610,40 @@ Partimos de la consulta anterior y seguimos los siguientes pasos:
 `GROUP BY uvb.ubicacion_inicio`
 `ORDER BY margin_pct DESC;`
 
-
 <br><br>
 
 ### C3 - Lección 4: midiendo el ROI por campaña
-<br><br><br>
+<br>
+
+🎯 **Propósito de la lección**
+
+- **Conectar marketing con finanzas:** saber si las campañas recuperan lo invertido.
+- Calcular y comparar el `ROI (%)` por campaña para priorizar presupuesto.
+
+🧠 **Idea central**
+
+`ROI = ((Revenue – Costo de campaña) / Costo de campaña) × 100` usando un `LEFT JOIN` entre `uber_viajes_bookings` (ingresos) y `uber_campanas_mercadeo` (inversión), agrupado por campaña.
+
+Concepto & lectura del ROI
+
+ROI positivo: la campaña fue rentable; negativo: quemó presupuesto.
+
+No mide solo ventas, mide eficiencia de la inversión (ver lámina de fórmula).
+
+Modelo y flujo
+
+Hechos: uber_viajes_bookings → valor_booking + campana_id.
+
+Dimensión: uber_campanas_mercadeo → costo_campana.
+
+Flujo: JOIN → agregar revenue por campaña → calcular ROI → ordenar (ver diagrama).
+
+SQL base (revenue + costo por campaña)
+
+
+
+
+<br><br>
 
 ---
 ## Capitulo 4: Analizar datos con tablas dinámicas
