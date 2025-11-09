@@ -1957,14 +1957,177 @@ Partimos de la consulta anterior y seguimos los siguientes pasos:
 <br><br>
 
 ---
-## Capitulo 4: Analizar datos con tablas dinámicas
-### C4 - Lección 1:
-<br><br><br>
+## Capitulo 4: Estructurar, entregar y comunicar reportes financieros
+### C4 - Lección 1: Escribir consultas SQL limpias y precisas
+<br>
 
-### C4 - Lección 1:
-<br><br><br>
+**🎯 Propósito de la lección**
 
-### C4 - Lección 2:
+Adoptar un estándar de estilo SQL (formato, alias, comentarios y orden de cláusulas) para que las queries sean legibles, auditables y fáciles de mantener por cualquier miembro del equipo.
+
+**🧠 Idea central**
+
+El valor de una consulta no es solo que “corra”, sino que se entienda. La claridad se logra cuando:
+
+- las palabras clave están en MAYÚSCULA y hay una cláusula por línea;
+
+- se emplean alias cortos y descriptivos en snake_case;
+
+- lo complejo se documenta con comentarios;
+
+- se respeta un orden fijo de cláusulas;
+
+- y los resultados salen con nombres claros usando AS.
+
+**✅ Buenas prácticas de formato (estándar recomendado)**
+
+Orden canónico de cláusulas
+`SELECT` → `FROM` → `JOIN` → `WHERE` → `GROUP BY` → `HAVING` → `ORDER BY` → `LIMIT`
+
+**Reglas rápidas**
+
+- Palabras clave en **MAYÚSCULA**.
+- Una cláusula por línea y **2–4** espacios de sangría.
+- Comas al final de cada columna en el `SELECT`.
+- Evitar `SELECT *`.
+- `AS` obligatorio para columnas calculadas.
+- Nombres y alias en `snake_case`.
+- Expresiones largas bien parentizadas.
+- Usar `CTEs (WITH)` cuando la consulta crece.
+
+**🏷️ Alias claros y consistentes**
+
+- **Tablas:** alias cortos con intención (ej.: viajes para uber_viajes_bookings, costo para uber_costo_viajes).
+- **Columnas calculadas:** describen qué es y, si aplica, unidad (total_revenue, net_margin_pct).
+- Evitar alias crípticos (t1, a) o con espacios.
+
+**🗒️ Comentarios que aportan**
+
+**Una línea:** aclaran decisiones no obvias.
+
+-- Excluye 'Cancelled by Customer' para métricas operativas
+
+**En bloque:** contextualizan toda la consulta.
+
+/* Ingresos, costos y margen por tipo de vehículo – Q1 2024 */
+
+**🧱 Antes y después (misma salida, distinta calidad)**
+
+❌ **Versión difícil de leer**
+
+SELECT tipo_vehiculo, SUM(valor_booking) AS total_revenue, SUM(costo_total) AS total_cost FROM uber_viajes_bookings uvb INNER JOIN uber_costo_viajes ucv ON ucv.booking_id=uvb.booking_id WHERE uvb.estado_booking='Completed' AND uvb.fecha BETWEEN '2024-01-01' AND '2024-03-31' GROUP BY tipo_vehiculo ORDER BY total_revenue DESC;
+
+✅ **Versión limpia y precisa**
+
+/* Ingresos, costos y margen por tipo de vehículo – Q1 2024 */
+`SELECT`<br>
+    `viajes.tipo_vehiculo,`<br>
+    `SUM(viajes.valor_booking)               AS total_revenue,`<br>
+    `SUM(COALESCE(costo.costo_total, 0))     AS total_cost,`<br>
+    `ROUND(`<br>
+        `(SUM(viajes.valor_booking) - SUM(COALESCE(costo.costo_total, 0)))`<br>
+        `/ NULLIF(SUM(viajes.valor_booking), 0) * 100`<br>
+    `, 2)                                    AS net_margin_pct`<br>
+`FROM uber_viajes_bookings AS viajes`<br>
+`LEFT JOIN uber_costo_viajes AS costo`<br>
+  `ON costo.booking_id = viajes.booking_id`<br>
+`WHERE viajes.estado_booking = 'Completed'`<br>
+  `AND viajes.fecha BETWEEN '2024-01-01' AND '2024-03-31'`<br>
+`GROUP BY viajes.tipo_vehiculo`<br>
+`ORDER BY total_revenue DESC;`<br>
+
+**Errores comunes**
+
+- ❌ `SELECT *` ✅ definir columnas explícitas.
+- ❌ Mayúsculas/minúsculas mezcladas ✅ mayúsculas solo para SQL.
+- ❌ Alias inconsistentes ✅ fijar diccionario por proyecto.
+- ❌ Cálculos sin `AS` ✅ salida con nombres vagos.
+- ❌ `JOIN` sin condición clara ✅ siempre `tabla.key = tabla.key`.
+- ❌ Agregados filtrados en `WHERE` ✅ usar `HAVING`.
+- ❌ División por cero ✅ `NULLIF(x, 0)`.
+- ❌ `NULL` en aritmética ✅ `COALESCE`.
+- ❌ Comas perdidas ✅ una columna por línea, coma al final.
+- ❌ Sin comentarios en la lógica compleja ✅ añadir bloque inicial y notas puntuales.
+
+**Practica guiada**
+
+1. **Contexto:** El equipo de Experiencia de Usuario de Uber quiere descubrir qué campaña de marketing generó la mejor experiencia para los clientes.
+
+Para medirlo, el analista de Uber decidió usar el promedio de las calificaciones de los pasajeros (rating_cliente), pero solo de viajes completados (porque un viaje cancelado o pendiente no refleja la experiencia real del usuario).
+
+**El analista escribió esta query:**
+
+`SELECT campana_descripcion, AVG(rating_cliente) `
+`FROM uber_viajes_bookings v JOIN uber_campanas_mercadeo m ON v.campana_ID=m.campana_ID WHERE v.estado_booking = 'Completed' GROUP BY campana_descripcion ORDER BY AVG(rating_cliente) DESC;`
+
+**Tu objetivo:**
+
+👉 Reescribir la query aplicando buenas prácticas de SQL.
+
+**Respuesta:**
+
+/* 
+Consulta para conocer qué campaña generó la mejor experiencia al cliente.
+Se mide por el promedio de las calificaciones (rating_cliente) 
+en viajes completados.
+*/
+
+`SELECT`<br>
+    `campanas.campana_descripcion AS nombre_campana_marketing,`<br>
+    `AVG(viajes.rating_cliente) AS promedio_rating_clientes`<br>
+`FROM uber_viajes_bookings AS viajes`<br>
+`INNER JOIN uber_campanas_mercadeo AS campanas`<br>
+    `ON viajes.campana_id = campanas.campana_id`<br>
+`WHERE viajes.estado_booking = 'Completed'`<br>
+`GROUP BY campanas.campana_descripcion`<br>
+`ORDER BY promedio_rating_clientes DESC;`<br>
+
+2. **Contexto:** Ahora el equipo de Experiencia de Usuario ya no solo quiere analizar los viajes bien calificados, también busca detectar posibles problemas en la calidad del servicio.
+
+Una de las métricas clave es la tasa de cancelación, que muestra con qué frecuencia los viajes solicitados no llegan a completarse.
+
+📌 Una campaña con un porcentaje alto de cancelaciones puede ser una señal de alerta para el equipo de operaciones.
+
+La tasa de cancelación se calcula con la siguiente fórmula:
+
+![Tasa de cancelacion](image-18.png)
+
+Para calcularlo un colega escribió esta query:
+
+`SELECT campana_descripcion, COUNT(booking_id), SUM(CASE WHEN estado_booking = 'Cancelled' THEN 1 ELSE 0` `END), (SUM(CASE WHEN estado_booking = 'Cancelled' THEN 1 ELSE 0 END) * 100 / COUNT(booking_id))`
+`FROM uber_viajes_bookings INNER JOIN uber_campanas_mercadeo ON uber_viajes_bookings.campana_id =` `uber_campanas_mercadeo.campana_id GROUP BY campana_descripcion ORDER BY (SUM(CASE WHEN estado_booking = 'Cancelled' THEN 1 ELSE 0 END) * 100 / COUNT(booking_id)) DESC;`
+
+**Tu objetivo:**
+
+👉 Reescribir la query aplicando buenas prácticas de SQL.
+
+**Respuesta:**
+
+/* 
+Consulta para calcular la tasa de cancelación por campaña.
+Incluye:
+- Nombre de la campaña
+- Total de viajes
+- Viajes cancelados
+- Tasa de cancelación
+*/
+
+`SELECT`<br>
+    `campanas.campana_descripcion AS nombre_campana,`<br>
+    `COUNT(viajes.booking_id) AS total_viajes,`<br>
+    `SUM(CASE WHEN viajes.estado_booking = 'Cancelled' THEN 1 ELSE 0 END) AS total_cancelados,`<br>
+    -- porcentaje de viajes cancelados<br>
+    `(SUM(CASE WHEN viajes.estado_booking = 'Cancelled' THEN 1 ELSE 0 END) * 100`<br>
+        `/ COUNT(viajes.booking_id)) AS tasa_cancelacion`<br>
+`FROM uber_viajes_bookings AS viajes`<br>
+`INNER JOIN uber_campanas_mercadeo AS campanas`<br>
+    `ON viajes.campana_id = campanas.campana_id`<br>
+`GROUP BY campanas.campana_descripcion`<br>
+`ORDER BY tasa_cancelacion DESC;`<br>
+
+<br><br>
+
+### C4 - Lección 2: Organizar salidas SQL para reportes
 <br><br><br>
 
 ### C4 - Lección 3:
