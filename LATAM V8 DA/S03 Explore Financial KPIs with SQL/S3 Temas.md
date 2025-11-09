@@ -2261,14 +2261,107 @@ La query original es:
 ### C4 - Lección 3: Documentar consultas SQL con comentarios
 <br>
 
+**🎯 Propósito de la lección**
 
+Que la persona aprenda a dejar evidencia clara y estructurada dentro de sus queries para que cualquiera entienda qué hace cada bloque, por qué se tomaron decisiones (fechas, filtros, métricas) y cómo mantener la consulta con el tiempo.
 
+**🧠 Idea central**
 
+Los comentarios convierten una query correcta en una query comprensible, auditable y colaborativa. SQL ignora los comentarios, pero el equipo los agradece: explican, contextualizan y previenen errores.
 
+🧭 **Para tener en cuenta**
 
+- **Qué documentar**
 
+    - Propósito del análisis y pregunta de negocio.
 
+    - Filtros clave (fechas, estados, segmentos) y su justificación.
 
+    - Supuestos de negocio (ej.: “solo viajes Completed”).
+
+    - Definiciones de métricas derivadas (ej.: gross_profit, ROI).
+
+    - Motivos de joins, group by y ordenamientos.
+
+- **Formas de comentar en SQL**
+
+    - Comentario en línea: -- … para anotar una columna, un filtro o un paso puntual.
+
+    - Comentario en bloque: /* … */ para describir una sección completa o el objetivo general.
+
+- **Cuándo comentar**
+
+    - Siempre que exista lógica no obvia (fechas móviles, reglas de exclusión, deduplicaciones).
+
+    - Cuando se construyen métricas (márgenes, ROI, tasas) o hay decisiones analíticas que afectan resultados.
+
+    - En consultas que usarán otros equipos (Finanzas, Marketing, Operaciones) o quedarán en producción.
+
+- **Estructura recomendada**
+
+    - Encabezado de la query (bloque) → objetivo, fuente de datos, alcance temporal, autor/fecha.
+
+    - Secciones con título → extracción, filtros, uniones, agregaciones, métricas, ordenamiento.
+
+    - Notas en línea donde ayude (sobre cada cálculo o condición sensible).
+
+🛠️ **Buenas prácticas de documentación**
+
+- Primero el “por qué” (objetivo y alcance); luego el “qué” y “cómo”.
+- Una idea por comentario; oraciones cortas y sin jerga ambigua.
+- Consistencia en títulos de sección: `-- [01] Filtros,` `-- [02] Joins,` etc.
+- Explicar supuestos y riesgos conocidos (lag de datos, exclusiones, outliers tratados).
+- Anotar decisiones de performance (índices usados, CTEs, motivos de desnormalización).
+- Documentar versiones si la lógica cambia (fecha, autor y cambio resumido).
+
+**Errores comunes**
+
+- ❌ “Comentarios decorativos” que no agregan contexto → explicar propósito o motivo, no repetir el código.
+- ❌ No justificar filtros/fechas ✅ anotar por qué se eligió el rango/estado y el impacto esperado.
+- ❌ Métricas sin definición ✅ siempre incluir la fórmula y el manejo de NULL/0 (NULLIF/COALESCE).
+- ❌ Bloques largos sin secciones ✅ dividir en pasos con subtítulos numerados.
+- ❌ Comentarios desactualizados ✅ actualizar junto con el cambio de lógica (mismo commit).
+
+**Practica guiada**
+
+1. **Contexto:** Finanzas recibe esta query con comentarios incorrectamente definidos. Necesitamos actualizarlo para que sea más fácil de leer. 
+
+**Tu objetivo:**
+
+Lee los comentarios en el el codigo y colocalos en su lugar correcto. En la primera línea indicar qué hace la query con un comentario de bloque.
+
+**Respuesta:**
+
+/* La query lista el revenue total por tipo de vehículo */
+`SELECT  tipo_vehiculo, --selecciono el tipo de vehículo`<br>
+        `SUM(valor_booking) AS Revenue` --sumo el booking<br>
+`FROM uber_viajes_bookings` --elijo la tabla<br>
+`WHERE fecha BETWEEN '2024-01-01' AND '2024-03-31'` --El rango es Q1 2024<br>
+`GROUP BY tipo_vehiculo;` --agrupo por tipo de vehículo<br>
+
+2. **Contexto:** Marketing quiere analizar ingresos por campaña, pero la query no está documentada.
+
+**Tu objetivo:**
+
+1. Reescribir la query agregando comentarios claros: 
+
+- Indica el propósito de la query al principio de la misma (`-- Ingresos totales por campaña durante H1 2024`).
+- Indica dónde se selecciona el nombre de campaña (`-- Nombre de campaña`).
+- Indica dónde se selecciona los ingresos totales (`-- Ingresos totales`).
+- Indica dónde se hace la unión por ID de campaña (`-- Unión por ID de campaña`).
+
+2. Documentar que el análisis cubre H1 2024. (-- Primer semestre).
+
+**Respuesta:**
+
+-- Ingresos totales por campaña durante H1 2024
+`SELECT cm.campana_descripcion,` -- Nombre de campaña<br>
+			 `SUM(uvb.valor_booking) AS Revenue` -- Ingresos totales<br>
+`FROM uber_viajes_bookings uvb`<br>
+`LEFT JOIN uber_campanas_mercadeo cm`<br>
+  `ON uvb.campana_ID = cm.campana_ID` -- Unión por ID de campaña<br>
+`WHERE uvb.fecha BETWEEN '2024-01-01' AND '2024-06-30'` -- Primer semestre<br>
+`GROUP BY cm.campana_descripcion;`<br>
 
 <br><br>
 
