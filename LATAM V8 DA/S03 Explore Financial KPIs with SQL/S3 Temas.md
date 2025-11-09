@@ -2364,25 +2364,3 @@ Lee los comentarios en el el codigo y colocalos en su lugar correcto. En la prim
 `GROUP BY cm.campana_descripcion;`<br>
 
 <br><br>
-
-### C4 - Lección 4:
-<br><br><br>
-
-### C4 - Lección 5:
-<br><br><br>
-
-## Capitulo 5: Visualizar y destacar hallazgos clave
-### C4 - Lección 1:
-<br><br><br>
-
-### C4 - Lección 2:
-<br><br><br>
-
-### C4 - Lección 3:
-<br><br><br>
-
-### C4 - Lección 4:
-<br><br><br>
-
-### C4 - Lección 5:
-<br><br><br>
