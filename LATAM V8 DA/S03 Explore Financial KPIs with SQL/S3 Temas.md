@@ -2128,10 +2128,149 @@ Incluye:
 <br><br>
 
 ### C4 - Lección 2: Organizar salidas SQL para reportes
-<br><br><br>
+<br>
 
-### C4 - Lección 3:
-<br><br><br>
+**🎯 Propósito de la lección**
+
+Dejar las consultas listas para negocio: encabezados claros, orden lógico y resultados que puedan exportarse a Excel/Sheets o a un dashboard sin limpieza adicional.
+
+**🧠 Idea central**
+
+No basta con que la query funcione; el resultado debe “hablar” el lenguaje del negocio. Para ello se usan alias descriptivos, orden de columnas y filas con criterio empresarial y nombres consistentes y “seguros para CSV”.
+
+**🧩 Conceptos y patrones**
+
+- **Alias de negocio (AS):** traducen términos técnicos a nombres comprensibles (p. ej., `valor_booking AS ingreso`, `costo_total AS costo_operativo`, `fecha AS fecha_del_viaje`).
+
+- **Orden lógico de columnas:** primero dimensiones (fecha, ciudad, tipo), luego métricas (ingreso, costo, margen).
+
+- **Orden de filas con sentido de negocio:** `ORDER BY ingreso DESC` para priorizar lo importante (más rentables primero, más cancelaciones, etc.).
+
+- **Outputs “CSV-safe”:** minúsculas, sin tildes ni espacios ni símbolos; usar guion bajo (`ingreso_total`, no Ingreso Total $).
+
+- **Consistencia entre consultas:** mismo nombre para la misma métrica en todos los reportes.
+
+- **Antes vs. después (apoyado por las capturas):** se mostró cómo un resultado con encabezados técnicos y desordenados cambia a una vista con alias claros y ordenados, lista para exportación.
+
+**Query modelo (con alias, orden de columnas y filas)**
+
+`SELECT`<br>
+  `v.booking_id              AS id_viaje,`<br>
+  `v.fecha                   AS fecha_del_viaje,`<br>
+  `v.hora                    AS hora_del_viaje,`<br>
+  `v.valor_booking           AS ingreso,`<br>
+  `c.costo_total             AS costo_operativo,`<br>
+  `v.estado_booking          AS estado_del_viaje`<br>
+`FROM uber_viajes_bookings AS v`<br>
+`INNER JOIN uber_costo_viajes AS c`<br>
+  `ON c.booking_id = v.booking_id`<br>
+`WHERE v.estado_booking = 'Completed'`<br>
+`ORDER BY ingreso DESC;`<br>
+
+**Claves:** alias “de negocio”, dimensiones→métricas, orden por desempeño.
+
+**Errores comunes**
+
+- ❌ Encabezados técnicos (p. ej., `valor_booking`, `costo_total`) en reportes para negocio.
+- ❌ Inconsistencia de nombres entre consultas (`ingreso` vs `venta`).
+- ❌ Símbolos/espacios/tildes en alias (rompen CSV/automatizaciones).
+- ❌ Orden aleatorio de columnas/filas (el usuario debe reordenar manualmente).
+- ❌ No castear/roundear importes y fechas → resultados difíciles de leer.
+- ❌ Olvidar `COALESCE` → vacíos o `NULL` en métricas exportadas.
+
+**Practica guiada**
+
+1. **Contexto:** El área de Operaciones está evaluando la rentabilidad de los vehículos. Quieren saber qué tipo de vehículo aporta más al negocio, considerando los ingresos generados y los costos que implican operarlo.
+
+Necesitan un reporte con:
+
+- Tipo de vehículo.
+- Número de viajes completados.
+- Ingreso promedio por viaje (valor_booking).
+- Costo promedio por viaje (costo_total).
+- Ingreso neto promedio (valor_booking - costo_total).
+- El archivo se abrirá en Google Sheets, por lo que la query debe estar lista para exportarse.
+
+📌 **Nota:** Usaremos promedios (AVG) porque el objetivo es comparar la rentabilidad por viaje de cada tipo de vehículo. Si usáramos SUM, los resultados se inclinarían hacia el vehículo que más viajes hace, aunque no sea el más eficiente.
+
+La query original es:
+
+`SELECT`<br>
+`viajes.tipo_vehiculo,`<br>
+`COUNT(*) AS viajes,`<br>
+`AVG(viajes.valor_booking) AS valor_prom,`<br>
+`AVG(costo.costo_total) AS costo_prom,`<br>
+`AVG(viajes.valor_booking - costo.costo_total) neto_prom`<br>
+`FROM uber_viajes_bookings viajes`<br>
+`INNER JOIN uber_costo_viajes AS costo`<br>
+    `ON viajes.booking_id = costo.booking_id`<br>
+`WHERE viajes.estado_booking = 'Completed'`<br>
+`GROUP BY viajes.tipo_vehiculo`<br>
+`ORDER BY valor_prom DESC;`<br>
+
+**Tu objetivo:**
+
+1. Usar alias claros
+- ingreso_promedio
+- costo_promedio
+- ingreso_neto_promedio
+
+2. Ordenar los resultados de mayor a menor ingreso neto promedio.
+
+**Respuesta:**
+
+`SELECT`<br>
+    `viajes.tipo_vehiculo AS tipo_vehiculo,`<br>
+    `COUNT(*) AS viajes_completados,`<br>
+    `AVG(viajes.valor_booking) AS ingreso_promedio,`<br>
+    `AVG(costo.costo_total) AS costo_promedio,`<br>
+    `AVG(viajes.valor_booking - costo.costo_total) AS ingreso_neto_promedio`<br>
+`FROM uber_viajes_bookings viajes`<br>
+`INNER JOIN uber_costo_viajes AS costo`<br>
+    `ON viajes.booking_id = costo.booking_id`<br>
+`WHERE viajes.estado_booking = 'Completed'`<br>
+`GROUP BY viajes.tipo_vehiculo`<br>
+`ORDER BY ingreso_neto_promedio DESC;`<br>
+
+2. **Contexto:** El área de Marketing quiere medir el impacto de sus campañas. Necesitan un reporte en Excel o Google Sheets que muestre qué campaña generó más ingresos y cuántos viajes completó cada campaña.
+
+**Instrucciones paso a paso:**
+
+- Unir `uber_viajes_bookings` con `uber_campanas_mercadeo`.
+- Agrupar por `campana_nombre` como `nombre_campana`.
+- Calcular ingresos totales (`SUM(valor_booking`)) como `ingresos`.
+- Hacer un recuento de todos los viajes filtrados (COUNT(*))
+- Incluir filtro en donde `estado_booking` = 'Completed', para tener en cuenta únicamente viajes finalizados
+- Ordenar de mayor a menor ingresos.
+
+**Respuesta:**
+
+`SELECT`<br>
+    `campana.campana_descripcion AS nombre_campana,`<br>
+    `SUM(viajes.valor_booking) AS ingresos,`<br>
+    `COUNT(*) AS viajes_completados`<br>
+`FROM uber_viajes_bookings viajes`<br>
+`LEFT JOIN uber_campanas_mercadeo campana`<br>
+  `ON viajes.campana_ID = campana.campana_ID`<br>
+`WHERE viajes.estado_booking = 'Completed'`<br>
+`GROUP BY campana.campana_descripcion`<br>
+`ORDER BY ingresos DESC;`<br>
+
+<br><br>
+
+### C4 - Lección 3: Documentar consultas SQL con comentarios
+<br>
+
+
+
+
+
+
+
+
+
+
+<br><br>
 
 ### C4 - Lección 4:
 <br><br><br>
