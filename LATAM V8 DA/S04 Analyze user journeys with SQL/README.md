@@ -17,5 +17,5 @@
 
 ### Proyecto
 
-- **Link al notebook del proyecto:** 
-- **Link al Google Sheets del proyecto:** 
+- **Link al notebook del proyecto:** https://github.com/tripleten-com/projects-da-ds/blob/9592a84bf33389554e45770b9c80756a1611be3a/LATAM%20V8%20DA/S04%20Analyze%20user%20journeys%20with%20SQL/S4_project_Spanish.ipynb
+- **Link al Google Sheets del proyecto:** https://docs.google.com/spreadsheets/d/1dKzNoS3qDhD7LIitaE77ZCNF44AVgDo9/edit?usp=sharing&ouid=107528237327491975411&rtpof=true&sd=true
