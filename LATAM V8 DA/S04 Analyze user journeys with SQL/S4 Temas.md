@@ -7,9 +7,7 @@
 ### C1 - Lección 1: Entendiendo un journey en los datos
 <br>
 
-| # | Nombre Proyecto | Tecnologías | Descripción | Usos o aplicabilidad | Link |
-|---|-----------------|-------------|-------------|-----------------------|------|
-| 1 | dsfsdf | Python, SQL | ETL para datos financieros | Entidades bancarias que necesitan automatizar procesos de extracción diaria de los datos | asdasd |
+
 
 <br>
 
