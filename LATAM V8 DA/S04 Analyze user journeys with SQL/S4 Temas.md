@@ -329,6 +329,117 @@ Detectar si existen duplicados en purchase. Un duplicado es una operación reali
 ### C2 - Lección 1: Extrayendo y filtrando eventos relevantes con CTEs
 <br>
 
+**🎯 Propósito de la lección**
+
+Transformar una consulta suelta de conteos de eventos en un embudo (funnel) claro y ordenado usando CTEs (Common Table Expressions), de forma que cada etapa del journey sea un bloque con nombre y podamos imponer el orden lógico del flujo (registro/entrada → exploración → carrito → checkout → compra).
+
+**🧠 Idea central**
+
+Las CTEs permiten modularizar la query: cada etapa del embudo es un subconjunto con nombre (p. ej., cte_view_item) que devuelve usuarios únicos que alcanzaron esa etapa. Luego, un SELECT final combina esas CTEs para contar usuarios por etapa (con COUNT(DISTINCT user_id)), ordenar el funnel y dejar la consulta legible, mantenible y depurable.
+
+**📚 Temáticas trabajadas**
+
+1. **Por qué CTEs para funnels**
+
+    - Problema inicial: el conteo por event_name sale “desordenado” y mezcla granularidades.
+    - Solución: CTEs con WITH nombre_cte AS ( subconsulta ) para separar etapas y documentarlas.
+
+2. **Diseño del embudo y orden explícito**
+
+    - Definir etapas clave y su orden (ej.: page_view → view_item → add_to_cart → begin_checkout → purchase).
+    - Imponer el orden en el resultado con ORDER BY CASE … END.
+
+3. **CTE de etapa (patrón base)**
+
+    `WITH cte_view_item AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'view_item'`
+    `)`
+    `SELECT COUNT(*) AS usuarios FROM cte_view_item;`
+
+4. **Construcción incremental**
+
+    - Agregar CTEs por cada etapa: cte_add_to_cart, cte_begin_checkout, cte_purchase.
+    - SELECT final que combine y ordene:
+
+    `WITH`
+    `cte_view_item AS ( ... ),`
+    `cte_add_to_cart AS ( ... ),`
+    `cte_begin_checkout AS ( ... ),`
+    `cte_purchase AS ( ... )`
+    `SELECT etapa, usuarios`
+    `FROM (`
+    `SELECT 'view_item' AS etapa, COUNT(*) AS usuarios FROM cte_view_item`
+    `UNION ALL`
+    `SELECT 'add_to_cart', COUNT(*) FROM cte_add_to_cart`
+    `UNION ALL`
+    `SELECT 'begin_checkout', COUNT(*) FROM cte_begin_checkout`
+    `UNION ALL`
+    `SELECT 'purchase', COUNT(*) FROM cte_purchase`
+    `) t`
+    `ORDER BY CASE etapa`
+    `WHEN 'view_item' THEN 1`
+    `WHEN 'add_to_cart' THEN 2`
+    `WHEN 'begin_checkout' THEN 3`
+    `WHEN 'purchase' THEN 4`
+    `END;`
+
+    **Ventaja:** salida legible y en orden del journey.
+
+5. **Granularidad del análisis**
+
+    - Por usuario: usa user_id (lealtad/avance individual).
+    - Por sesión: usa session_id (eficiencia de interfaz).
+    - Dejar notado en la lección cuál se usa y por qué.
+
+**⚠️ Errores comunes y cómo evitarlos**
+
+- ❌ Contar eventos en vez de usuarios por etapa. ✅ Usa COUNT(DISTINCT user_id) dentro de cada CTE o en el SELECT final para tasas de avance.
+- ❌ Confundir “signup” con “session_start”. ✅ Alinea nombres del copy con el filtro real (event_name = 'sign_up' o session_start) y mantenlo consistente en todo el capítulo.
+- ❌ Embudo sin orden explícito. ✅ Ordena la salida con ORDER BY CASE etapa … END o con una columna step_order.
+- ❌ Granularidad incorrecta (usuario vs sesión). ✅ Define al inicio si el funnel es por usuario o por sesión y ajusta los DISTINCT y joins.
+- ❌ CTEs ruidosas (demasiadas columnas / sin DISTINCT). ✅ Mantén cada CTE mínima: SELECT DISTINCT user_id FROM … WHERE event_name = '…'.
+- ❌ No documentar cada etapa. ✅ Añade un comentario corto por CTE (qué representa y por qué es necesaria).
+
+**Práctica aplicada**
+
+1. **Objetivo:** Aislar a los usuarios que iniciaron sesión para usarlos luego en un funnel. 
+
+La consulta intenta crear una CTE, pero tiene errores de sintaxis.
+
+**Instrucciones:**
+
+- Arregla la CTE y el SELECT final para contar a los usuarios.
+- Muestra el conteo con el alias total_usuarios.
+
+**Respuesta:**
+
+    `WITH cte_session_start AS(`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'session_start'`
+    `)`
+    `SELECT COUNT(*) AS total_usuarios`
+    `FROM cte_session_start;`
+
+2. **Objetivo:** Producto quiere saber cuántos usuarios agregaron al carrito en enero 2021, continuamos con la tabla ecommerce_jan_2021.
+
+**Instrucciones:**
+
+- Crear una CTE llamada cte_add_to_cart que devuelva los usuarios únicos que agregaron un producto al carrito (add_to_cart).
+- Escribir el SELECT final que muestre el conteo como total_add_to_cart.
+
+**Respuesta:**
+
+    `WITH cte_add_to_cart AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'add_to_cart'`
+    `)`
+    `SELECT COUNT(*) AS total_add_to_cart`
+    `FROM cte_add_to_cart;`
+
 <br>
 
 ### C2 - Lección 2: Escribir funnels con CTEs
