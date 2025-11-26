@@ -402,7 +402,7 @@ Las CTEs permiten modularizar la query: cada etapa del embudo es un subconjunto 
 - ❌ CTEs ruidosas (demasiadas columnas / sin DISTINCT). ✅ Mantén cada CTE mínima: SELECT DISTINCT user_id FROM … WHERE event_name = '…'.
 - ❌ No documentar cada etapa. ✅ Añade un comentario corto por CTE (qué representa y por qué es necesaria).
 
-**Práctica aplicada**
+**Práctica guiada**
 
 1. **Objetivo:** Aislar a los usuarios que iniciaron sesión para usarlos luego en un funnel. 
 
@@ -445,15 +445,443 @@ La consulta intenta crear una CTE, pero tiene errores de sintaxis.
 ### C2 - Lección 2: Escribir funnels con CTEs
 <br>
 
+**🎯 Propósito de la lección**
+
+Construir un funnel de usuario con SQL ordenado y modular utilizando CTEs (Common Table Expressions), y comparar dos estrategias para obtener métricas por etapa: subconsultas en el SELECT versus LEFT JOINs entre CTEs, cuidando el conteo correcto de usuarios y la relación entre pasos del embudo.
+
+**🧠 Idea central**
+
+Dividir el embudo en bloques nombrados (CTEs) —p. ej., signup → add_to_cart → purchase—, deduplicar por usuario en cada bloque y luego ensamblarlos en un SELECT final. Las CTEs mejoran legibilidad, prueba, y mantenimiento; los LEFT JOINs suelen ofrecer mejor eficiencia y permiten calcular conversiones encadenadas con menos relecturas.
+
+**Temáticas trabajadas**
+
+1. **CTEs en SQL – sintaxis y patrón mental**
+
+    - **Estructura:** WITH nombre_cte AS ( … ) SELECT …
+    - Cada CTE representa una etapa del funnel. Ejemplo base:
+
+    `WITH cte_signup AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'signup'   -- o 'session_start' (unificar criterio)`
+    `),`
+    `cte_cart AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'add_to_cart'`
+    `),`
+    `cte_purchase AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'purchase'`
+    `)`
+
+    - **Buenas prácticas:** nombres explícitos, comentarios arriba de cada CTE (qué filtra, por qué), y DISTINCT user_id para medir personas, no eventos.
+
+2. **Dos estrategias de salida**
+
+    **A) Subconsultas en el SELECT (más simple de leer):**
+
+    `SELECT`
+    `(SELECT COUNT(*) FROM cte_signup)   AS signup_users,`
+    `(SELECT COUNT(*) FROM cte_cart)     AS cart_users,`
+    `(SELECT COUNT(*) FROM cte_purchase) AS purchase_users;`
+
+
+    **Ventajas:** claridad y rapidez para explicar. Desventaja: no encadena pasos por sí sola; si hay que estimar conversión A→B, se debe controlar población.
+
+    **B) LEFT JOINs (más eficiente y escalable):**
+
+    `SELECT`
+    `COUNT(DISTINCT s.user_id) AS signup_users,`
+    `COUNT(DISTINCT c.user_id) AS cart_users,`
+    `COUNT(DISTINCT p.user_id) AS purchase_users`
+    `FROM cte_signup  s`
+    `LEFT JOIN cte_cart     c ON s.user_id = c.user_id`
+    `LEFT JOIN cte_purchase p ON s.user_id = p.user_id;`
+
+3. **Conversiones encadenadas (evitar sobreestimación)**
+
+    - Si se quiere conversiones reales A→B, asegura la dependencia entre etapas. Opciones:
+
+    - Restringir CTEs encadenando:
+
+        `cte_cart AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'add_to_cart'`
+            `AND user_id IN (SELECT user_id FROM cte_signup)`
+        `)`
+
+    - O calcular intersecciones con joins/INTERSECT para A∩B, B∩C.
+
+4. **Control de duplicados y orden temporal**
+
+    Cada CTE deduplica por usuario. Si necesitas el primer momento de la etapa:
+
+    `SELECT user_id, MIN(event_timestamp) AS first_ts`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'add_to_cart'`
+    `GROUP BY user_id`
+
+    Esto evita inconsistencias al ordenar journeys y mejora la trazabilidad por usuario.
+
+5. **Rendimiento y mantenibilidad**
+
+    - Índices/particiones o clustering en event_name, user_id, event_timestamp.
+    - Para >100M eventos, evaluar APPROX_COUNT_DISTINCT(user_id) si la precisión lo permite.
+    - Comentar el SQL y usar una convención: `cte_<etapa>_users`, fechas en WHERE, y nota de supuestos (p. ej., session_start se usa como equivalente a signup).
+
+**Errores comunes y cómo evitarlos**
+
+- ❌ Contar eventos en vez de usuarios por etapa. ✅ Usa COUNT(DISTINCT user_id) o deduplica en cada CTE y luego COUNT(*).
+- ❌ Calcular conversión A→B con poblaciones no encadenadas (totales independientes). ✅ Encadena CTEs (IN/joins) o calcula A∩B explícitamente.
+- ❌ Inconsistencia de nombres de evento (signup vs session_start). ✅ Unifica el evento o documenta el mapeo (proxy) en el código y el texto.
+- ❌ Duplicados por usuario dentro de una etapa. ✅ SELECT DISTINCT user_id y, si importa el orden, MIN(event_timestamp) por usuario.
+- ❌ Cambiar a INNER JOIN sin analizar el impacto. ✅ Mantén LEFT JOIN si quieres conservar la población de la etapa A como base del funnel.
+- ❌ Diferencias entre conteos con subconsultas y joins sin explicación. ✅ Explica que subconsultas leen varias veces y joins consolidan; valida cardinalidad.
+- ❌ Omitir límites temporales. ✅ Filtra el período analizado (ej.: Enero 2021) para comparabilidad.
+- ❌ SQL poco legible. ✅ Nombra CTEs por etapa y agrega comentarios breves (“filtra usuarios únicos que …”).
+
+**Práctica guiada**
+
+1. **Objetivo:** Producto quiere medir cuántos usuarios únicos avanzan en el funnel básico.
+
+Continuamos con la tabla `ecommerce_jan_2021`.
+
+**Instrucciones:**
+
+- Crea una CTE para signup con el evento session_start.
+- Crea una CTE para add_to_cart.
+- Crea una CTE para purchase.
+- Muestra en un solo SELECT el conteo de cada etapa.
+- Utiliza sub consultas en el SELECT final para realizar los conteos por etapa.
+
+**Respuesta:**
+
+    `WITH cte_signup AS (``
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'session_start'`
+    `),`
+    `cte_cart AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'add_to_cart'`
+    `),`
+    `cte_purchase AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'purchase'`
+    `)`
+    `SELECT`
+    `(SELECT COUNT(*) FROM cte_signup)   AS signup_users,`
+    `(SELECT COUNT(*) FROM cte_cart)     AS cart_users,`
+    `(SELECT COUNT(*) FROM cte_purchase) AS purchase_users;`
+
+2. **Objetivo:** Marketing quiere analizar otro funnel:
+view_item → begin_checkout → purchase.
+
+**Instrucciones:**
+
+1. Crea 3 CTEs (una por cada evento).
+    - cte_view
+    - cte_checkout
+    - cte_purchase
+2. Muestra los conteos de cada etapa en un SELECT final.
+3. Utiliza sub consultas en el SELECT final para realizar los conteos por etapa. Usa los siguientes nombres para las columnas de la tabla final:
+    - view_users
+    - checkout_users
+    - purchase_users
+4. Identifica en qué etapa se pierden más usuarios.
+
+**Respuesta:**
+
+    `WITH cte_view AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'view_item'`
+    `),`
+    `cte_checkout AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'begin_checkout'`
+    `),`
+    `cte_purchase AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'purchase'`
+    `)`
+    `SELECT`
+    `(SELECT COUNT(*) FROM cte_view)     AS view_users,`
+    `(SELECT COUNT(*) FROM cte_checkout) AS checkout_users,`
+    `(SELECT COUNT(*) FROM cte_purchase) AS purchase_users;`
+
 <br>
 
 ### C2 - Lección 3: Contando usuarios en cada etapa
 <br>
 
+**🎯 Propósito de la lección**
+
+Calcular, con una sola consulta clara y robusta, cuántos usuarios únicos llegan a cada etapa del funnel y qué porcentaje se pierde entre pasos consecutivos (drop-off) para detectar dónde se estrecha el embudo y priorizar mejoras.
+
+**🧠 Idea central**
+
+Modelamos cada paso del funnel como una CTE (WITH … AS …) que guarda usuarios únicos por evento (p. ej., `session_start` → `add_to_cart` → `purchase`). Luego, en el SELECT final:
+
+- contamos usuarios por etapa con COUNT(*) sobre cada CTE;
+- calculamos conversión y drop-off entre etapas usando aritmética simple y NULLIF para evitar divisiones por cero;
+- opcionalmente, normalizamos el resultado en formato “largo” para reportar etapa por etapa con LAG().
+
+**📚 Temáticas trabajadas**
+
+1. **CTEs por etapa (usuarios únicos)**
+
+    `WITH cte_signup AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name IN ('session_start','sign_up')`
+    `),`
+    `cte_cart AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'add_to_cart'`
+    `),`
+    `cte_purchase AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'purchase'`
+    `)`
+
+2. **Conteos + drop-off + conversión en una sola salida**
+
+    `SELECT`
+    `(SELECT COUNT(*) FROM cte_signup)   AS signup_users,`
+    `(SELECT COUNT(*) FROM cte_cart)     AS cart_users,`
+    `(SELECT COUNT(*) FROM cte_purchase) AS purchase_users,`
+
+    `-- % que se pierde de signup -> cart`
+    `ROUND(`
+       `((SELECT COUNT(*) FROM cte_signup) - (SELECT COUNT(*) FROM cte_cart))`
+        `/ NULLIF((SELECT COUNT(*) FROM cte_signup), 0.0) * 100, 2`
+    `) AS dropoff_after_signup_pct,`
+
+    `-- % que se pierde de cart -> purchase`
+    `ROUND(`
+        `((SELECT COUNT(*) FROM cte_cart) - (SELECT COUNT(*) FROM cte_purchase))`
+        `/ NULLIF((SELECT COUNT(*) FROM cte_cart), 0.0) * 100, 2`
+    `) AS dropoff_after_cart_pct,`
+
+    `-- conversiones útiles`
+    `ROUND((SELECT COUNT(*) FROM cte_cart) / NULLIF((SELECT COUNT(*) FROM cte_signup), 0.0) * 100, 2)`
+        `AS conv_signup_to_cart_pct,`
+    `ROUND((SELECT COUNT(*) FROM cte_purchase) / NULLIF((SELECT COUNT(*) FROM cte_cart), 0.0) * 100, 2)`
+        `AS conv_cart_to_purchase_pct,`
+    `ROUND((SELECT COUNT(*) FROM cte_purchase) / NULLIF((SELECT COUNT(*) FROM cte_signup), 0.0) * 100, 2)`
+        `AS conv_signup_to_purchase_pct;`
+
+3. **Buenas prácticas de estabilidad**
+
+- Usa `DISTINCT user_id` dentro de cada CTE para evitar doble conteo.
+
+- Aplica `NULLIF(…,0)` en divisiones y `ROUND` para porcentajes legibles.
+
+- Si tu producto tiene sinónimos de eventos, normalízalos con IN (…).
+
+- Si necesitas asegurar una sola ocurrencia por usuario/etapa, deduplica con `ROW_NUMBER()` por `user_id`, `event_name ORDER BY event_timestamp`.
+
+**Errores comunes y cómo evitarlos**
+
+- ❌ Contar eventos en vez de usuarios por etapa. ✅ Usa COUNT(DISTINCT user_id) dentro de cada CTE.
+- ❌ Comparar etapas con ventanas temporales distintas (p. ej., signup en enero y purchase en todo el año). ✅ Filtra el mismo rango temporal para todas las CTE (ej. WHERE event_date BETWEEN '2021-01-01' AND '2021-01-31').
+- ❌ No controlar divisiones por cero (embudos con 0 usuarios en la etapa anterior). ✅ Protege con NULLIF(denominador,0) y muestra 0/NULL según tu regla de negocio.
+- ❌ Olvidar sinónimos de eventos (session_start vs sign_up). ✅ Unifica con IN ('session_start','sign_up') o crea una CTE de mapeo.
+- ❌ Duplicados por múltiples hits válidos del mismo usuario en una etapa. ✅ Forza unicidad por user_id dentro de cada CTE (o toma el primer hit con ROW_NUMBER() y filtra WHERE rn=1).
+- ❌ Orden lógico implícito. ✅ Define el orden del funnel explícitamente (stage_order) para que LAG() y los cálculos sean consistentes.
+
+**Práctica guiada**
+
+1. **Objetivo:** Marketing quiere ver el funnel básico de los siguientes pasos: 
+
+add_to_cart → begin_checkout → purchase
+
+![alt text](image-1.png)
+
+**Instrucciones:**
+
+- Calcular el drop-off entre add_to_cart y begin_checkout.
+- Calcular el drop-ff entre begin_checkout y purchase
+
+**Respuesta:**
+
+    `WITH cte_cart AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'add_to_cart'`
+    `),`
+    `cte_checkout AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'begin_checkout'`
+    `),`
+    `cte_purchase AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'purchase'`
+    `)`
+    `SELECT`
+    `(SELECT COUNT(*) FROM cte_cart)     AS cart_users,`
+    `(SELECT COUNT(*) FROM cte_checkout) AS checkout_users,`
+    `(SELECT COUNT(*) FROM cte_purchase) AS purchase_users,`
+    `((SELECT COUNT(*) FROM cte_cart) - (SELECT COUNT(*) FROM cte_checkout)) * 100`
+        `/ NULLIF((SELECT COUNT(*) FROM cte_cart), 0) AS dropoff_after_cart_pct,`
+    `((SELECT COUNT(*) FROM cte_checkout) - (SELECT COUNT(*) FROM cte_purchase)) * 100`
+        `/ NULLIF((SELECT COUNT(*) FROM cte_checkout), 0) AS dropoff_after_checkout_pct;`
+
+2. **Objetivo:** El equipo de producto quiere identificar en qué punto del recorrido los usuarios interesados dejan de avanzar hacia la compra.
+
+Para ello, construirás un funnel con las etapas iniciales del proceso:
+
+view_item, add_to_cart y begin_checkout.
+
+![alt text](image-2.png)
+
+**Instrucciones:**
+
+Continuamos con la tabla ecommerce_jan_2021.
+
+- Crea tres CTEs que representen las etapas del funnel (cte_view, cte_cart, cte_checkout).
+- Muestra el número de usuarios únicos en cada etapa.
+- Calcula el porcentaje de abandono (drop-off) entre cada paso del funnel. Usa los alias 
+- dropoff_after_view_pct y dropoff_after_cart_pct respectivamente.
+- Presenta los resultados en una tabla final que muestre tanto los conteos como los porcentajes.
+
+**Respuesta:**
+
+    `WITH cte_view AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'view_item'`
+    `),`
+    `cte_cart AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'add_to_cart'`
+    `),`
+    `cte_checkout AS (`
+    `SELECT DISTINCT user_id`
+    `FROM ecommerce_jan_2021`
+    `WHERE event_name = 'begin_checkout'`
+    `)`
+    `SELECT`
+    `(SELECT COUNT(*) FROM cte_view)     AS viewed_products,`
+    `(SELECT COUNT(*) FROM cte_cart)     AS added_to_cart,`
+    `(SELECT COUNT(*) FROM cte_checkout) AS started_checkout,`
+    `((SELECT COUNT(*) FROM cte_view) - (SELECT COUNT(*) FROM cte_cart)) * 100`
+        `/ NULLIF((SELECT COUNT(*) FROM cte_view), 0) AS dropoff_after_view_pct,`
+    `((SELECT COUNT(*) FROM cte_cart) - (SELECT COUNT(*) FROM cte_checkout)) * 100`
+        `/ NULLIF((SELECT COUNT(*) FROM cte_cart), 0) AS dropoff_after_cart_pct;`
+
 <br>
 
 ### C2 - Lección 4: Analizando tasas de conversión y abandono
 <br>
+
+**🎯 Propósito de la lección**
+
+Transformar la salida del funnel en métricas interpretables: usuarios únicos por etapa, conversión entre etapas, drop-off entre etapas y conversión global; y convertir esos números en insights accionables que prioricen mejoras del producto/UX.
+
+**🧠 Idea central**
+
+Con CTEs que representan cada paso del funnel, puedes calcular de forma consistente:
+
+    - Usuarios únicos por etapa (COUNT(*) sobre CTEs con SELECT DISTINCT user_id).
+    - Conversión etapa→etapa next/prev * 100.
+    - Drop-off etapa→etapa (prev - next)/prev * 100.
+    - Conversión acumulada desde el inicio hasta purchase.
+    - Luego interpretas: detectas el mayor drop-off, formulas hipótesis (precio, relevancia, fricción), y cierras con un mini-reporte C → F → I (Context, Finding, Insight).
+
+**Temáticas trabajadas**
+
+1. Estandarización del funnel: page_view → view_item → add_to_cart → begin_checkout → purchase. Aclara si el capítulo usará este orden (evita mezclar con session_start/signup).
+2. CTEs por etapa con usuarios únicos: SELECT DISTINCT user_id en cada CTE para no contar duplicados.
+3. Tabla de conteos: CTE/consulta counts que expone *_users por etapa y sirve de base para todos los cálculos.
+4. Conversión entre etapas: ROUND(100.0 * next / NULLIF(prev,0), 1) para cada transición.
+5. Drop-off entre etapas: ROUND(100.0 * (1 - next/NULLIF(prev,0)), 1) equivalente a (prev - next)/prev * 100.
+6. Conversión acumulada: ROUND(100.0 * purchase_users / NULLIF(page_view_users,0), 2).
+7. Formateo y robustez: NULLIF(...,0) para evitar división por cero y ROUND para lecturas limpias.
+8. Lectura accionable: detectar el máximo drop-off, proponer hipótesis, priorizar pruebas (pricing, copia, visibilidad CTA, tiempo de carga, etc.).
+9. Reporte C→F→I: guía para cerrar cada análisis con un insight ejecutable (no solo números).
+
+**SQL recomendado (limpio, con conversión y abandono)**
+
+    `WITH`
+    `cte_page_view AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'page_view'`
+    `),`
+    `cte_view_item AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'view_item'`
+    `),`
+    `cte_add_to_cart AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'add_to_cart'`
+    `),`
+    `cte_begin_checkout AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'begin_checkout'`
+    `),`
+    `cte_purchase AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'purchase'`
+    `),`
+    `counts AS (`
+       `SELECT`
+        `(SELECT COUNT(*) FROM cte_page_view)     AS page_view_users,`
+        `(SELECT COUNT(*) FROM cte_view_item)     AS view_item_users,`
+        `(SELECT COUNT(*) FROM cte_add_to_cart)   AS add_to_cart_users,`
+        `(SELECT COUNT(*) FROM cte_begin_checkout) AS begin_checkout_users,`
+        `(SELECT COUNT(*) FROM cte_purchase)      AS purchase_users`
+    `)`
+    `SELECT`
+    `page_view_users,`
+    `view_item_users,`
+    `add_to_cart_users,`
+    `begin_checkout_users,`
+    `purchase_users,`
+
+    `-- Conversión entre etapas`
+    `ROUND(100.0 * view_item_users      / NULLIF(page_view_users,0), 1) AS conv_page_to_item_pct,`
+    `ROUND(100.0 * add_to_cart_users    / NULLIF(view_item_users,0), 1)  AS conv_item_to_cart_pct,`
+    `ROUND(100.0 * begin_checkout_users / NULLIF(add_to_cart_users,0), 1) AS conv_cart_to_checkout_pct,`
+    `ROUND(100.0 * purchase_users       / NULLIF(begin_checkout_users,0), 1) AS conv_checkout_to_purchase_pct,`
+
+    `-- Drop-off entre etapas`
+    `ROUND(100.0 * (1 - view_item_users      / NULLIF(page_view_users,0)), 1) AS `dropoff_after_page_view_pct,`
+    `ROUND(100.0 * (1 - add_to_cart_users    / NULLIF(view_item_users,0)), 1)  AS `dropoff_after_view_item_pct,`
+    `ROUND(100.0 * (1 - begin_checkout_users / NULLIF(add_to_cart_users,0)), 1) AS dropoff_after_cart_pct,`
+    `ROUND(100.0 * (1 - purchase_users       / NULLIF(begin_checkout_users,0)), 1) AS `dropoff_after_checkout_pct,
+
+    `-- Conversión global`
+    `ROUND(100.0 * purchase_users / NULLIF(page_view_users,0), 2) AS conv_overall_pct`
+    `FROM counts;`
+
+**Errores comunes y cómo evitarlos**
+
+- ❌ Contar eventos en vez de usuarios por etapa. ✅ Usa SELECT DISTINCT user_id en cada CTE y cuenta con COUNT(*).
+- ❌ Dividir por la etapa incorrecta. ✅ Para transición A→B, el denominador siempre es A.
+- ❌ No multiplicar por 100 o no redondear. ✅ ROUND(100.0 * expr, 1) y nombres con sufijo _pct.
+- ❌ Identificadores inválidos (guiones) en CTEs. ✅ Usa snake_case: cte_add_to_cart.
+- ❌ Mezclar etapas entre lecciones (signup vs page_view). ✅ Declara al inicio el funnel estándar que se usará en L4.
+- ❌ Interpretar mal el gráfico. ✅ Rotula explícitamente si el % es drop-off o conversión; idealmente muestra ambos.
+- ❌ Ignorar calidad de datos. ✅ Revisa duplicados y secuencia (lección de calidad) antes de calcular métricas.
 
 <br>
 
