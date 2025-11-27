@@ -13,13 +13,3 @@
 ### Proyecto
 
 - **Link al notebook del proyecto:** https://github.com/tripleten-com/projects-da-ds/blob/c9ecab23b27b056e42bd11df722f2644a608f7c3/LATAM%20V8%20DA/S05%20Prepare%20and%20structure%20data%20with%20Python/S5%20ladb_mobility_economy_project_solution.ipynb
-
-
-
-
-
-
-
-
-
-https://github.com/tripleten-com/projects-da-ds/blob/c9ecab23b27b056e42bd11df722f2644a608f7c3/LATAM%20V8%20DA/S05%20Prepare%20and%20structure%20data%20with%20Python/S5%20ladb_mobility_economy_project_solution.ipynb
