@@ -1,6 +1,9 @@
-# Sprint 5
-## ESP: 
-📅 Fecha de actualización: 2025
+# Sprint 5: Prepare and Structure data with Python
+## ESP: Preparar y estructurar datos con Python
+
+📅 Fecha de actualización: Noviembre 2025
+
+💻 Herramienta: Python
 
 ### Descripción del proyecto
 ---
