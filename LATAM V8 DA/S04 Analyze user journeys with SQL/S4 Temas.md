@@ -888,6 +888,111 @@ Con CTEs que representan cada paso del funnel, puedes calcular de forma consiste
 ## Capitulo 3: Análisis de retención con cohortes
 ### C3 - Lección 1: Agrupando usuarios en cohorts
 <br>
+**🎯 Propósito de la lección**
+
+Asignar a cada cliente una etiqueta de cohorte (semanal, mensual o trimestral) basada en su primera fecha de relación con el banco, para luego comparar adopción/retención entre grupos homogéneos en el tiempo.
+
+**🧠 Idea central**
+
+Una cohorte agrupa usuarios que empezaron en el mismo período. Calcularla correctamente exige (1) validar la fecha de alta, (2) fijar la primera fecha por cliente y (3) truncarla al período de análisis (semana/mes/trimestre).
+
+**Temáticas trabajadas**
+
+1. **Dataset de referencia (clientes_banco):** Campos relevantes para cohorts: `customer_id`, `signup_date (alta)`, `exited (abandono)`, opcionales demográficos y de relación (tenure_months, productos, etc.).
+
+2. **Validar la fecha de registro:** Detectar clientes con más de una fecha de alta (o nulos) antes de calcular cohorts.
+
+        `-- ¿Algún cliente tiene >1 fecha de alta no nula?`
+        `SELECT customer_id, COUNT(signup_date) AS conteo_signups`
+        `FROM clientes_banco`
+        `GROUP BY customer_id`
+        `HAVING COUNT(signup_date) > 1;`
+
+_Si hay duplicados reales, depurar o elegir la primera fecha._
+
+3. **Obtener la PRIMERA fecha de relación por cliente**
+
+        `SELECT`
+        `customer_id,`
+        `MIN(signup_date) AS first_signup_date`
+        `FROM clientes_banco`
+        `GROUP BY customer_id;`
+
+4. **Etiquetar cohortes por período con DATE_TRUNC**
+
+Trunca la primera fecha al inicio del período elegido.
+
+        `-- Cohorte semanal (inicio de semana según motor; en Postgres es lunes)`
+        `SELECT`
+        `customer_id,`
+        `DATE_TRUNC('week', MIN(signup_date))  AS cohort_week`
+        `FROM clientes_banco`
+        `GROUP BY customer_id;`
+
+        `-- Cohorte mensual`
+        `SELECT`
+        `customer_id,`
+        `DATE_TRUNC('month', MIN(signup_date)) AS cohort_month`
+        `FROM clientes_banco`
+        `GROUP BY customer_id;`
+
+        `-- Cohorte trimestral`
+        `SELECT`
+        `customer_id,`
+        `DATE_TRUNC('quarter', MIN(signup_date)) AS cohort_quarter`
+        `FROM clientes_banco`
+        `GROUP BY customer_id;`
+
+**Notas prácticas**
+
+- Si signup_date es timestamp en UTC y tu negocio usa hora local, normalizar: `DATE_TRUNC('month', (signup_ts AT TIME ZONE 'UTC')::date)`.
+- Si necesitas semana que empiece en domingo, define calendario auxiliar o ajustar con `DATE_TRUNC('week', (signup_date + INTERVAL '1 day')) - INTERVAL '1 day'`.
+
+**Variantes útiles**
+
+- Persistir una tabla de dimensionalidad: dim_customer_cohort(customer_id, cohort_month, cohort_week, cohort_quarter).
+- Filtrar por producto/segmento/país antes de truncar si el análisis de retención será por esa dimensión.
+
+**Errores comunes y cómo evitarlos**
+
+- ❌ Mezclar signup_date con MIN(signup_date) y agrupar por ambos. ✅ Usa solo MIN(signup_date) y GROUP BY customer_id para garantizar la primera fecha real.
+- ❌ No aclarar el inicio de semana o la zona horaria al usar DATE_TRUNC('week', …). ✅ Documenta: día de inicio y TZ del cálculo. Normaliza timestamp → date en la TZ de negocio antes de truncar.
+- ❌ Columnas inconsistentes entre tablas o capturas (has_or_card vs has_cr_card, is_active_mem). ✅ Estandariza nombres o crea un diccionario de mapeo y úsalo en todas las consultas.
+- ❌ Usar el registro del dataset sin validar duplicados/nulos. ✅ Corre la verificación de duplicados y nulos; decide reglas (p. ej., “si hay varias altas, tomar la más antigua”).
+- ❌ Cohortes con períodos ambiguos (semana ISO vs fiscal). ✅ Alinea a la semana de negocio (ISO/fiscal) y deja constancia en el encabezado del notebook/tablero.
+
+**Práctica guiada**
+
+1. **Objetivo:**  El equipo de producto del banco quiere entender cómo se comportan los clientes según el mes en que se registraron. Para ello, necesitan agruparlos en cohortes mensuales usando la fecha de registro.
+
+**Instrucciones:**
+
+1. Obtener la primera fecha de registro de cada cliente.
+2. Crear una columna cohort_mensual para cada cliente.
+3. Muestra el customer_id y su cohorte mensual.
+
+**Respuesta:**
+
+    `SELECT customer_id,`
+        `DATE_TRUNC('month', MIN(signup_date)) AS cohort_mensual`
+    `FROM clientes_banco`
+    `GROUP BY customer_id;`
+
+2. **Objetivo:** El equipo de marketing del banco realiza reportes trimestrales sobre adquisición y retención de clientes.
+Necesitan agrupar a los clientes en cohortes trimestrales según la fecha en que abrieron su primera cuenta (signup_date).
+
+**Instrucciones:**
+
+1. Obtener la primera fecha de registro de cada cliente.
+2. Crear una columna cohort_trimestral que agrupe por trimestre.
+3. Muestra el customer_id y su cohorte trimestral.
+
+**Respuesta:**
+
+    `SELECT customer_id,`
+        `DATE_TRUNC('quarter', MIN(signup_date)) AS cohort_trimestral`
+    `FROM clientes_banco`
+    `GROUP BY customer_id;`
 
 <br>
 
