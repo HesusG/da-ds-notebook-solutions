@@ -999,6 +999,88 @@ Necesitan agrupar a los clientes en cohortes trimestrales según la fecha en que
 ### C3 - Lección 2: Midiendo la retención en el tiempo
 <br>
 
+**🎯 Propósito de la lección**
+
+Medir retención por cohorte mensual (qué proporción de clientes sigue activa tras 1, 2 y 3 meses desde su registro) y presentar el resultado en una tabla interpretable para producto/marketing.
+
+**🧠 Idea central**
+
+Construyes una CTE de cohortes con la primera fecha de registro, cuentas clientes retenidos por mes de vida usando condiciones (CASE) y conviertes esos conteos a porcentajes sobre el total inicial de la cohorte para compararlas entre sí.
+
+**Temáticas trabajadas**
+
+1. Definir la cohorte (mes de registro)
+
+    - CTE `cohortes` con `MIN(signup_date)` y `DATE_TRUNC('month', …)` → `cohorte_mes`.
+    - **Buenas prácticas:** si puede haber múltiples filas por cliente, agrupa solo por customer_id (y luego trae atributos si los necesitas).
+
+2. Contar retenidos por horizonte (M+1, M+2, M+3)
+
+    - Usar `COUNT(CASE WHEN tenure_months >= k AND exited = FALSE THEN 1 END)` para cada horizonte.
+    - **Opción robusta:** `COUNT(DISTINCT CASE WHEN … THEN customer_id END)` si la granularidad no es 1-fila-por-cliente.
+
+3. Transformar a proporciones/porcentajes
+
+    - Dividir por `clientes_iniciales` y uniformar: o dejas proporción (0–1) o multiplicar por 100 y renombrar con sufijo `_pct`.
+
+4. Interpretación de la tabla de cohortes
+
+    - **Fila** = cohorte (mes de alta).
+    - **Columnas** = % retenido a 1, 2, 3 meses.
+    - **Lectura:** comparar diagonales/filas para detectar mejoras o deterioros en retención por mes de adquisición.
+
+5. Notas de método (limitaciones y extensiones)
+
+    - **Simplificación:** `exited` refleja estado actual; para retención “real” por cohorte se recomienda tabla de actividad mensual o snapshots (estado por mes de vida).
+    - Extender a M0–M12 y exportar a heatmap.
+
+6. SQL de referencia (esqueleto limpio y consistente)
+
+        `/* Paso 1: Cohortes mensuales (robusto) */`
+        `WITH cohortes AS (`
+        `SELECT`
+            `customer_id,`
+            `DATE_TRUNC('month', MIN(signup_date)) AS cohorte_mes`
+        `FROM clientes_banco`
+        `GROUP BY customer_id`
+        `),`
+        `/* Paso 2: Retenidos por horizonte */`
+        `retencion AS (`
+        `SELECT`
+            `c.cohorte_mes,`
+            `COUNT(DISTINCT b.customer_id)                                    AS clientes_iniciales,`
+            `COUNT(DISTINCT CASE WHEN b.tenure_months >= 1 AND b.exited=false THEN b.customer_id END) AS retained_m1,`
+            `COUNT(DISTINCT CASE WHEN b.tenure_months >= 2 AND b.exited=false THEN b.customer_id END) AS retained_m2,`
+            `COUNT(DISTINCT CASE WHEN b.tenure_months >= 3 AND b.exited=false THEN b.customer_id END) AS retained_m3`
+        `FROM cohortes c`
+        `JOIN clientes_banco b USING (customer_id)`
+        `GROUP BY c.cohorte_mes`
+        `)`
+        `/* Paso 3: Proporciones o porcentajes */`
+        `SELECT`
+        `/* Proporción */`
+        `TO_CHAR(cohorte_mes, 'YYYY-MM') AS cohorte,`
+        `ROUND(retained_m1::numeric / clientes_iniciales, 2) AS mes_1,`
+        `ROUND(retained_m2::numeric / clientes_iniciales, 2) AS mes_2,`
+        `ROUND(retained_m3::numeric / clientes_iniciales, 2) AS mes_3`
+        `FROM retencion`
+        `ORDER BY cohorte_mes;`
+        `-- Si quieres %: reemplaza cada columna por ROUND(100.0 * retained_mk / clientes_iniciales, 2) AS mes_k_pct`
+
+**Errores comunes y cómo evitarlos**
+
+❌ Llamar “%” a proporciones 0–1 ✅ añade * 100 o aclara que son proporciones.
+
+❌ Fragmentar cohortes sin querer (GROUP BY incluyendo tenure_months/exited). ✅ en la CTE de cohortes agrupa solo por customer_id.
+
+❌ Doble conteo cuando hay más de una fila por cliente. ✅ COUNT(DISTINCT customer_id) en iniciales y retenidos.
+
+❌ Aliases inconsistentes (m1 vs retained_m1). ✅ usa un solo esquema de nombres en todo el flujo y en el código final.
+
+❌ Suponer retención histórica con exited actual. ✅ explica la simplificación y, si es posible, construye una tabla mensual de actividad o snapshots.
+
+❌ Dependencia del motor SQL. ✅ agrega una sección de portabilidad (Postgres/BigQuery/Spark/SQL Server) para TO_CHAR/FORMAT_DATE/date_format y casts.
+
 <br>
 
 ### C3 - Lección 3: Creando heatmaps de retención
