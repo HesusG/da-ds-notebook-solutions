@@ -1081,6 +1081,114 @@ Construyes una CTE de cohortes con la primera fecha de registro, cuentas cliente
 
 ❌ Dependencia del motor SQL. ✅ agrega una sección de portabilidad (Postgres/BigQuery/Spark/SQL Server) para TO_CHAR/FORMAT_DATE/date_format y casts.
 
+
+**Práctica guiada**
+
+1. **Objetivo:** El equipo de producto del banco quiere entender la retención trimestral de los clientes para observar tendencias más amplias.
+Tu tarea será calcular qué proporción de clientes permanecen activos después de 1, 2 y 3 trimestres desde su registro.
+
+**Instrucciones:**
+
+Continuamos con la tabla `clientes_banco`.
+
+1. Agrupa a los clientes por cohorte trimestral según su fecha de registro (`signup_date`).
+2. Calcula cuántos siguen activos después de 1, 2 y 3 trimestres. 
+    - Usa los alias `retained_q1`, `retained_q2` y `retained_q3`.
+3. Convierte los resultados en proporción de retención. 
+    - Muestra el trimestre usando `TO_CHAR()` con el formato `'YYYY-"Q"Q'` para mostrar el trimestre con el alias `cohorte`.
+    - Muestra `clientes_iniciales`.
+    - Calcula la proporción, redondea a 2 decimales y para mostrarlos, usa los alias `trimestre_1`, `trimestre_2` y `trimestre_3`.
+    - Ordena las cohortes cronológicamente.
+
+**Respuesta:**
+
+        `/* PASO 1: Identificar la cohorte trimestral de cada cliente */`
+        `WITH cohortes AS (`
+        `SELECT`
+            `customer_id,`
+            `DATE_TRUNC('quarter', MIN(signup_date)) AS cohorte_trimestre,`
+            `tenure_months,`
+            `exited`
+        `FROM clientes_banco`
+        `GROUP BY customer_id, tenure_months, exited`
+        `),`
+        `/* PASO 2: Calcular clientes retenidos por trimestre */`
+        `retencion AS (`
+        `SELECT`
+            `cohorte_trimestre,`
+            `COUNT(*) AS clientes_iniciales,`
+            `COUNT(CASE WHEN tenure_months >= 3 AND exited = FALSE THEN 1 END) AS retained_q1,`
+            `COUNT(CASE WHEN tenure_months >= 6 AND exited = FALSE THEN 1 END) AS retained_q2,`
+            `COUNT(CASE WHEN tenure_months >= 9 AND exited = FALSE THEN 1 END) AS retained_q3`
+        `FROM cohortes`
+        `GROUP BY cohorte_trimestre`
+        `)`
+        `/* PASO 3: Crear la tabla de retención con porcentajes */`
+        `SELECT`
+        `TO_CHAR(cohorte_trimestre, 'YYYY-"Q"Q') AS cohorte,`
+        `clientes_iniciales,`
+        `ROUND(retained_q1::numeric / clientes_iniciales, 2) AS trimestre_1,`
+        `ROUND(retained_q2::numeric / clientes_iniciales, 2) AS trimestre_2,`
+        `ROUND(retained_q3::numeric / clientes_iniciales, 2) AS trimestre_3`
+        `FROM retencion`
+        `ORDER BY cohorte_trimestre;`
+
+2. **Objetivo:** El equipo de marketing necesita analizar la retención durante los primeros seis meses para identificar en qué etapa los clientes tienden a abandonar el servicio.
+
+Esto permite detectar si los usuarios desertan en los primeros meses o si mantienen su compromiso durante el primer semestre, información clave para mejorar la experiencia inicial.
+
+**Instrucciones:**
+
+1. Crea una CTE `cohortes` para agrupar a los clientes por cohorte mensual según su fecha de registro (`signup_date`).
+    - Usa el alias `cohorte_mes` para los cohortes.
+    - Mantén las columnas que necesitaras para la siguiente CTE.
+2. Crea una CTE `retencion`, a partir de la anterior, para calcular cuántos clientes siguen activos después de 1, 3 y 6 meses.
+    - Cuenta los usuarios que iniciaron en cada cohorte con el alias `clientes_iniciales`.
+    - Usa los alias `mes_1`, `mes_3` y `mes_6` para la cantidad de clientes activos por mes.
+    - Mantén las columnas que necesitaras para la tabla final.
+3. Convierte los resultados en porcentajes de retención para comparar entre cohortes.
+    - Muestra la cohorte con el formato '`YYYY-MM`’ usando el alias `cohorte`.
+    - Muestra los `clientes_iniciales` de cada cohorte.
+    - Muestra el porcentaje de retención de cada mes de interés redondeando a 2 decimales. Usa los alias `retencion_mes_1`, `retencion_mes_3` y `retencion_mes_6` respectivamente.
+    - Ordena la tabla cronológicamente.
+
+**Nota:** No agruparemos mes a mes, sino que usaremos los meses 1, 3 y 6, ya que representan hitos clave del primer semestre. Estos puntos permiten analizar la retención de manera significativa sin perderse en demasiados detalles.
+
+**Respuesta:**
+
+        `/* PASO 1: Identificar la cohorte mensual de cada cliente */`
+        `WITH cohortes AS (`
+        `SELECT`
+            `customer_id,`
+            `DATE_TRUNC('month', MIN(signup_date)) AS cohorte_mes,`
+            `tenure_months,`
+            `exited`
+        `FROM clientes_banco`
+        `GROUP BY customer_id, tenure_months, exited`
+        `),`
+
+        `/* PASO 2: Calcular clientes retenidos por periodo */`
+        `retencion AS (`
+        `SELECT`
+            `cohorte_mes,`
+            `COUNT(*) AS clientes_iniciales,`
+            `COUNT(CASE WHEN tenure_months >= 1 AND exited = FALSE THEN 1 END) AS mes_1,`
+            `COUNT(CASE WHEN tenure_months >= 3 AND exited = FALSE THEN 1 END) AS mes_3,`
+            `COUNT(CASE WHEN tenure_months >= 6 AND exited = FALSE THEN 1 END) AS mes_6`
+        `FROM cohortes`
+        `GROUP BY cohorte_mes`
+        `)`
+
+        `/* PASO 3: Crear la tabla de retención con porcentajes */`
+        `SELECT`
+        `TO_CHAR(cohorte_mes, 'YYYY-MM') AS cohorte,`
+        `clientes_iniciales,`
+        `ROUND(mes_1::numeric / clientes_iniciales * 100, 2) AS retencion_mes_1,`
+        `ROUND(mes_3::numeric / clientes_iniciales * 100, 2) AS retencion_mes_3,`
+        `ROUND(mes_6::numeric / clientes_iniciales * 100, 2) AS retencion_mes_6`
+        `FROM retencion`
+        `ORDER BY cohorte_mes;`
+
 <br>
 
 ### C3 - Lección 3: Creando heatmaps de retención
