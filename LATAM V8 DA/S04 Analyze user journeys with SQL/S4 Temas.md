@@ -1194,10 +1194,66 @@ Esto permite detectar si los usuarios desertan en los primeros meses o si mantie
 ### C3 - Lección 3: Creando heatmaps de retención
 <br>
 
+**🎯 Propósito de la lección**
+
+Visualizar la retención por cohortes con un heatmap para detectar, de un vistazo, patrones, mejoras y puntos de abandono; y complementar con curvas de retención para comparar la velocidad de caída entre cohortes.
+
+**🧠 Idea central**
+
+Partiendo de una tabla con conteos por cohorte y mes de vida, normalizamos contra mes_0 para obtener porcentajes, aplicamos formato condicional (mínimo–medio–máximo) y luego creamos gráficos de línea que muestran la curva de retención por cohorte.
+
+**Temáticas trabajadas**
+
+- De conteos a porcentajes (normalización):
+
+    - Tabla base: cohorte, mes_0, mes_1, mes_2, mes_3 (u horizontes que tengas).
+    - Cálculo en Sheets/Excel (ejemplo):
+        - pct_mes_1 = C2/$B2, pct_mes_2 = D2/$B2, pct_mes_3 = E2/$B2.
+    - Asegura formato porcentaje antes de graficar.
+
+- Heatmap (formato condicional):
+
+    - Selecciona el rango de porcentajes y usa Escala de color.
+    - Sugerido: Mínimo = rojo (baja retención), Punto medio = amarillo, Máximo = verde.
+    - Define los umbrales según el tipo de dato:
+        - Porcentajes: 0% / 50% / 100%.
+        - Decimales: 0 / 0.5 / 1.
+
+- Lectura del heatmap (dos ejes de análisis):
+
+    - Horizontal: curva de retención de una cohorte a lo largo del tiempo (oscurece hacia rojo = mayor abandono).
+    - Vertical: comparación entre cohortes en el mismo mes de vida (cuáles retienen mejor/peor en “Mes 1”, “Mes 2”, etc.).
+    - Identifica saltos bruscos (puntos de fricción) y bloques verdes (cohortes o meses con buena fidelidad).
+
+- Curvas de retención (líneas):
+
+    - Eje X: meses de vida (Mes 1–3). Eje Y: % de retención.
+    - Series: 2–3 cohortes recientes para comparar.
+    - Útil para explicar velocidad de caída y separación entre cohortes.
+
+- Entrega accionable (mini-reporte C → F → I):
+
+    - Context: período, dataset y definición de “activo”.
+    - Finding: dónde están los picos de abandono / cohortes destacadas.
+    - Insight: hipótesis y acciones (onboarding, pricing, UX de carrito, campañas de reactivación, etc.).
+
+**Errores comunes y cómo evitarlos**
+
+- ❌ Mezclar unidades de tiempo (D+ vs Mes). ✅ Estandariza nomenclatura en todo el capítulo (recom.: Mes 0–N).
+- ❌ Fórmulas mal referenciadas (autorreferencia G2/$B2). ✅ Usa C2/$B2, D2/$B2, E2/$B2 (copiar a derecha) y fija mes_0 con $.
+- ❌ Aplicar heatmap a conteos absolutos. ✅ Siempre normaliza (mes_X / mes_0) antes del formato condicional.
+- ❌ Colores que no reflejan porcentajes por formato incorrecto. ✅ Define si tus celdas están en % o decimales y ajusta los umbrales (0–1 vs 0%–100%).
+- ❌ Tildes y estilo inconsistentes. ✅ Revisión rápida de ortografía (retención, fácil, comparación, más) y uso consistente de heatmap.
+- ❌ Curvas con series “automáticas” ruidosas. ✅ Elige cohortes representativas (p.ej., 3 más recientes) y el mismo horizonte (Mes 1–3) para comparabilidad.
+
 <br>
 
 ### C3 - Lección 4: Segmentando la retención por atributos de usuario
 <br>
+
+
+
+
 
 <br>
 
