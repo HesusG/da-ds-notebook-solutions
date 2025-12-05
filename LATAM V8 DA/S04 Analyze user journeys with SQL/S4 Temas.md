@@ -1251,7 +1251,7 @@ Partiendo de una tabla con conteos por cohorte y mes de vida, normalizamos contr
 ### C3 - Lección 4: Segmentando la retención por atributos de usuario
 <br>
 
-holaaa
+
 
 
 
