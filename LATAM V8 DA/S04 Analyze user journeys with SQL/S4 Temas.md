@@ -1251,9 +1251,182 @@ Partiendo de una tabla con conteos por cohorte y mes de vida, normalizamos contr
 ### C3 - Lección 4: Segmentando la retención por atributos de usuario
 <br>
 
+**🎯 Propósito de la lección**
 
+Aprender a comparar la retención entre subgrupos de clientes (p. ej., por género, país, plan o canal), y a combinar la dimensión temporal de cohortes con atributos de usuario para encontrar diferencias relevantes y accionables.
 
+**🧠 Idea central**
 
+Partiendo del cálculo de retención mensual, agregamos una dimensión de segmentación (género en el ejemplo) y luego doble agregamos por cohorte mensual + atributo, expresando los retained_mX / clientes_iniciales como proporciones/porcentajes para comparar grupos de igual forma.
+
+**Temáticas trabajadas**
+
+1. **Retención segmentada (una dimensión)**
+
+- CTE `retencion` con:
+    `clientes_iniciales = COUNT(*` por `gender`
+    `retained_m1/m2/m3 = COUNT(CASE WHEN tenure_months >= X AND exited = FALSE THEN 1 END)`
+- Cálculo de `mes_1/mes_2/mes_3` como `ROUND(retained_mX::numeric / clientes_iniciales, 2)`.
+
+2. **Doble agregación: Cohorte + Atributo**
+
+- CTE `cohortes` con `DATE_TRUNC('month', signup_date) AS cohorte_mes, gender, tenure_months, exited`.
+- CTE `retencion` agrupando por `cohorte_mes, gender` y mismas métricas.
+- Salida final con `TO_CHAR(cohorte_mes, 'YYYY-MM') AS cohorte`, `gender`, y proporciones por mes.
+
+3. **Lectura de resultados**
+
+- Heatmap segmentado (cohorte en filas, meses en columnas, una vista por género) para detectar diferencias rápidas.
+- Curva de retención por segmento (línea para Femenino y Masculino) para comparar velocidad de descenso.
+
+4. **Buenas prácticas**
+
+- Consistencia de formatos (`YYYY-MM`), casting para evitar división entera, y nombres con `sufijo _pct` si el valor es proporción.
+- Manejo de nulos/categorías raras con `COALESCE` o grupos “Otros/Desconocido”.
+- Umbrales de muestra: mostrar `clientes_iniciales` y filtrar cohortes/segmentos pequeños.
+- Ética y sesgos: ser prudente con atributos sensibles; contextualizar, evitar conclusiones causales sin análisis adicional.
+
+5. **Plantillas reutilizables**
+
+- **Segmentación genérica por atributo (reemplaza segmento_col por plan, country, etc.):**
+
+        `WITH retencion AS (`
+        `SELECT`
+            `COALESCE(segmento_col,'Unknown') AS segmento,`
+            `COUNT(*) AS clientes_iniciales,`
+            `COUNT(CASE WHEN tenure_months >= 1 AND exited = FALSE THEN 1 END) AS retained_m1,`
+            `COUNT(CASE WHEN tenure_months >= 2 AND exited = FALSE THEN 1 END) AS retained_m2,`
+            `COUNT(CASE WHEN tenure_months >= 3 AND exited = FALSE THEN 1 END) AS retained_m3`
+        `FROM clientes_banco`
+        `GROUP BY 1`
+        `)`
+        `SELECT`
+        `segmento,`
+        `ROUND(retained_m1::numeric / clientes_iniciales, 2) AS mes_1_pct,`
+        `ROUND(retained_m2::numeric / clientes_iniciales, 2) AS mes_2_pct,`
+        `ROUND(retained_m3::numeric / clientes_iniciales, 2) AS mes_3_pct`
+        `FROM retencion`
+        `ORDER BY segmento;`
+
+- **Cohorte + atributo:**
+
+        `WITH cohortes AS (`
+        `SELECT`
+            `DATE_TRUNC('month', signup_date) AS cohorte_mes,`
+            `COALESCE(segmento_col,'Unknown') AS segmento,`
+            `customer_id, tenure_months, exited`
+        `FROM clientes_banco`
+        `-- si existe más de un registro por cliente, deduplica antes`
+        `),`
+        `retencion AS (`
+        `SELECT`
+            `cohorte_mes, segmento,`
+            `COUNT(*) AS clientes_iniciales,`
+            `COUNT(CASE WHEN tenure_months >= 1 AND exited = FALSE THEN 1 END) AS retained_m1,`
+            `COUNT(CASE WHEN tenure_months >= 2 AND exited = FALSE THEN 1 END) AS retained_m2,`
+            `COUNT(CASE WHEN tenure_months >= 3 AND exited = FALSE THEN 1 END) AS retained_m3`
+        `FROM cohortes`
+        `GROUP BY 1,2`
+        `)`
+        `SELECT`
+        `TO_CHAR(cohorte_mes,'YYYY-MM') AS cohorte,`
+        `segmento,`
+        `ROUND(retained_m1::numeric / clientes_iniciales, 2) AS mes_1_pct,`
+        `ROUND(retained_m2::numeric / clientes_iniciales, 2) AS mes_2_pct,`
+        `ROUND(retained_m3::numeric / clientes_iniciales, 2) AS mes_3_pct,`
+        `clientes_iniciales`
+        `FROM retencion`
+        `ORDER BY cohorte, segmento;`
+
+**Errores comunes y cómo evitarlos**
+
+- ❌ Confundir segmentación con clustering ✅ Aclara que aquí agrupas por una columna existente; clustering crea grupos automáticamente con algoritmos.
+- ❌ División entera / porcentajes mal calculados ✅ Usa ::numeric (o multiplica por 1.0) y agrega sufijo _pct o multiplica ×100 y añade “%”.
+- ❌ Inconsistencias de formato ✅ Estándar YYYY-MM para cohortes; mismo idioma en etiquetas (Género/Femenino/Masculino).
+- ❌ Segmentos pequeños ✅ Muestra clientes_iniciales, fija un umbral mínimo y/o combina categorías raras en “Otros”.
+- ❌ Nulos y categorías desconocidas ✅ COALESCE(col,'Unknown') y decide si se excluyen o se reportan.
+- ❌Duplicados por cliente ✅ Si hay múltiples filas por customer_id, deduplica o usa la primera signup_date (coherente con C3-L1).
+- ❌DISTINCT innecesario en salidas agregadas ✅ Elimínalo para simplificar y evitar confusión.
+
+**Practica guiada**
+
+1. **Objetivo:** El equipo de producto sospecha que la retención de los clientes más jóvenes es distinta a la de los mayores. Sin embargo, en lugar de analizar cada edad, quieren dividir a los clientes en dos grupos de edad: 'Joven' (menor o igual a 35 años) y 'Adulto' (mayor de 35 años). También desean mantener la segmentación por género. 
+
+**Instrucciones:**
+
+Modifica la query para segmentar a los clientes basándote en la columna `age`:
+
+1. En la cte `retención`, usa la sentencia `CASE WHEN` para crear una nueva columna llamada `age_segment` para clasificar en `'Joven'` o `'Adulto'`.
+2. Asegúrate de que esta nueva columna `age_segment` se use también para agrupar.
+
+**Respuesta:**
+
+    `-- Cohortes de retención mensuales segmentadas por género y edad`
+    `WITH retencion AS (`
+        `SELECT`
+                `gender,`
+                `CASE`
+                `WHEN age <= 35`
+                    `THEN 'Joven'`
+                `ELSE 'Adulto'`
+            `END AS age_segment,`
+                `COUNT(*) AS clientes_iniciales,`
+                `COUNT(CASE WHEN tenure_months >= 1 AND exited = FALSE THEN 1 END) AS retained_m1,`
+                `COUNT(CASE WHEN tenure_months >= 2 AND exited = FALSE THEN 1 END) AS retained_m2,`
+                `COUNT(CASE WHEN tenure_months >= 3 AND exited = FALSE THEN 1 END) AS retained_m3`
+        `FROM clientes_banco`
+        `GROUP BY gender, age_segment`
+    `)`
+
+    `SELECT`
+        `DISTINCT gender, age_segment,`
+        `ROUND(retained_m1::numeric / clientes_iniciales, 2) AS mes_1,`
+        `ROUND(retained_m2::numeric / clientes_iniciales, 2) AS mes_2,`
+        `ROUND(retained_m3::numeric / clientes_iniciales, 2) AS mes_3`
+    `FROM retencion`
+    `ORDER BY gender;`
+
+2. **Contexto:** El equipo de Riesgos está alarmado por la retención de los clientes según país. Quieren analizar la tendencia de las cohortes tomando referencias geográficas para segmentar. Necesitas crear un análisis que combine ambas dimensiones: el país y la cohorte.
+
+**Tu objetivo:**
+
+Adapta la query para incluir una segmentación por fecha de cohorte y país:
+
+1. En la CTE `cohortes`, agrega la columna `geography`.
+Asegúrate de tener las columnas `cohorte_mes`, `geography` y `ternure_month`.
+2. Completa la CTE `retencion` y el `SELECT` final.
+
+**Respuesta:**
+
+    `WITH cohortes AS (`
+        `SELECT`
+            `DATE_TRUNC('month', signup_date) AS cohorte_mes,`
+            `geography,`
+            `customer_id,`
+            `tenure_months,`
+            `exited`
+        `FROM clientes_banco`
+    `),`
+    `retencion AS (`
+    `SELECT`
+        `cohorte_mes,`
+        `geography,`
+        `COUNT(*) AS clientes_iniciales,`
+        `COUNT(CASE WHEN tenure_months >= 1 AND exited = FALSE THEN 1 END) AS retained_m1,`
+        `COUNT(CASE WHEN tenure_months >= 2 AND exited = FALSE THEN 1 END) AS retained_m2,`
+        `COUNT(CASE WHEN tenure_months >= 3 AND exited = FALSE THEN 1 END) AS retained_m3`
+    `FROM cohortes`
+    `GROUP BY cohorte_mes, geography`
+    `)`
+
+    `SELECT`
+        `TO_CHAR(cohorte_mes, 'Mon YYYY') AS cohorte,`
+        `geography,`
+        `ROUND(retained_m1::numeric / clientes_iniciales, 2) AS mes_1,`
+        `ROUND(retained_m2::numeric / clientes_iniciales, 2) AS mes_2,`
+        `ROUND(retained_m3::numeric / clientes_iniciales, 2) AS mes_3`
+    `FROM retencion`
+    `ORDER BY cohorte_mes, geography;`
 
 <br>
 
