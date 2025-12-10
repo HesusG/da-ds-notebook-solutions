@@ -1886,6 +1886,128 @@ Partiendo del código aprendido en la lección, modifica para cumplir lo siguien
 ### C4 - Lección 3: Comparando escenarios entre segmentos
 <br>
 
+**🎯 Propósito de la lección**
+
+Comparar eficiencia (tasa de conversión) y potencial económico (impacto en USD) por país y dispositivo, simulando una mejora controlada (+15 % en la primera etapa) para identificar dónde conviene invertir primero.
+
+**🧠 Idea central**
+
+Un segmento con la mejor tasa no siempre maximiza el valor total: a igual mejora relativa, los segmentos con mayor volumen de usuarios suelen generar más compras adicionales y, por tanto, más ingresos.
+
+**Temáticas trabajadas**
+
+- Segmentación del funnel por `country` y `category`:
+    - Conteos únicos por etapa (`page_view` → `view_item` → `add_to_cart` → `begin_checkout` → `purchase`).
+    - Cálculo de tasa de conversión global del segmento: `overall_conversion_pct = purchase_users / page_view_users * 100.`
+
+- **Simulación de mejora en la etapa 1 (+15 % “recuperando” parte del drop-off entre page_view y view_item) y propagación usando tasas históricas del mismo segmento:**
+
+    - `view_item_sim = view_item + ROUND( (page_view - view_item) * 0.15 )`
+    - `add_to_cart_sim = add_to_cart + ROUND( (page_view - view_item) * 0.15 * (add_to_cart / NULLIF(view_item,0)) )`
+    - Análogo para `begin_checkout` y `purchase`.
+
+- **Traducción a impacto económico (si ARPU=200 USD):**
+
+    - `additional_purchases = purchase_sim - purchase_original`
+    - `revenue_impact_usd = additional_purchases * 200.`
+
+- **Lectura estratégica:**
+
+    - **Ejemplo:** México–tablet 5 % conv., pero base mínima ⇒ bajo impacto. Perú–desktop ~2.5 % conv., pero alto volumen ⇒ mayor impacto total.
+
+- **Buenas prácticas:**
+
+    - Evitar sesgos por muestras pequeñas (umbral mínimo de base).
+    - Ordenar por impacto económico para priorización.
+    - Presentar eficiencia (pct) y volumen (page_view_users) juntos.
+
+**Errores comunes y cómo evitarlos**
+
+- ❌ Dividir por cero / uso incorrecto de NULLIF Evita: NULLIF(..., 2) → no protege cuando el denominador es 0. ✅ NULLIF(denominador, 0) y usa * 100.0 para precisión en float.
+- ❌ Confundir nombres de campos vs. términos en español (pais vs country, category=dispositivo). ✅ estandariza o aliasa: SELECT country AS país, category AS dispositivo.
+- ❌ Concluir “mejor” solo por porcentaje con base mínima (p.ej., 5 % con 20 visitas). ✅ fija un umbral (p.ej., page_view_users ≥ 100) o muestra intervalo de confianza / etiqueta de base pequeña.
+- ❌ Asumir que las tasas de propagación son globales. ✅ calcula las tasas por segmento (add_to_cart / view_item dentro de cada country×category).
+- ❌ Comparar impacto sin mostrar la tasa base. ✅ incluye overall_conversion_pct y page_view_users junto a additional_purchases y revenue_impact_usd.
+- ❌ Redondeo excesivo que distorsiona compras adicionales. ✅ usa ROUND(..., 0) solo al final y mantén cálculos intermedios en decimal (::numeric, CAST(... AS DECIMAL) o multiplicadores 1.0).
+
+**Práctica guiada**
+
+1. **Objetivo:**
+
+Comparar la tasa de conversión (`page_view → purchase`) según el sistema operativo (`operating_system`) y país (`country`) para detectar diferencias de desempeño entre entornos técnicos.
+
+**Instrucciones:**
+
+1. Usa la tabla `ecommerce_jan_2021`.
+2. Agrupa los datos por `country` y `operating_system`.
+3. Cuenta los usuarios únicos para los eventos `page_view` y `purchase`.
+4. Calcula la conversión en porcentaje por grupo, mantén 2 decimales.
+    - Usa `CASE` para contar los usuarios únicos en `purchase`
+    - Multiplica sin perder decimales.
+    - Divide entre el total de usuarios únicos en `page_view`.
+    - Usa el alias `conversion_pct`.
+5. Ordena los resultados del más alto al más bajo.
+
+**Respuesta:**
+
+    `SELECT`
+    `country,`
+    `operating_system,`
+    `COUNT(DISTINCT CASE WHEN event_name = 'page_view' THEN user_id END)  AS page_view_users,`
+    `COUNT(DISTINCT CASE WHEN event_name = 'purchase'   THEN user_id END)  AS purchase_users,`
+    `ROUND(`
+        `COUNT(DISTINCT CASE WHEN event_name = 'purchase' THEN user_id END) * 100.0 /`
+        `COUNT(DISTINCT CASE WHEN event_name = 'page_view' THEN user_id END), 2) AS conversion_pct`
+    `FROM ecommerce_jan_2021`
+    `GROUP BY country, operating_system`
+    `ORDER BY conversion_pct DESC;`
+
+2. **Simulación de impacto por fuente de tráfico**
+
+**Objetivo:**
+
+Simular el impacto de una mejora del 10 % en la conversión inicial (page_view → view_item) por fuente de tráfico (stream_id), estimando cuántas compras e ingresos adicionales podría generar.
+
+**Instrucciones:**
+
+1. Usa la tabla `ecommerce_jan_2021`.
+2. Agrupa por `stream_id` (fuente o campaña).
+3. Calcula los conteos únicos de usuarios en cada paso del funnel. Usa el nombre del evento como su alias: `page_view`, `view_item`, `add_to_cart`, `begin_checkout` y `purchase`.
+4. Simula una mejora del 10 % en la etapa `page_view → view_item` y propaga la mejora a las demás etapas. Usa los alias `view_item_users`, `add_to_cart_users`, `begin_checkout_users` y `purchase_users`.
+Redondea el incremento al entero más cercano antes de sumarlo.
+5. Muestra el nuevo estimado de compras como `additional_purchases` y estima el impacto económico con ARPU = 150 USD con el alias `revenue_impact_usd`.
+
+**Respuesta:**
+
+    `WITH base AS (`
+    `SELECT`
+        `stream_id,`
+        `COUNT(DISTINCT CASE WHEN event_name = 'page_view'      THEN user_id END) AS page_view,`
+        `COUNT(DISTINCT CASE WHEN event_name = 'view_item'      THEN user_id END) AS view_item,`
+        `COUNT(DISTINCT CASE WHEN event_name = 'add_to_cart'    THEN user_id END) AS add_to_cart,`
+        `COUNT(DISTINCT CASE WHEN event_name = 'begin_checkout' THEN user_id END) AS begin_checkout,`
+        `COUNT(DISTINCT CASE WHEN event_name = 'purchase'       THEN user_id END) AS purchase`
+    `FROM ecommerce_jan_2021`
+    `GROUP BY stream_id`
+    `),`
+    `simulated AS (`
+    `SELECT`
+        `stream_id,`
+        `page_view AS page_view_users,`
+        `view_item + ROUND((page_view - view_item) * 0.10) AS view_item_users,`
+        `add_to_cart + ROUND((page_view - view_item) * 0.10 * (add_to_cart * 1.0 / view_item)) AS add_to_cart_users,`
+        `begin_checkout + ROUND((page_view - view_item) * 0.10 * (add_to_cart * 1.0 / view_item) * (begin_checkout * 1.0 / add_to_cart)) AS begin_checkout_users,`
+        `purchase + ROUND((page_view - view_item) * 0.10 * (add_to_cart * 1.0 / view_item) * (begin_checkout * 1.0 / add_to_cart) * (purchase * 1.0 / begin_checkout)) AS purchase_users,`
+        `purchase AS original_purchase_users`
+    `FROM base`
+    `)`
+    `SELECT`
+    `stream_id,`
+    `(purchase_users - original_purchase_users) AS additional_purchases,`
+    `(purchase_users - original_purchase_users) * 150 AS revenue_impact_usd`
+    `FROM simulated`
+    `ORDER BY revenue_impact_usd DESC;`
+
 <br>
 
 ### C4 - Lección 4: Visualización de Embudos para los Stakeholders
