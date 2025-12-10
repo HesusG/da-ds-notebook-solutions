@@ -1513,14 +1513,373 @@ Necesitas crear una consulta que muestre cuántos usuarios únicos llegan a cada
 
 1. Crear cinco CTEs: una por cada evento clave (`page_view`, `view_item`, `add_to_cart`, `begin_checkout`, `purchase`).
 2. Contar los usuarios únicos en cada CTE.
-3. Mostrar los resultados en una sola fila con columnas para cada etapa. Usa los nombres de columna: page_view, view_item, add_to_cart, begin_checkout y purchase respectivamente.
+3. Mostrar los resultados en una sola fila con columnas para cada etapa. Usa los nombres de columna: page_view, `view_item`, `add_to_cart`, `begin_checkout` y purchase respectivamente.
 
+**Respuesta:**
 
+    `WITH cte_page_view AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'page_view'`
+    `),`
+    `cte_view_item AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'view_item'`
+    `),`
+    `cte_add_to_cart AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'add_to_cart'`
+    `),`
+    `cte_begin_checkout AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'begin_checkout'`
+    `),`
+    `cte_purchase AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'purchase'`
+    `)`
+    `SELECT`
+        `(SELECT COUNT(*) FROM cte_page_view)   AS page_view,`
+        `(SELECT COUNT(*) FROM cte_view_item)   AS view_item,`
+        `(SELECT COUNT(*) FROM cte_add_to_cart) AS add_to_cart,`
+        `(SELECT COUNT(*) FROM cte_begin_checkout) AS begin_checkout,`
+        `(SELECT COUNT(*) FROM cte_purchase)    AS purchase;`
+
+2. **Objetivo:**
+
+Ahora que tienes la línea base, simula qué pasaría si la tasa de abandono entre page_view y view_item se reduce en  23%. Queremos ver cómo ese cambio afecta a todas las etapas siguientes.
+
+**Instrucciones:**
+
+Usa la misma estructura de CTEs del ejercicio anterior, con una nueva CTE llamada `baseline` que reúne los conteos por etapa.
+
+En el SELECT final, 
+
+1. Muestra las cantidades originales como: `page_view_base`, `view_item_base`, `add_to_cart_base`, `begin_checkout_base`, y `purchase_base`,
+2. Calcula los valores simulados para cada etapa plicando la mejora de reducir en 23 % el abandono entre `page_view → view_item`.
+3. Calcula los nuevos valores simulados para cada paso asumiendo que se mantienen los porcentajes de caída en cada etapa del funnel.
+4. Usa `ROUND()` para redondear los valores simulados al entero más cercano y muestra los valores como: `view_item_simulated`, `add_to_cart_simulated`, `begin_checkout_simulated` y `purchase_simulated`.
+
+**Respuesta:**
+
+    `WITH cte_page_view AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'page_view'`
+    `),`
+    `cte_view_item AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'view_item'`
+    `),`
+    `cte_add_to_cart AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'add_to_cart'`
+    `),`
+    `cte_begin_checkout AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'begin_checkout'`
+    `),`
+    `cte_purchase AS (`
+        `SELECT DISTINCT user_id`
+        `FROM ecommerce_jan_2021`
+        `WHERE event_name = 'purchase'`
+    `),`
+    `baseline AS (`
+        `SELECT`
+            `(SELECT COUNT(*) FROM cte_page_view)      AS page_view,`
+            `(SELECT COUNT(*) FROM cte_view_item)      AS view_item,`
+            `(SELECT COUNT(*) FROM cte_add_to_cart)    AS add_to_cart,`
+            `(SELECT COUNT(*) FROM cte_begin_checkout) AS begin_checkout,`
+            `(SELECT COUNT(*) FROM cte_purchase)       AS purchase`
+    `)`
+    `-- 💡 Simulación: se reduce 23% el abandono (drop-off) entre page_view y view_item`
+    `SELECT`
+        `page_view AS page_view_base,`
+        `view_item AS view_item_base,`
+        `add_to_cart AS add_to_cart_base,`
+        `begin_checkout AS begin_checkout_base,`
+        `purchase AS purchase_base,`
+
+        `-- 1️⃣ Reducción del 23% del abandono → solo queda el 77% de la pérdida original`
+        `ROUND(page_view - ((page_view - view_item) * 0.77)) AS view_item_simulated,`
+
+        `-- 2️⃣ Propagamos la mejora a las siguientes etapas manteniendo las tasas históricas`
+        `ROUND((page_view - ((page_view - view_item) * 0.77)) * (add_to_cart * 1.0 / view_item)) AS add_to_cart_simulated,`
+        `ROUND((page_view - ((page_view - view_item) * 0.77)) * (add_to_cart * 1.0 / view_item) * (begin_checkout * 1.0 / add_to_cart)) AS begin_checkout_simulated`,
+        `ROUND((page_view - ((page_view - view_item) * 0.77)) * (add_to_cart * 1.0 / view_item) * (begin_checkout * 1.0 / add_to_cart) * (purchase * 1.0 / begin_checkout)) AS purchase_simulated`
+    `FROM baseline;`
 
 <br>
 
 ### C4 - Lección 2: Estimando el impacto en métricas de negocio
 <br>
+
+**🎯 Propósito de la lección**
+
+Traducir mejoras simuladas en el embudo a impacto financiero usando un valor monetario promedio por transacción/usuario (AOV/ARPU) y presentar revenue base, revenue simulado y revenue gain para priorizar inversiones.
+
+**🧠 Idea central**
+
+Una mejora de conversión en etapas tempranas del funnel se propaga río abajo. Si cuantificamos cuántas compras adicionales genera y las multiplicamos por un valor promedio por compra (AOV), obtenemos un estimado claro en $ para negocio (y podemos evaluar sensibilidad/ROI).
+
+**Temáticas trabajadas**
+
+1. **Línea base**
+
+    - Construir CTEs con usuarios únicos por etapa (`page_view`, `view_item`, `add_to_cart`, `begin_checkout`, `purchase`).
+    - Consolidar en baseline los conteos.
+
+2. **Ratios históricos**
+
+- Calcular tasas entre etapas para propagar mejoras de forma realista:
+
+    - `rate_vi = view_item::numeric / NULLIF(page_view,0)`
+    - `rate_atc = add_to_cart::numeric / NULLIF(view_item,0)`
+    - `rate_bc = begin_checkout::numeric / NULLIF(add_to_cart,0)`
+    - `rate_pur = purchase::numeric / NULLIF(begin_checkout,0)`
+
+3. **Simulación de lift**
+
+- Supuesto: reducir drop-off inicial o aumentar conversión inicial en `lift` (p. ej., 15 %).
+- `view_item_sim = view_item + ROUND((page_view - view_item) * lift)`
+- Propagar:
+    - `add_to_cart_sim = add_to_cart + ROUND((page_view - view_item) * lift * rate_atc)`
+    - `begin_checkout_sim = begin_checkout + ROUND((page_view - view_item) * lift * rate_atc * rate_bc)`
+    - `purchase_sim = purchase + ROUND((page_view - view_item) * lift * rate_atc * rate_bc * rate_pur)`
+
+4. **Impacto en ingresos**
+
+- Definir AOV (o ARPPU) = 200 USD (parametrizable).
+- `additional_purchases = purchase_sim - purchase`
+- `revenue_gain_usd = additional_purchases * AOV`
+
+5. **Presentación ejecutiva**
+
+- Reportar Base vs. Simulado vs. Gain ($).
+- Aclarar horizonte (mensual/anual) y supuestos (estacionalidad, canibalización, repetición de compras).
+- Añadir sensibilidad (AOV ∈ [150,250], lift ∈ [10 %,20 %]) y breakeven ROI: mejora es priorizable si `revenue_gain_usd ≥ costo.`
+
+**SQL sugerido (robusto y paramétrico, abreviado):**
+
+    `WITH params AS (`
+    `SELECT 0.15::numeric AS lift, 200::numeric AS aov`
+    `),`
+    `cte AS (`
+    `SELECT`
+        `COUNT(DISTINCT CASE WHEN event_name='page_view'      THEN user_id END) AS page_view,`
+        `COUNT(DISTINCT CASE WHEN event_name='view_item'      THEN user_id END) AS view_item,`
+        `COUNT(DISTINCT CASE WHEN event_name='add_to_cart'    THEN user_id END) AS add_to_cart,`
+        `COUNT(DISTINCT CASE WHEN event_name='begin_checkout' THEN user_id END) AS begin_checkout,`
+        `COUNT(DISTINCT CASE WHEN event_name='purchase'       THEN user_id END) AS purchase`
+    `FROM ecommerce.jan_2021`
+    `),`
+    `rates AS (`
+    `SELECT`
+        `view_item::numeric      / NULLIF(page_view,0)      AS rate_vi,`
+        `add_to_cart::numeric    / NULLIF(view_item,0)      AS rate_atc,`
+        `begin_checkout::numeric / NULLIF(add_to_cart,0)    AS rate_bc,`
+        `purchase::numeric       / NULLIF(begin_checkout,0) AS rate_pur,`
+        `*`
+    `FROM cte`
+    `),`
+    `sim AS (`
+    `SELECT`
+        `page_view,`
+        `view_item + ROUND((page_view - view_item) * p.lift)   AS view_item_sim,`
+        `add_to_cart + ROUND((page_view - view_item) * p.lift * rate_atc)   AS add_to_cart_sim,`
+        `begin_checkout + ROUND((page_view - view_item) * p.lift * rate_atc * rate_bc) AS begin_checkout_sim,`
+        `purchase + ROUND((page_view - view_item) * p.lift * rate_atc * rate_bc * rate_pur) AS purchase_sim,`
+        `purchase AS purchase_base,`
+        `p.aov`
+    `FROM rates r CROSS JOIN params p`
+    `)`
+    `SELECT`
+    `page_view,`
+    `view_item_sim, add_to_cart_sim, begin_checkout_sim, purchase_sim,`
+    `purchase_base,`
+    `(purchase_sim - purchase_base)                                  AS additional_purchases,`
+    `ROUND((purchase_sim - purchase_base) * aov, 2)                  AS revenue_gain_usd`
+    `FROM sim;`
+
+
+**Errores comunes y cómo evitarlos**
+
+- ❌ Usar ARPU cuando realmente multiplicas compras adicionales × valor por compra. ✅ Cambia a AOV/ARPPU o explica que el “200 USD” es por compra.
+- ❌ Dividir enteros sin ::numeric y sin NULLIF() → resultados en 0 o error. ✅ Castea y protege: x::numeric / NULLIF(y,0).
+- ❌ Redondear demasiado pronto (varias veces). ✅ Redondea al final y sólo para $ (ROUND(...,2)).
+- ❌ Decir impacto anual con datos mensuales. ✅ Especifica el horizonte y la extrapolación (p. ej., ×12).
+- ❌ No parametrizar lift ni AOV. ✅ Usa un CTE params y muestra escenarios (p. ej., 10–20 %, 150–250 USD).
+- ❌ Dejar un recurso sin enlace. ✅ Añade el link a Investopedia (texto clicable).
+- ❌ “Analisis” sin tilde y puntuación con espacios previos. ✅ Análisis y limpieza de espacios antes de coma/punto.
+
+**Práctica guiada**
+
+1. **Mejora moderada en Stage 2 (+7%) con ARPU = $180**
+
+**Objetivo:** Estimar el revenue_gain si aumentamos +7% la conversión de Stage 1→2 (page_view → view_item). ARPU = $180.
+
+**Instrucciones:**
+
+Partiendo del código aprendido en la lección, modifica para cumplir lo siguiente:
+
+1. Simula +7% solo en `view_item`.
+2. Propaga el efecto a `add_to_cart`, `begin_checkout` y `purchase` usando las tasas base.
+3. Calcula compras adicionales y revenue_impact_usd con ARPU =180.
+
+**Respuesta:**
+
+    `WITH cte_page_view AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'page_view'`
+    `), cte_view_item AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'view_item'`
+    `), cte_add_to_cart AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'add_to_cart'`
+    `), cte_begin_checkout AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'begin_checkout'`
+    `), `
+    `cte_purchase AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'purchase'`
+    `),`
+    `baseline AS (`
+        `SELECT`
+            `(SELECT COUNT(*) FROM cte_page_view) AS page_view,`
+            `(SELECT COUNT(*) FROM cte_view_item) AS view_item,`
+            `(SELECT COUNT(*) FROM cte_add_to_cart) AS add_to_cart,`
+            `(SELECT COUNT(*) FROM cte_begin_checkout) AS begin_checkout,`
+            `(SELECT COUNT(*) FROM cte_purchase) AS purchase`
+    `),`
+    `simulated AS (`
+        `SELECT`
+            `page_view AS page_view_users,`
+            `view_item + ROUND((page_view - view_item) * 0.07) AS view_item_users,`
+            `add_to_cart + ROUND((page_view - view_item) * 0.07 * (add_to_cart * 1.0 / view_item)) AS add_to_cart_users,`
+            `begin_checkout + ROUND((page_view - view_item) * 0.07 * (add_to_cart * 1.0 / view_item) * (begin_checkout *` `1.0 / add_to_cart)) AS begin_checkout_users,`
+            `purchase + ROUND((page_view - view_item) * 0.07 * (add_to_cart * 1.0 / view_item) * (begin_checkout * 1.0 / `add_to_cart) * (purchase * 1.0 / begin_checkout)) AS purchase_users,`
+            `purchase AS original_purchase_users`
+        `FROM baseline`
+    `)`
+    `SELECT`
+        `page_view_users,`
+        `view_item_users,`
+        `add_to_cart_users,`
+        `begin_checkout_users,`
+        `purchase_users,`
+        `original_purchase_users,`
+        `purchase_users - original_purchase_users AS additional_purchases,`
+        `(purchase_users - original_purchase_users) * 180 AS revenue_impact_usd`
+    `FROM simulated;`
+
+2. **Empuje fuerte en Stage 3 (+12%) con ARPU = $220**
+
+**Objetivo:** Simular una mejora del +12% en la etapa view_item → add_to_cart (Stage 3) y estimar ingresos con ARPU $220.
+
+**Instrucciones:**
+
+1. Mantén `page_view` y `view_item` sin cambio.
+2. Aumenta `add_to_cart` para incrementar un 12% los usuarios que continúan desde `view_item`.
+3. Propaga a `begin_checkout` y `purchase` con sus tasas base.
+4. Antes de sumar el incremento de usuarios a cada etapa, redondea el incremento al entero más cercano.
+5. Calcula los nuevos ingresos usando el alias `revenue_impact_usd`.
+
+**Respuesta:**
+
+    `WITH cte_page_view AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'page_view'`
+    `), cte_view_item AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'view_item'`
+    `), cte_add_to_cart AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'add_to_cart'`
+    `), cte_begin_checkout AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'begin_checkout'`
+    `), cte_purchase AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'purchase'`
+    `), baseline AS (`
+        `SELECT`
+            `(SELECT COUNT(*) FROM cte_page_view) AS page_view,`
+            `(SELECT COUNT(*) FROM cte_view_item) AS view_item,`
+            `(SELECT COUNT(*) FROM cte_add_to_cart) AS add_to_cart,`
+            `(SELECT COUNT(*) FROM cte_begin_checkout) AS begin_checkout,`
+            `(SELECT COUNT(*) FROM cte_purchase) AS purchase`
+    `),`
+    `simulated AS (`
+        `SELECT`
+            `page_view AS page_view_users,`
+            `view_item AS view_item_users,`
+            `add_to_cart + ROUND((view_item - add_to_cart) * 0.12) AS add_to_cart_users,`
+            `begin_checkout + ROUND((view_item - add_to_cart) * 0.12 * (begin_checkout * 1.0 / add_to_cart)) AS begin_checkout_users,`
+            `purchase + ROUND((view_item - add_to_cart) * 0.12 * (begin_checkout * 1.0 / add_to_cart) * (purchase * 1.0 / begin_checkout)) AS purchase_users,`
+            `purchase AS original_purchase_users`
+        `FROM baseline`
+    `)`
+    `SELECT`
+        `page_view_users,`
+        `view_item_users,`
+        `add_to_cart_users,`
+        `begin_checkout_users,`
+        `purchase_users,`
+        `original_purchase_users,`
+        `(purchase_users - original_purchase_users) AS additional_purchases,`
+        `(purchase_users - original_purchase_users) * 220 AS revenue_impact_usd`
+    `FROM simulated;`
+
+3. **Mejora única en Stage 4 (+10%) con ARPU = $200**
+
+**Objetivo:** Simular una mejora del +10% en la etapa begin_checkout → purchase (Stage 4) y estimar el impacto en ingresos con ARPU = $200.
+
+**Instrucciones:**
+
+1. Calcula el funnel base con los mismos CTEs.
+2. Solo incrementa `purchase` aplicando +10% de la brecha `(begin_checkout - purchase)`. Redondea el incremento al entero más cercano antes de sumarlo.
+3. Mantén las demás etapas iguales al baseline.
+4. Calcula `additional_purchases` y `revenue_impact_usd`.
+
+**Respuesta:**
+
+    `WITH cte_page_view AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'page_view'`
+    `), cte_view_item AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'view_item'`
+    `), cte_add_to_cart AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'add_to_cart'`
+    `), cte_begin_checkout AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'begin_checkout'`
+    `), cte_purchase AS (`
+        `SELECT DISTINCT user_id FROM ecommerce_jan_2021 WHERE event_name = 'purchase'`
+    `), baseline AS (`
+        `SELECT`
+            `(SELECT COUNT(*) FROM cte_page_view) AS page_view,`
+            `(SELECT COUNT(*) FROM cte_view_item) AS view_item,`
+            `(SELECT COUNT(*) FROM cte_add_to_cart) AS add_to_cart,`
+            `(SELECT COUNT(*) FROM cte_begin_checkout) AS begin_checkout,`
+            `(SELECT COUNT(*) FROM cte_purchase) AS purchase`
+    `),`
+    `simulated AS (`
+        `SELECT`
+            `page_view AS page_view_users,`
+            `view_item AS view_item_users,`
+            `add_to_cart AS add_to_cart_users,`
+            `begin_checkout AS begin_checkout_users,`
+            `purchase + ROUND((begin_checkout - purchase) * 0.10) AS purchase_users,`
+            `purchase AS original_purchase_users`
+        `FROM baseline`
+    `)`
+    `SELECT`
+        `page_view_users,`
+        `view_item_users,`
+        `add_to_cart_users,`
+        `begin_checkout_users,`
+        `purchase_users,`
+        `original_purchase_users,`
+        `(purchase_users - original_purchase_users) AS additional_purchases,`
+        `(purchase_users - original_purchase_users) * 200 AS revenue_impact_usd`
+    `FROM simulated;`
 
 <br>
 
