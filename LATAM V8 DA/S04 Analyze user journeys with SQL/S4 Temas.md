@@ -1434,6 +1434,89 @@ Asegúrate de tener las columnas `cohorte_mes`, `geography` y `ternure_month`.
 ### C4 - Lección 1: Pruebas A/B en funnels y simulando mejoras
 <br>
 
+**🎯 Propósito de la lección**
+
+Entender qué es un experimento A/B aplicado a un funnel de conversión, distinguir cambios orgánicos vs. efectos de tratamiento y simular—con SQL—el impacto potencial de mejorar la conversión en una etapa temprana del embudo antes de invertir en cambios reales.
+
+**🧠 Idea central**
+
+1. Construyes una línea base con usuarios únicos por etapa del funnel.
+
+2. Planteas una mejora hipotética (p. ej., reducir 15% el drop-off entre `page_view` → `view_item`).
+
+3. Propagas ese incremento a las etapas siguientes usando tasas históricas de conversión (p. ej., `add_to_cart / view_item`), para estimar su efecto en purchase. Así cuantificas el retorno potencial de atacar la primera fricción.
+
+**Temáticas trabajadas**
+
+- **Qué es A/B testing y por qué usarlo**
+
+    - Grupos control (A) vs tratamiento (B); objetivo: atribuir cambios a la intervención.
+    - Diferencia entre cambio orgánico (estacionalidad, campañas, caídas técnicas) y efecto de tratamiento.
+    - Riesgos si no es controlado: diferencias no significativas, sesgos de muestra, no segmentar subgrupos.
+
+- **Funnel de referencia**
+
+    - `page_view → view_item → add_to_cart → begin_checkout → purchase`.
+    - Se cuentan usuarios únicos por etapa (usar SELECT DISTINCT user_id en cada CTE).
+
+- **Línea base en SQL (CTEs)**
+
+    - `cte_page_view`, `cte_view_item`, `cte_add_to_cart`, `cte_begin_checkout`, `cte_purchase`.
+    - Consolidación en una CTE `baseline` con los conteos totales por etapa.
+
+- **Simulación “what-if”**
+
+    - Usuarios “recuperados” por mejora en etapa 1:
+    - `recuperados = (page_view - view_item) * mejora_pct.`
+    - Nuevo `view_item = view_item + recuperados`.
+    - Propagación a etapas siguientes con tasas históricas:
+        - tasa a carrito: `add_to_cart / view_item` (histórica).
+        - incremento estimado en `add_to_cart`: `recuperados * tasa_histórica`.
+        - repetir para `begin_checkout` y `purchase`.
+
+- **Detalles técnicos para simulación fiable**
+
+    - División en punto flotante: `add_to_cart * 1.0 / NULLIF(view_item,0) o CAST(... AS numeric)`.
+    - Evitar redondeos intermedios; redondear sólo al mostrar.
+    - Monotonía del funnel: capear con `LEAST(nuevo_add_to_cart, nuevo_view_item)` etc.
+    - Sensibilidad: probar varios niveles de mejora (5/10/15/20%) y observar elasticidad en `purchase`.
+
+- **Lectura del resultado**
+
+    - Ejemplo: mejorar 15% el primer salto eleva `view_item` y, por propagación, compras (p. ej., de 16 a 24).
+    - Insight clave: pequeñas mejoras temprano en el embudo multiplican el efecto al final.
+
+- Buenas prácticas de A/B real (más allá de la simulación)
+
+    - Tamaño de muestra y potencia estadística; evitar peeking.
+    - Duración que cubra ciclos de tráfico.
+    - Segmentación (evitar paradoja de Simpson).
+    - Métrica primaria predefinida y análisis de significancia.
+
+**Errores comunes y cómo evitarlos**
+
+- ❌ División entera sin decimales → tasas mal calculadas. ✅ multiplica por 1.0 o castea a numeric; usa NULLIF para evitar división por cero.
+- ❌ Nombres de tablas inconsistentes (ecommerce.jan_2021 vs ecommerce_jan_2021). ✅ estandariza el nombre y documenta el esquema.
+- ❌ No usar DISTINCT user_id en CTEs → doble conteo por múltiples eventos. ✅ SELECT DISTINCT user_id por etapa.
+- ❌Redondear demasiado pronto → sesgo acumulado. ✅ calcula en decimal y redondea sólo en la salida.
+- ❌ Resultados simulados que violan el orden lógico del funnel. ✅ verifica page_view ≥ view_item ≥ add_to_cart ≥ begin_checkout ≥ purchase y aplica límites.
+- ❌ Ignorar tamaño de muestra y duración en A/B reales. ✅ plan de potencia, duración mínima y reglas de stopping.
+- ❌ Confundir correlación con causalidad en simulaciones. ✅ usa la simulación para priorizar hipótesis, pero valida con un A/B controlado.
+
+**Practica guiada**
+
+1. **Objetivo:**
+
+Necesitas crear una consulta que muestre cuántos usuarios únicos llegan a cada etapa del funnel. Esta servirá como punto de partida para medir cualquier mejora posterior. Continuamos con el dataset ecommerce_jan_2021.
+
+**Instrucciones:**
+
+1. Crear cinco CTEs: una por cada evento clave (`page_view`, `view_item`, `add_to_cart`, `begin_checkout`, `purchase`).
+2. Contar los usuarios únicos en cada CTE.
+3. Mostrar los resultados en una sola fila con columnas para cada etapa. Usa los nombres de columna: page_view, view_item, add_to_cart, begin_checkout y purchase respectivamente.
+
+
+
 <br>
 
 ### C4 - Lección 2: Estimando el impacto en métricas de negocio
