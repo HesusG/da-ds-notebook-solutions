@@ -2013,4 +2013,99 @@ Redondea el incremento al entero más cercano antes de sumarlo.
 ### C4 - Lección 4: Visualización de Embudos para los Stakeholders
 <br>
 
+**🎯 Propósito de la lección**
+
+Convertir los resultados del funnel (real vs. simulado) en una visualización ejecutiva en Google Sheets que permita a cualquier stakeholder entender, en segundos: qué cambió, dónde se amplifica la mejora y qué impacto representa, sin necesidad de leer SQL ni tablas largas.
+
+**🧠 Idea central**
+
+Los números por sí solos no “venden” decisiones. La habilidad clave es traducir una simulación técnica en una historia visual: comparar el antes vs. después, resaltar el “salto” por etapa, y acompañarlo con 2–3 mensajes que conecten el cambio con acción (priorizar optimización, escalar a otros segmentos, estimar retorno).
+
+**Temáticas trabajadas**
+
+1. **Contexto:** de tablas a story (por qué esto importa)
+
+- Hasta aquí, ya sabes:
+
+    - medir el funnel real (cuántos usuarios pasan por cada etapa),
+    - simular una mejora (p. ej., +15% en la conversión inicial) y ver cómo se “propaga” al resto del embudo.
+    - En esta lección cambias de modo “analista técnico” a modo “analista que influye”: tu entregable ya no es una query, sino una historia visual lista para presentar.
+
+2. **Paso 1: Preparar datos en Google Sheets (hacerlos “visual-ready”)**
+
+- Qué problema resuelve: normalmente el funnel sale en una sola fila con muchas columnas (page_view, view_item, add_to_cart…). Eso es incómodo para graficar como embudo comparativo.
+- Qué hacen con `UNION ALL`:
+    - “Despivotear” manualmente el resultado: pasar de columnas a filas.
+    - Construyen una tabla con 3 columnas:
+        - `etapa` (nombre del paso del funnel),
+        - `real` (conteo base),
+        - `simulado` (conteo tras la mejora).
+
+- Cómo leer la tabla resultante (por qué ya cuenta una historia):
+
+    - `page_view` suele quedar igual (es el “tope” del embudo).
+    - desde `view_item` en adelante, el simulado se “ensancha” si la mejora funciona.
+    - el valor más importante para negocio suele estar cerca del final: `purchase` (16 → 24 = +8 compras).
+
+- Buenas prácticas al copiar a Sheets:
+
+    - pegar con encabezados claros,
+    - asegurar el orden correcto del funnel,
+    - verificar que estás comparando usuarios únicos (no eventos duplicados).
+
+3. **Paso 2: Construir la visual del embudo (Real vs. Simulado)**
+
+- Objetivo del gráfico: que el stakeholder vea dos recorridos lado a lado y entienda de inmediato:
+    - dónde se pierde gente (estrechamiento),
+    - dónde la mejora genera el mayor “ensanchamiento”,
+    - cómo ese efecto se acumula hasta compras.
+
+- Flujo recomendado en Google Sheets (lo que realmente estás configurando):
+
+    - Seleccionas el rango completo (etapa, real, simulado).
+    - Insertas un gráfico (Sheets suele sugerir línea por defecto).
+    - Cambias a un tipo que comunique “magnitud por etapa” (barras/columnas).
+    - Ajustas para que se lea como embudo: ordenar etapas, invertir el eje si quieres que page_view quede arriba, y activar etiquetas para ver valores.
+
+- Qué debes asegurar para que “se entienda solo”:
+
+    - Título descriptivo (incluye que es +15% en la primera etapa si aplica).
+    - Etapas en orden del funnel.
+    - Dos series claramente diferenciadas: Real vs Simulado.
+    - Etiquetas de datos visibles (para que no todo dependa del color).
+
+4. **Columna opcional: “Mejora %” (y cómo usarla sin dañar el visual)**
+
+    - Qué representa: el crecimiento relativo por etapa vs. base:
+    - ejemplo conceptual: `((Simulado - Real) / Real)`.
+
+- Para qué sirve:
+
+    - poner un número rápido junto al visual (p. ej., “view_item +52%”, “purchase +50%”).
+    - reforzar la historia: “una mejora al inicio se amplifica y llega a +8 compras”.
+
+- Cómo se usa bien: como columna auxiliar en la tabla y/o como resumen en notas, no como serie dentro del mismo gráfico principal si eso lo vuelve confuso.
+
+5. **Paso 3: Notas para stakeholders (la parte que convierte en decisión)**
+
+- Qué problema resuelve: un gráfico sin contexto se interpreta de mil formas. Las notas fijan el mensaje.
+- Qué debe incluir un bloque de notas sólido (plantilla mental):
+
+    - Cambio visible: “view_item sube de 266 a 405 (+52%).”
+    - Resultado de negocio: “purchase sube de 16 a 24 (+8 compras).”
+    - Implicación/acción: “Priorizar optimizar la etapa inicial; replicar en otros mercados/segmentos.”
+
+- **Tono:** ejecutivo, accionable, sin jerga técnica (“CTEs”, “subqueries”, etc.).
+- **Cierre de la historia:** “ya no solo informas; recomiendas el siguiente paso”.
+
+**Errores comunes y cómo evitarlos**
+
+- ❌ Recomendar gráfico apilado para comparar Real vs Simulado → ✅ Usa gráfico agrupado (o desactiva “Apilamiento”) para que A vs B se compare sin “sumas visuales”.
+- ❌ Dejar que las etapas se reordenen (alfabético) → ✅ Fuerza el orden del funnel (o agrega columna orden y ordena por ella).
+- ❌ Copiar a Sheets sin validar que baseline/simulated son una sola fila → ✅ Asegura que las CTEs devuelvan 1 fila (si no, la tabla se rompe o se duplica).
+- ❌ Meter “Mejora %” como tercera serie en el gráfico principal → ✅ Déjala como columna de apoyo o crea un gráfico separado solo de porcentajes.
+- ❌ Calcular “Mejora %” sin controlar división por cero → ✅ Usa IFERROR / IF(Real=0,…) y luego formatea como %.
+- ❌ Poner notas con conceptos de otra lección (retención/activación) → ✅ Escribe notas con vocabulario del funnel: conversión por etapa y compras.
+- ❌ Mostrar el gráfico sin un “so what” claro → ✅ Agrega 2–3 bullets: cambio, impacto, recomendación.
+
 <br>
