@@ -113,6 +113,74 @@ Cargar → Explorar → Limpiar → Analizar → Visualizar → Comunicar (aplic
 ### C1 - Lección 2: Configurando tu entorno de análisis
 <br>
 
+**🎯 Propósito de la lección**
+
+Dejarte listo para trabajar en un entorno reproducible usando Jupyter Notebook, de forma que puedas empezar a construir el reporte mensual de PM2.5 por país (máx, mín, promedio) sin depender de pasos manuales.
+
+**🧠 Idea central**
+
+El “entorno” no es solo instalar cosas: es tener un espacio de trabajo donde puedas (1) ejecutar código por bloques, (2) ver resultados inmediatamente, y (3) documentar el análisis como si fuera un reporte. Jupyter Notebook funciona como el puente entre “programar” y “comunicar”.
+
+**Tematicas trabajadas**
+
+1) **Contexto de negocio y plan por capítulos**
+
+- El problema que plantea tu jefa: reporte mensual de PM2.5 por país (máximo, mínimo, promedio).
+
+La lección se enfoca en que puedas empezar el trabajo desde un notebook y dejarlo “bien armado” desde el inicio.
+
+2) **Qué es Jupyter Notebook y por qué se usa**
+
+- **Qué es:** un documento interactivo que mezcla código + texto + visualizaciones en un solo lugar.
+- Por qué sirve en analítica:
+
+    - Documentas paso a paso (no queda “mágico” como a veces pasa en Sheets).
+    - Experimentas sin “romper” el dataset original.
+    - Te queda un artefacto compartible (el notebook) para tu equipo/stakeholders técnicos.
+
+3) **Conociendo la interfaz (lo mínimo indispensable)**
+
+- **Celdas de código:** ejecutas Python y ves output debajo (tablas, prints, errores, gráficos).
+- **Celdas de texto (Markdown):** escribes títulos, subtítulos, explicaciones y conclusiones.
+- **Menú superior:** ejecutar celdas, insertar, mover, convertir tipo de celda, etc.
+La idea es que el notebook no sea “solo código”, sino una historia.
+
+4) **Ejecutando tu primer código (y entendiendo el “estado” del notebook)**
+
+- **Cómo ejecutar:** botón Run/Ejecutar o atajo Shift + Enter.
+- **Variables:** se guardan en memoria (kernel).
+
+    - Si defines ciudad = "Buenos Aires" en una celda, puedes usarla más adelante en otras celdas.
+    - Si borras la celda que crea la variable, la variable puede seguir existiendo si el kernel no se reinició (esto es clave para entender por qué a veces “funciona” algo y luego no).
+
+5) Organizando tu notebook como un reporte profesional
+
+Tres prácticas que se remarcan:
+
+1. Usar títulos claros (Markdown)
+
+    - _#_ Título principal
+    - _##_ Secciones
+    - _###_ Subsecciones
+
+Esto actúa como “índice” y guía de lectura.
+
+2. Comentarios breves en el código
+
+    - Explican intención: qué haces y por qué (ej. “reemplazo nulos”, “cargo datos”, “calculo promedio”).
+
+3. Variables con nombres con sentido
+
+    - Mejor df_pm25, clean_df, mean_value que x, df1, etc.
+
+**Errores comunes y cómo evitarlos**
+
+- ❌ Creer que “reiniciar el notebook” borra todo (incluyendo outputs) automáticamente → ✅ Aclara: Restart Kernel limpia variables/memoria; para borrar outputs usa Clear All Outputs (o “Restart & Clear Output” si existe en tu interfaz).
+- ❌ Ejecutar celdas “salteadas” y después no entender por qué algo falla → ✅ Ejecuta de arriba hacia abajo (Run All) y valida que el notebook sea reproducible.
+- ❌ Escribir títulos con # dentro de una celda de código esperando que sea un encabezado → ✅ Los encabezados van en celda Markdown (en código # es comentario).
+- ❌ Dejar un notebook como “pared de código” → ✅ Alterna: código → resultado → 2–3 líneas de explicación.
+- ❌ Usar nombres genéricos (df1, x, temp) y perder el hilo → ✅ Nombres que describan contenido/estado: df_raw, df_clean, df_summary.
+
 <br>
 
 ### C1 - Lección 3: Cargando datos con Pandas
