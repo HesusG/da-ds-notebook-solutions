@@ -7,6 +7,107 @@
 ### C1 - Lección 1: Python para el análisis de datos
 <br>
 
+**🎯 Propósito de la lección**
+
+Dar el salto desde análisis “manual” (Sheets/Excel) a un enfoque automatizable y escalable usando Python, entendiendo por qué es el estándar en analítica cuando empiezan a crecer los datos, la frecuencia de actualización y la necesidad de reproducibilidad.
+
+**🧠 Idea central**
+
+El valor no está solo en calcular, sino en poder repetir el mismo análisis cada semana (con archivos nuevos), sin errores humanos, dejando un proceso documentado, trazable y reutilizable.
+
+**Tematicas trabajadas**
+
+1) **Contexto del caso (motivación realista)**
+
+    - Te pones en el rol de Data Analyst Jr. en una organización ambiental que monitorea contaminación (PM2.5).
+    - Cada lunes llegan archivos nuevos y hoy el proceso se hace “a mano” (copiar/pegar/filtrar/calcular promedios).
+    - La jefa pide automatización: “No podemos depender de pasos manuales. Quiero que empieces a usar Python.”
+
+**Mensaje clave:** cuando el proceso se repite semanalmente, ya no es un análisis, es un proceso… y eso se automatiza.
+
+2) **Qué es Python (y por qué se volvió el idioma universal)**
+
+- Python se presenta como lenguaje simple, versátil y con comunidad.
+
+- Se aterriza a analítica: Python sirve para
+
+    - Limpieza y transformación (ordenar, limpiar, preparar datos)
+    - Visualización (gráficos y dashboards)
+    - Automatización (scripts reproducibles)
+    - (y más adelante) Machine Learning
+
+3) **Por qué Sheets se queda corto (y dónde entra Python)**
+
+Se explican 3 límites típicos de hojas de cálculo:
+
+- Repetición manual → más tiempo + más probabilidad de error
+- Dificultad para escalar → archivos grandes se ponen lentos o fallan
+- Poca trazabilidad → cuesta saber “cómo se generó” el reporte
+
+Python entra como solución porque:
+
+- te deja automatizar lo repetitivo,
+- repetir el flujo con nuevos datos,
+- documentar el proceso (y que otro lo ejecute igual).
+
+4) **Cómo se usa Python en Data Analytics (librerías)**
+
+Se introduce la idea de librerías: paquetes que ya traen herramientas listas.
+
+- **pandas:** tablas tipo Excel, pero programables
+- **numpy / scipy:** matemáticas/estadística
+- **matplotlib / seaborn:** visualización
+
+5) **Comparación práctica: Sheets vs SQL vs Python**
+
+Se ubica cada herramienta en el ciclo de análisis:
+
+- **SQL:** extraer datos y agrupar en bases corporativas
+- **Sheets/Excel:** revisión rápida, compartir con negocio, outputs manuales
+- **Python:** limpieza robusta, análisis reproducible, automatización, visualización programable
+
+6) **Pensamiento programático (structured thinking)**
+
+Se enseña que programar no es memorizar comandos: es pensar en pasos.
+
+- Analogía “receta”: pasos claros y en orden.
+- Se plantea un flujo típico de analítica:
+    1. definir el problema
+    2. ubicar datos
+    3. cargar dataset
+    4. explorar columnas/errores
+    5. limpiar (nulos/duplicados/inconsistencias)
+    6. calcular
+    7. visualizar
+    8. responder la pregunta
+
+**Mini-pseudocódigo:** promedio de PM2.5 por país (agrupar → promedio → ordenar → gráfico → reporte).
+
+7) **Ejemplo de lógica “si-entonces” (para automatizar)**
+
+Se cuenta el caso de Sofía (inventario) para explicar:
+
+- cómo un proceso manual se vuelve reglas + bucles:
+
+    - “si stock > 0”
+    - “y si fecha última venta > 90 días”
+    - entonces “agregar a olvidados”
+
+Se muestra la equivalencia “manual vs pseudocódigo”.
+
+8) **Conexión con el flujo real que se usará en el sprint**
+
+Se deja instalado el pipeline mental que se repetirá en las siguientes lecciones:
+Cargar → Explorar → Limpiar → Analizar → Visualizar → Comunicar (aplicado al dataset de PM2.5).
+
+**Errores comunes y cómo evitarlos**
+
+- ❌ Creer que Python “reemplaza” SQL y Sheets → ✅ Pensar en combo: SQL extrae, Python transforma/analiza, Sheets comparte/visualiza rápido.
+- ❌ Empezar a “tirar código” sin plan → ✅ Escribir primero pasos/pseudocódigo (qué hago, en qué orden, con qué reglas).
+- ❌ No estandarizar nombres/unidades del dataset (PM2.5) → ✅ Definir una convención y repetirla en todo el sprint.
+- ❌ Pensar que “librería = magia” y no entender qué hace → ✅ Conectar cada librería con una tarea (tablas, estadística, gráficos).
+- ❌ Hacer el análisis una sola vez y no prepararlo para repetirse → ✅ Diseñar desde el inicio como proceso semanal: cargar → limpiar → calcular → reportar.
+
 <br>
 
 ### C1 - Lección 2: Configurando tu entorno de análisis
