@@ -99,6 +99,33 @@ Los datos provienen de consultas SQL previamente ejecutadas y guardadas en archi
 - [ ] **[OBLIGATORIO]** El código ejecuta sin errores
 - [ ] **[OBLIGATORIO]** Todas las celdas están ejecutadas secuencialmente
 
+<details>
+<summary>📊 Resultados Esperados - BÁSICO</summary>
+
+**Tamaño de los DataFrames:**
+- `df_companies`: 64 filas (empresas de taxi)
+- `df_neighborhoods`: 94 filas (barrios)
+- `df_airport`: 1,068 filas (viajes al aeropuerto)
+
+**Tipos de datos iniciales:**
+- `start_ts`: object (debe convertirse a datetime)
+- `weather_conditions`: object (Good/Bad)
+- `duration_seconds`: int64
+
+**Valores nulos:** Ninguno en los 3 DataFrames
+
+**Código de carga:**
+```python
+df_companies = pd.read_csv('/datasets/project_sql_result_01.csv')
+df_neighborhoods = pd.read_csv('/datasets/project_sql_result_04.csv')
+df_airport = pd.read_csv('/datasets/project_sql_result_07.csv')
+
+print(df_companies.info())
+print(df_companies.head())
+```
+
+</details>
+
 ### INTERMEDIO
 
 **Limpieza de Datos**
@@ -124,6 +151,62 @@ Los datos provienen de consultas SQL previamente ejecutadas y guardadas en archi
 - [ ] **[OBLIGATORIO]** Los ejes tienen etiquetas claras
 - [ ] Usa rotación en etiquetas cuando es necesario
 - [ ] Aplica paleta de colores apropiada
+
+<details>
+<summary>📊 Resultados Esperados - INTERMEDIO</summary>
+
+**Limpieza de Datos:**
+- Viajes con `duration_seconds = 0`: **6 viajes** (deben eliminarse o documentarse)
+- Después de filtrar: **1,062 viajes válidos**
+- Todos los viajes son de sábados (`dayofweek == 5`)
+
+**Conversión de fecha:**
+```python
+df_airport['start_ts'] = pd.to_datetime(df_airport['start_ts'])
+df_airport['day_of_week'] = df_airport['start_ts'].dt.dayofweek
+```
+
+---
+
+**Top 10 Empresas de Taxi:**
+
+![Top 10 Empresas](../hesus-analysis/svg1_top_empresas.svg)
+
+| Empresa | Viajes | % del Total |
+|---------|--------|-------------|
+| Flash Cab | 19,558 | 14.24% |
+| Taxi Affiliation Services | 11,422 | 8.32% |
+| Medallion Leasing | 10,367 | 7.55% |
+| Yellow Cab | 9,888 | 7.20% |
+| Taxi Affiliation Service Yellow | 9,299 | 6.77% |
+| Chicago Carriage Cab Corp | 9,181 | 6.69% |
+| City Service | 8,448 | 6.15% |
+| Sun Taxi | 7,701 | 5.61% |
+| Star North Management LLC | 7,455 | 5.43% |
+| Blue Ribbon Taxi Association | 5,953 | 4.34% |
+
+**Total viajes todas las empresas:** 137,311
+
+---
+
+**Top 10 Barrios (Destinos):**
+
+![Top 10 Barrios](../hesus-analysis/svg2_top_barrios.svg)
+
+| Barrio | Viajes Promedio | Contexto |
+|--------|-----------------|----------|
+| Loop | 10,727.47 | Centro financiero de Chicago |
+| River North | 9,523.67 | Zona de entretenimiento/restaurantes |
+| Streeterville | 6,664.67 | Área turística junto al lago |
+| West Loop | 5,163.67 | Zona de restaurantes/tech |
+| O'Hare | 2,546.90 | Aeropuerto internacional |
+| Lake View | 2,420.97 | Barrio residencial popular |
+| Grant Park | 2,068.53 | Parque principal/eventos |
+| Museum Campus | 1,510.00 | Zona de museos |
+| Gold Coast | 1,364.23 | Barrio lujoso |
+| Sheffield & DePaul | 1,259.77 | Área universitaria |
+
+</details>
 
 ### AVANZADO
 
@@ -151,6 +234,78 @@ Los datos provienen de consultas SQL previamente ejecutadas y guardadas en archi
 - [ ] Resume hallazgos sobre empresas y barrios
 - [ ] Proporciona recomendaciones basadas en el análisis
 
+<details>
+<summary>📊 Resultados Esperados - AVANZADO (Prueba de Hipótesis)</summary>
+
+**Distribución por Condición Climática:**
+
+![Distribución por Clima](../hesus-analysis/svg3_duracion_por_clima.svg)
+
+| Condición | n | Media | Desv. Estándar |
+|-----------|---|-------|----------------|
+| Buen clima | 882 | 33.55 min | 12.39 min |
+| Mal clima | 180 | 40.45 min | 12.02 min |
+| **Diferencia** | - | **+6.90 min** | - |
+
+---
+
+**Comparación Visual:**
+
+![Boxplot Clima](../hesus-analysis/svg4_boxplot_clima.svg)
+
+---
+
+**Prueba de Levene (Igualdad de Varianzas):**
+```python
+from scipy.stats import levene
+
+stat, p_value = levene(df_bad['duration_seconds'], df_good['duration_seconds'])
+# Estadístico: ~0.14
+# Valor p: ~0.71
+```
+
+**Interpretación Levene:** p > 0.05 → No rechazamos H₀ de igualdad de varianzas → Usar `equal_var=True`
+
+---
+
+**Prueba t-test:**
+```python
+from scipy.stats import ttest_ind
+
+alpha = 0.05
+t_stat, p_value = ttest_ind(
+    df_bad['duration_seconds'],
+    df_good['duration_seconds'],
+    equal_var=True
+)
+```
+
+**Resultados esperados:**
+- Estadístico t: ~6.67
+- Valor p: ~4.29e-11 (prácticamente 0)
+
+---
+
+**Visualización de Hipótesis:**
+
+![Prueba de Hipótesis](../hesus-analysis/svg5_hipotesis.svg)
+
+---
+
+**Conclusión:**
+- **H₀:** No hay diferencia en duración promedio entre sábados con buen y mal clima
+- **H₁:** Hay diferencia significativa en la duración promedio
+- **α = 0.05**
+
+**Decisión:** Rechazamos H₀ (p << 0.05)
+
+**Interpretación:** La duración promedio de los viajes al aeropuerto **SÍ cambia significativamente** los sábados con mal clima. Los viajes son aproximadamente **7 minutos más largos** cuando hay mal tiempo, probablemente debido a:
+- Tráfico más lento por condiciones de visibilidad
+- Conductores manejando con más precaución
+- Mayor congestión por accidentes relacionados con el clima
+
+</details>
+
 ## Criterios de Aprobación General
 
 **Niveles de aprobación:**
@@ -167,13 +322,20 @@ Los datos provienen de consultas SQL previamente ejecutadas y guardadas en archi
   - Todos los criterios OBLIGATORIOS: 24/24
   - Al menos 10 criterios adicionales de los no obligatorios
 
-## Ejemplos de Cumplimiento
+## Ejemplos de Código
+
+> **Nota:** Todos los imports deben estar en la primera celda del notebook.
+
+**Primera celda (imports):**
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy import stats
+from scipy.stats import levene, ttest_ind
+```
 
 **Carga de datos:**
 ```python
-import pandas as pd
-from scipy import stats
-
 df_trips = pd.read_csv('/datasets/project_sql_result_01.csv')
 df_location = pd.read_csv('/datasets/project_sql_result_04.csv')
 df_to_airport = pd.read_csv('/datasets/project_sql_result_07.csv')
@@ -181,81 +343,58 @@ df_to_airport = pd.read_csv('/datasets/project_sql_result_07.csv')
 
 **Conversión de fecha:**
 ```python
-df_to_airport['start_ts'] = pd.to_datetime(df_to_airport['start_ts'], format='%Y-%m-%d %H:%M:%S')
+df_to_airport['start_ts'] = pd.to_datetime(df_to_airport['start_ts'])
 ```
 
 **Identificación de viajes con duración 0:**
 ```python
-# Verificar cuántos viajes tienen duración 0
 zero_duration = (df_to_airport['duration_seconds'] == 0).sum()
 print(f"Viajes con duración 0: {zero_duration}")
 
-# Eliminar viajes con duración 0 (no tienen sentido)
 df_to_airport = df_to_airport[df_to_airport['duration_seconds'] != 0]
 ```
 
 **Top 10 empresas de taxi:**
 ```python
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 top10_companies = df_trips.sort_values(by='trips_amount', ascending=False).head(10)
 
 plt.figure(figsize=(12, 6))
-sns.barplot(data=top10_companies, x='company_name', y='trips_amount')
-plt.xticks(rotation=45, ha='right')
-plt.title('Top 10 Empresas de Taxi por Número de Viajes (Nov 15-16, 2017)')
-plt.xlabel('Nombre de la Empresa')
-plt.ylabel('Número de Viajes')
+plt.barh(top10_companies['company_name'][::-1], top10_companies['trips_amount'][::-1])
+plt.title('Top 10 Empresas de Taxi por Número de Viajes')
+plt.xlabel('Número de Viajes')
 plt.tight_layout()
 plt.show()
 ```
 
-**Filtrar sábados por condición climática:**
+**Filtrar por condición climática:**
 ```python
-# Agregar día de la semana (5 = sábado)
 df_to_airport['day_of_week'] = df_to_airport['start_ts'].dt.dayofweek
 
-# Verificar que solo hay sábados
-print(df_to_airport['day_of_week'].value_counts())
+df_good = df_to_airport[df_to_airport['weather_conditions'] == 'Good']
+df_bad = df_to_airport[df_to_airport['weather_conditions'] == 'Bad']
 
-# Separar por clima
-df_good_weather = df_to_airport[df_to_airport['weather_conditions'] == 'Good']
-df_bad_weather = df_to_airport[df_to_airport['weather_conditions'] == 'Bad']
-
-# Calcular promedios
-print(f"Promedio buen clima: {df_good_weather['duration_seconds'].mean():.2f} segundos")
-print(f"Promedio mal clima: {df_bad_weather['duration_seconds'].mean():.2f} segundos")
+print(f"Promedio buen clima: {df_good['duration_seconds'].mean():.2f} segundos")
+print(f"Promedio mal clima: {df_bad['duration_seconds'].mean():.2f} segundos")
 ```
 
 **Prueba de Levene:**
 ```python
-from scipy.stats import levene
-
-stat, p_value = levene(df_bad_weather['duration_seconds'], df_good_weather['duration_seconds'])
+stat, p_value = levene(df_bad['duration_seconds'], df_good['duration_seconds'])
 print(f'Estadístico de Levene: {stat:.4f}')
 print(f'Valor p: {p_value:.4f}')
 
-if p_value < 0.05:
-    print("Varianzas diferentes → usar equal_var=False")
-    equal_var = False
-else:
-    print("Varianzas iguales → usar equal_var=True")
-    equal_var = True
+equal_var = p_value >= 0.05
+print(f"Usar equal_var={equal_var}")
 ```
 
 **Prueba t-test:**
 ```python
-# Hipótesis:
-# H₀: No hay diferencia en duración promedio entre sábados lluviosos y no lluviosos
-# H₁: Hay diferencia significativa en la duración promedio
-
 alpha = 0.05
 
-t_stat, p_value = stats.ttest_ind(
-    df_bad_weather['duration_seconds'],
-    df_good_weather['duration_seconds'],
-    equal_var=True  # basado en resultado de Levene
+t_stat, p_value = ttest_ind(
+    df_bad['duration_seconds'],
+    df_good['duration_seconds'],
+    equal_var=True
 )
 
 print(f"Estadístico t: {t_stat:.4f}")
@@ -271,6 +410,7 @@ else:
 
 **Errores Críticos que descalifican automáticamente:**
 - Notebook con celdas sin ejecutar
+- Imports dispersos en el notebook (todos los imports deben estar en la primera celda)
 - No carga los 3 archivos CSV
 - No convierte start_ts a datetime
 - No crea visualizaciones de empresas o barrios
