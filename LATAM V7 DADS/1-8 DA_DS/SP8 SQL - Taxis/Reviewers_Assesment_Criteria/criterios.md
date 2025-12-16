@@ -170,7 +170,7 @@ df_airport['day_of_week'] = df_airport['start_ts'].dt.dayofweek
 
 **Top 10 Empresas de Taxi:**
 
-![Top 10 Empresas](../hesus-analysis/svg1_top_empresas.svg)
+![Top 10 Empresas](../local-assets/svg1_top_empresas.svg)
 
 | Empresa | Viajes | % del Total |
 |---------|--------|-------------|
@@ -191,7 +191,7 @@ df_airport['day_of_week'] = df_airport['start_ts'].dt.dayofweek
 
 **Top 10 Barrios (Destinos):**
 
-![Top 10 Barrios](../hesus-analysis/svg2_top_barrios.svg)
+![Top 10 Barrios](../local-assets/svg2_top_barrios.svg)
 
 | Barrio | Viajes Promedio | Contexto |
 |--------|-----------------|----------|
@@ -239,7 +239,7 @@ df_airport['day_of_week'] = df_airport['start_ts'].dt.dayofweek
 
 **Distribución por Condición Climática:**
 
-![Distribución por Clima](../hesus-analysis/svg3_duracion_por_clima.svg)
+![Distribución por Clima](../local-assets/svg3_duracion_por_clima.svg)
 
 | Condición | n | Media | Desv. Estándar |
 |-----------|---|-------|----------------|
@@ -251,7 +251,7 @@ df_airport['day_of_week'] = df_airport['start_ts'].dt.dayofweek
 
 **Comparación Visual:**
 
-![Boxplot Clima](../hesus-analysis/svg4_boxplot_clima.svg)
+![Boxplot Clima](../local-assets/svg4_boxplot_clima.svg)
 
 ---
 
@@ -288,7 +288,7 @@ t_stat, p_value = ttest_ind(
 
 **Visualización de Hipótesis:**
 
-![Prueba de Hipótesis](../hesus-analysis/svg5_hipotesis.svg)
+![Prueba de Hipótesis](../local-assets/svg5_hipotesis.svg)
 
 ---
 

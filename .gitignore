@@ -10,7 +10,7 @@ snippet*.py
 *.json
 catboost_info
 
-# Analysis folders - ignore Python scripts but keep SVGs
-**/hesus-analysis/*.py
-**/hesus-analysis/*.ipynb
-**/hesus-analysis/*.csv
+# Local assets - ignore scripts but keep SVGs
+**/local-assets/*.py
+**/local-assets/*.ipynb
+**/local-assets/*.csv
