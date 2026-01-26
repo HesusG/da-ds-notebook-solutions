@@ -1,22 +1,60 @@
-# Sprint 13: Forecasts and Predictions
-## EN: Forecasts and Predictions
-📅 English version last update: unknown (before 2025)
+# SP13: Forecasts and Predictions
 
-⛔ This project does not start with a template for the student.
+> **Track:** Data Analyst | **Sprint:** 13 de 14
 
---- 
-## ESP:Pronósticos y predicciones
-📅 Fecha de actualización versión en español: 
+## Resumen del Proyecto
 
-⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
+Análisis de pérdida de clientes (churn) para la cadena de gimnasios Model Fitness. Desarrollo de modelos de clasificación para predecir la probabilidad de abandono y segmentación de usuarios mediante clustering para proponer estrategias de retención personalizadas.
 
-### Descripción del proyecto
-La cadena de gimnasios Model Fitness está desarrollando una estrategia de interacción con clientes basada en datos analíticos.
+## Objetivo de Aprendizaje
 
-Uno de los problemas más comunes que enfrentan los gimnasios y otros servicios es la pérdida de clientes. ¿Cómo descubres si un/a cliente ya no está contigo? Puedes calcular la pérdida en función de las personas que se deshacen de sus cuentas o no renuevan sus contratos. Sin embargo, a veces no es obvio que un/a cliente se haya ido: puede que se vaya de puntillas.
+- Entrenar modelos de clasificación supervisada (Regresión Logística, Random Forest)
+- Evaluar modelos con métricas de clasificación (Accuracy, Precision, Recall)
+- Aplicar clustering no supervisado (K-Means, Dendrogramas)
+- Interpretar resultados para estrategias de negocio
 
-Los indicadores de pérdida varían de un campo a otro. Si un usuario o una usuaria compra en una tienda en línea con poca frecuencia, pero con regularidad, no se puede decir que ha huido. Pero si durante dos semanas no ha abierto un canal que se actualiza a diario, es motivo de preocupación: es posible que tu seguidor o seguidor/a se haya aburrido y te haya abandonado.
+## Dataset
 
-En el caso de un gimnasio, tiene sentido decir que un/a cliente se ha ido si no viene durante un mes. Por supuesto, es posible que estén en Cancún y retomen sus visitas cuando regresen, pero ese no es un caso típico. Por lo general, si un/a cliente se une, viene varias veces y luego desaparece, es poco probable que regrese.
+| Archivo | Descripción |
+|---------|-------------|
+| `gym_churn_us.csv` | Perfiles de clientes del gimnasio con variable de churn |
 
-Con el fin de combatir la cancelación, Model Fitness ha digitalizado varios de sus perfiles de clientes. Tu tarea consiste en analizarlos y elaborar una estrategia de retención de clientes.
+> Los datasets están en `.gitignore`. Obtenerlos del LMS.
+
+## Estructura del Proyecto
+
+### Proyecto del Estudiante
+
+| Idioma | Archivo |
+|--------|---------|
+| English | [`P12.ipynb`](./P%20English%20version/P12.ipynb) |
+
+### Soluciones
+
+| Idioma | Archivo | Notas |
+|--------|---------|-------|
+| English | [`P12 EN SOL Forecasts and Predictions.py`](./P%20English%20version/P12%20EN%20SOL%20Forecasts%20and%20Predictions.py) | Script de referencia |
+| Español | [`S13 SOL - Pronósticos y predicciones.ipynb`](./P%20Spanish%20Version/S13%20SOL%20-%20Pronósticos%20y%20predicciones.ipynb) | Solución principal |
+
+### Criterios de Evaluación
+
+[**criterios_DA_13_pronosticos_predicciones.md**](./Reviewers_Assesment_Criteria/criterios_DA_13_pronosticos_predicciones.md)
+
+---
+
+## Requisitos Técnicos
+
+- Python 3.x
+- pandas, numpy
+- matplotlib, seaborn
+- scikit-learn (LogisticRegression, RandomForestClassifier, KMeans, StandardScaler)
+- scipy (dendrograma)
+
+## Entregables
+
+- [ ] EDA con comparación de características por grupo de churn
+- [ ] Modelos de clasificación (Regresión Logística + Random Forest)
+- [ ] Evaluación con métricas de clasificación
+- [ ] Clustering con K-Means (datos estandarizados)
+- [ ] Perfilado de clusters y tasa de churn por grupo
+- [ ] Recomendaciones de marketing por segmento

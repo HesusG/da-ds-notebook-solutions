@@ -1,21 +1,58 @@
-# Sprint 11: Integrated Project 2
-## EN: Integrated Project 2
-📅 English version last update: unknown (before 2025)
+# SP11: Integrated Project 2
 
-⛔ This project does not start with a template for the student.
+> **Track:** Data Analyst | **Sprint:** 11 de 14
 
---- 
-## ESP: Proyecto del módulo 2
-📅 Fecha de actualización versión en español: 1 Agosto 2025
-- Las soluciones son proyectos hechos por alumnos.
+## Resumen del Proyecto
 
-⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
+Análisis del comportamiento de usuarios en una app de delivery de alimentos. Estudio del embudo de ventas para identificar puntos de fricción y evaluación de un test A/A/B para determinar si un cambio de fuentes en la aplicación afecta la conversión.
 
-### Descripción del proyecto
-Trabajas en una empresa emergente que vende productos alimenticios. Debes investigar el comportamiento del usuario para la aplicación de la empresa.
+## Objetivo de Aprendizaje
 
-Primero, estudia el embudo de ventas. Descubre cómo los usuarios llegan a la etapa de compra. ¿Cuántos usuarios realmente llegan a esta etapa? ¿Cuántos se atascan en etapas anteriores? ¿Qué etapas en particular?
+- Construir y analizar embudos de conversión (funnel analysis)
+- Diseñar y evaluar experimentos A/A/B
+- Aplicar pruebas de hipótesis para proporciones (Z-test)
+- Implementar corrección de significancia por comparaciones múltiples
 
-Luego, observa los resultados de un test A/A/B (sigue leyendo para obtener más información sobre los test A/A/B). Al equipo de diseño le gustaría cambiar las fuentes de toda la aplicación, pero la gerencia teme que los usuarios piensen que el nuevo diseño es intimidante. Por ello, deciden tomar una decisión basada en los resultados de un test A/A/B.
+## Dataset
 
-Los usuarios se dividen en tres grupos: dos grupos de control obtienen las fuentes antiguas y un grupo de prueba obtiene las nuevas. Descubre qué conjunto de fuentes produce mejores resultados.
+| Archivo | Descripción |
+|---------|-------------|
+| `logs_exp_us.csv` | Logs de eventos de usuarios (con grupo experimental) |
+
+> Los datasets están en `.gitignore`. Obtenerlos del LMS.
+
+## Estructura del Proyecto
+
+### Proyecto del Estudiante
+
+| Idioma | Archivo |
+|--------|---------|
+| English | [`P10 EN.ipynb`](./P%20English%20version/P10%20EN.ipynb) |
+
+### Soluciones
+
+| Idioma | Archivo | Notas |
+|--------|---------|-------|
+| English | [`S10 EN SOL Integrated Project 2.ipynb`](./P%20English%20version/S10%20EN%20SOL%20Integrated%20Project%202.ipynb) | Solución principal |
+| Español | [`S11 ESP SOL Proyecto Integrado 2.ipynb`](./P%20Spanish%20version/S11%20ESP%20SOL%20Proyecto%20Integrado%202.ipynb) | Solución principal |
+
+### Criterios de Evaluación
+
+[**criterios.md**](./Reviewers_Assesment_Criteria/criterios.md)
+
+---
+
+## Requisitos Técnicos
+
+- Python 3.x
+- pandas, numpy
+- matplotlib, seaborn, plotly
+- statsmodels (proportions_ztest)
+
+## Entregables
+
+- [ ] Preprocesamiento y filtrado de datos (periodo válido)
+- [ ] Análisis de embudo de eventos con visualización
+- [ ] Evaluación del Test A/A (validación del sistema)
+- [ ] Evaluación del Test A/B (control vs test)
+- [ ] Conclusiones y recomendación de negocio

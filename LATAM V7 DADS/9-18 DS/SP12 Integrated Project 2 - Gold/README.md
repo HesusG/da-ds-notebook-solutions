@@ -1,26 +1,60 @@
-# Sprint 12: Integrated Project 2
-## EN: Integrated Project 2
-📅 English version last update: unknown (before 2025)
+# SP12: Integrated Project 2 - Gold Recovery
 
-⛔ This project does not start with a template for the student.
+> **Track:** Data Scientist | **Sprint:** 12 de 18
 
---- 
-## ESP:Proyecto del módulo 2
-📅 Fecha de actualización versión en español: 1 Agosto 2025
-- La solución es un proyecto hecho por un alumno.
+## Resumen del Proyecto
 
-⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
+Desarrollo de un modelo de machine learning para Zyfra que predice la cantidad de oro extraído del mineral. El modelo optimiza la producción eliminando parámetros no rentables en el proceso de extracción y purificación de oro.
 
-### Descripción del proyecto
-Prepara un prototipo de un modelo de machine learning para Zyfra. La empresa desarrolla soluciones de eficiencia para la industria pesada.
+## Objetivo de Aprendizaje
 
-El modelo debe predecir la cantidad de oro extraído del mineral de oro. Dispones de los datos de extracción y purificación.
+- Analizar datos de procesos industriales (múltiples etapas de extracción)
+- Desarrollar métricas de evaluación personalizadas (sMAPE)
+- Entrenar modelos de regresión para optimización de producción
+- Integrar análisis de datos con desarrollo de modelos
 
-El modelo ayudará a optimizar la producción y a eliminar los parámetros no rentables.
+## Dataset
 
-Tendrás que:
-1. Preparar los datos.
-2. Realizar el análisis de datos.
-3. Desarrollar un modelo y entrenarlo.
+| Archivo | Descripción |
+|---------|-------------|
+| `gold_recovery_train.csv` | Datos de entrenamiento del proceso de extracción |
+| `gold_recovery_test.csv` | Datos de prueba del proceso |
+| `gold_recovery_full.csv` | Dataset completo para análisis |
 
-Para completar el proyecto, puedes utilizar la documentación de pandas, matplotlib y sklearn.
+> Los datasets están en `.gitignore`. Obtenerlos del LMS.
+
+## Estructura del Proyecto
+
+### Proyecto del Estudiante
+
+| Idioma | Archivo |
+|--------|---------|
+| English | [`P11.ipynb`](./P%20English%20version/P11.ipynb) |
+
+### Soluciones
+
+| Idioma | Archivo | Notas |
+|--------|---------|-------|
+| English | [`S11 EN SOL Integrated Project 2.py`](./P%20English%20version/S11%20EN%20SOL%20Integrated%20Project%202.py) | Script de referencia |
+| Español | [`S12 ESP Proyecto integrado 2 - Extracción oro.ipynb`](./P%20Spanish%20version/S12%20ESP%20Proyecto%20integrado%202%20-%20Extracción%20oro.ipynb) | Solución principal |
+
+### Criterios de Evaluación
+
+[**criterios.md**](./Reviewers_Assesment_Criteria/criterios.md)
+
+---
+
+## Requisitos Técnicos
+
+- Python 3.x
+- pandas, numpy
+- matplotlib, seaborn
+- scikit-learn (modelos de regresión, cross-validation)
+
+## Entregables
+
+- [ ] Preparación y limpieza de datos
+- [ ] Análisis exploratorio del proceso de extracción
+- [ ] Implementación de métrica sMAPE personalizada
+- [ ] Entrenamiento y comparación de modelos
+- [ ] Evaluación final en conjunto de prueba

@@ -1,23 +1,61 @@
-# Sprint 11: Machine Learning for Business
-## EN: Machine Learning for Business
-📅 English version last update: unknown (before 2025)
+# SP11: Machine Learning for Business
 
-⛔ This project does not start with a template for the student.
+> **Track:** Data Scientist | **Sprint:** 11 de 18
 
---- 
-## ESP: Aprendizaje automático en negocios
-📅 Fecha de actualización versión en español: 1 Agosto 2025
-- La solución es un proyecto hecho por un alumno.
+## Resumen del Proyecto
 
-⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
+Selección de la mejor región para abrir 200 nuevos pozos petroleros para OilyGiant. Se utilizan modelos de regresión lineal para predecir el volumen de reservas y la técnica de Bootstrapping para analizar riesgos y ganancias potenciales.
 
-### Descripción del proyecto
-Trabajas en la compañía de **extracción de petróleo OilyGiant**. Tu tarea es encontrar los mejores lugares donde abrir **200 pozos nuevos de petróleo**.
+## Objetivo de Aprendizaje
 
-Para completar esta tarea, tendrás que realizar los siguientes pasos:
-- Leer los archivos con los parámetros recogidos de pozos petrolíferos en la región seleccionada: calidad de crudo y volumen de reservas.
-- Crear un modelo para predecir el volumen de reservas en pozos nuevos.
-- Elegir los pozos petrolíferos que tienen los valores estimados más altos.
-- Elegir la región con el beneficio total más alto para los pozos petrolíferos seleccionados.
- 
-Tienes datos sobre muestras de crudo de tres regiones. Ya se conocen los parámetros de cada pozo petrolero de la región. Crea un modelo que ayude a elegir la región con el mayor margen de beneficio. Analiza los beneficios y riesgos potenciales utilizando la técnica bootstrapping.
+- Implementar regresión lineal para predicción de volumen
+- Aplicar técnica Bootstrapping para análisis de riesgo
+- Calcular intervalos de confianza y probabilidad de pérdidas
+- Tomar decisiones de negocio basadas en análisis costo-beneficio
+
+## Dataset
+
+| Archivo | Descripción |
+|---------|-------------|
+| `geo_data_0.csv` | Datos de pozos de la Región 0 |
+| `geo_data_1.csv` | Datos de pozos de la Región 1 |
+| `geo_data_2.csv` | Datos de pozos de la Región 2 |
+
+> Los datasets están en `.gitignore`. Obtenerlos del LMS.
+
+## Estructura del Proyecto
+
+### Proyecto del Estudiante
+
+| Idioma | Archivo |
+|--------|---------|
+| English | [`P10.ipynb`](./P%20English%20version/P10.ipynb) |
+
+### Soluciones
+
+| Idioma | Archivo | Notas |
+|--------|---------|-------|
+| English | [`S10 EN SOLV ML for Business.py`](./P%20English%20version/S10%20EN%20SOLV%20ML%20for%20Business.py) | Script de referencia |
+| Español | [`S11 ESP ML negocios - Selección región pozos petróleo.ipynb`](./P%20Spanish%20version/S11%20ESP%20ML%20negocios%20-%20Selección%20región%20pozos%20petróleo.ipynb) | Solución principal |
+
+### Criterios de Evaluación
+
+[**criterios.md**](./Reviewers_Assesment_Criteria/criterios.md)
+
+---
+
+## Requisitos Técnicos
+
+- Python 3.x
+- pandas, numpy
+- scikit-learn (LinearRegression, StandardScaler)
+- Técnica de Bootstrapping manual
+
+## Entregables
+
+- [ ] Modelos de regresión lineal para las 3 regiones
+- [ ] Cálculo de RMSE y volumen promedio predicho
+- [ ] Cálculo de volumen mínimo para cubrir costos
+- [ ] Bootstrapping con 1000 iteraciones (500 muestras → mejores 200)
+- [ ] Intervalos de confianza del 95% y riesgo de pérdidas
+- [ ] Selección de región óptima con justificación

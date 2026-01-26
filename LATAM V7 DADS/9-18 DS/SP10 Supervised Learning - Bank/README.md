@@ -1,21 +1,57 @@
-# Sprint 10: Supervised Learning
-## EN: Supervised Learning
-📅 English version last update: unknown (before 2025)
+# SP10: Supervised Learning
 
-⛔ This project does not start with a template for the student.
+> **Track:** Data Scientist | **Sprint:** 10 de 18
 
---- 
-## ESP: Aprendizaje supervisado 
-📅 Fecha de actualización versión en español: 1 Agosto 2025
-- La solución es un proyecto hecho por un alumno.
+## Resumen del Proyecto
 
-⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
+Predicción de abandono de clientes (churn) para Beta Bank. El modelo debe manejar datos desbalanceados y alcanzar un F1-score de al menos 0.59, utilizando técnicas de balanceo como upsampling o class_weight.
 
-### Descripción del proyecto
-Los clientes de **Beta Bank** se están yendo, cada mes, poco a poco. Los banqueros descubrieron que es más barato salvar a los clientes existentes que atraer nuevos.
+## Objetivo de Aprendizaje
 
-Necesitamos **predecir si un cliente dejará el banco pronto**. Tú tienes los datos sobre el comportamiento pasado de los clientes y la terminación de contratos con el banco.
+- Manejar clases desbalanceadas en problemas de clasificación
+- Aplicar técnicas de balanceo (upsampling, class_weight)
+- Optimizar modelos con GridSearchCV
+- Evaluar con métricas apropiadas para datos desbalanceados (F1-score, ROC-AUC)
 
-Crea un modelo con el máximo valor F1 posible. Para aprobar la revisión, necesitas un valor F1 de al menos 0.59. Verifica F1 para el conjunto de prueba. 
+## Dataset
 
-Además, debes medir la métrica AUC-ROC y compararla con el valor F1.
+| Archivo | Descripción |
+|---------|-------------|
+| `Churn.csv` | Datos históricos de clientes bancarios con variable de abandono |
+
+> Los datasets están en `.gitignore`. Obtenerlos del LMS.
+
+## Estructura del Proyecto
+
+### Proyecto del Estudiante
+
+| Idioma | Archivo |
+|--------|---------|
+| English | [`P9 Customer churn Bank loyalty.ipynb`](./P%20English%20version/P9%20Customer%20churn%20Bank%20loyalty.ipynb) |
+
+### Soluciones
+
+| Idioma | Archivo | Notas |
+|--------|---------|-------|
+| English | [`S9 EN SOL Supervised Learning.py`](./P%20English%20version/S9%20EN%20SOL%20Supervised%20Learning.py) | Script de referencia |
+
+### Criterios de Evaluación
+
+[**criterios.md**](./Reviewers_Assesment_Criteria/criterios.md)
+
+---
+
+## Requisitos Técnicos
+
+- Python 3.x
+- pandas, numpy
+- scikit-learn (clasificadores, StandardScaler, train_test_split, GridSearchCV)
+- Métricas: f1_score, roc_auc_score
+
+## Entregables
+
+- [ ] Preprocesamiento (manejo de nulos, encoding, escalado)
+- [ ] Modelo baseline sin balanceo
+- [ ] Al menos dos técnicas de balanceo implementadas
+- [ ] Comparación de modelos con métricas apropiadas
+- [ ] Evaluación final con F1-score ≥ 0.59 y ROC-AUC

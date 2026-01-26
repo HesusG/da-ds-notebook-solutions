@@ -1,18 +1,57 @@
-# Sprint 10: Making Business Decisions Based on Data
-## EN: Making Business Decisions Based on Data
-📅 English version last update: unknown (before 2025)
+# SP10: Making Business Decisions Based on Data
 
-⛔ This project does not start with a template for the student.
+> **Track:** Data Analyst | **Sprint:** 10 de 14
 
---- 
-## ESP:Tomar decisiones de negocio basadas en datos
-📅 Fecha de actualización versión en español: 1 Agosto 2025
-- Las soluciones son proyectos hechos por alumnos.
+## Resumen del Proyecto
 
+Priorización de hipótesis para aumentar ingresos de una tienda online y análisis de resultados de un test A/B. Se utilizan frameworks ICE/RICE para priorización y pruebas estadísticas para evaluar la significancia de las diferencias entre grupos.
 
-⛔ El proyecto no tiene plantilla o precodigo para el estudiante.
+## Objetivo de Aprendizaje
 
-### Descripción del proyecto
-Eres analista en una gran tienda online. Junto con el departamento de marketing has recopilado una lista de hipótesis que pueden ayudar a aumentar los ingresos.
+- Aplicar frameworks de priorización (ICE/RICE) para backlog de hipótesis
+- Analizar tests A/B con métricas acumuladas
+- Identificar y manejar anomalías (outliers) en datos de e-commerce
+- Tomar decisiones basadas en pruebas estadísticas (Mann-Whitney)
 
-Tienes que priorizar estas hipótesis, lanzar un test A/B y analizar los resultados.
+## Dataset
+
+| Archivo | Descripción |
+|---------|-------------|
+| `hypotheses_us.csv` | Lista de hipótesis con parámetros para ICE/RICE |
+| `orders_us.csv` | Registro de pedidos del test A/B |
+| `visits_us.csv` | Registro de visitas por grupo del test |
+
+> Los datasets están en `.gitignore`. Obtenerlos del LMS.
+
+## Estructura del Proyecto
+
+### Proyecto del Estudiante
+
+Este proyecto no tiene plantilla inicial para el estudiante.
+
+### Soluciones
+
+| Idioma | Archivo | Notas |
+|--------|---------|-------|
+| English | [`P9 EN SOL .ipynb`](./P%20English%20version/P9%20EN%20SOL%20.ipynb) | Solución principal |
+
+### Criterios de Evaluación
+
+[**criterios.md**](./Reviewers_Assesment_Criteria/criterios.md)
+
+---
+
+## Requisitos Técnicos
+
+- Python 3.x
+- pandas, numpy
+- matplotlib, seaborn
+- scipy.stats (Mann-Whitney U)
+
+## Entregables
+
+- [ ] Priorización de hipótesis con ICE y RICE
+- [ ] Gráficos de métricas acumuladas por grupo (ingresos, conversión, ticket)
+- [ ] Análisis de anomalías y filtrado de datos
+- [ ] Pruebas estadísticas con datos crudos y filtrados
+- [ ] Decisión final sobre el test A/B (parar/continuar)
